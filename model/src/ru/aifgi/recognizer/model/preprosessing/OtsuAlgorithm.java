@@ -29,7 +29,7 @@ public class OtsuAlgorithm {
         final int[] histogram = new int[256];
         for (final double[] line : image) {
             for (final double value : line) {
-                final int brightness = DoubleMath.roundToInt(value, RoundingMode.HALF_EVEN);
+                final int brightness = DoubleMath.roundToInt(value, RoundingMode.HALF_UP);
                 ++histogram[brightness];
             }
         }
