@@ -1,0 +1,38 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.aifgi</groupId>
+    <artifactId>api</artifactId>
+    <version>0.0.1</version>
+
+    <parent>
+        <groupId>org.aifgi</groupId>
+        <artifactId>Recognizer</artifactId>
+        <version>0.0.1</version>
+    </parent>
+
+    <build>
+        <sourceDirectory>src</sourceDirectory>
+        <!--<testSourceDirectory>test</testSourceDirectory>-->
+        <outputDirectory>../out</outputDirectory>
+        <testOutputDirectory>../testOut</testOutputDirectory>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.0.2</version>
+                <configuration>
+                    <source>1.7</source>
+                    <target>1.7</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <developers>
+        <developer>
+            <name>Alexey Ivanov</name>
+            <email>aifgi@mail.ru</email>
+        </developer>
+    </developers>
+</project>
