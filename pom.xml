@@ -16,6 +16,14 @@
         <module>swing-view</module>
     </modules>
 
+    <dependencies>
+        <dependency>
+            <groupId>${pom.groupId}</groupId>
+            <artifactId>swing-view</artifactId>
+            <version>0.0.1</version>
+        </dependency>
+    </dependencies>
+
     <build>
         <sourceDirectory>src</sourceDirectory>
         <!--<testSourceDirectory>test</testSourceDirectory>-->
