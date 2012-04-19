@@ -21,6 +21,7 @@ package ru.aifgi.recognizer.view.actions;
  */
 
 public enum Actions {
+    ABOUT(new AboutAction()),
     EXIT(new ExitAction());
 
     private final MyAction myAction;

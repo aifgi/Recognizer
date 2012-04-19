@@ -1,4 +1,5 @@
-package ru.aifgi.recognizer.view.actions;
+package ru.aifgi.recognizer.view.dialogs;
+
 /*
  * Copyright 2012 Alexey Ivanov
  *
@@ -16,26 +17,31 @@ package ru.aifgi.recognizer.view.actions;
  */
 
 import javax.swing.*;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 
 /**
  * @author aifgi
  */
 
-public enum ActionGroups {
-    HELP_MENU("Help", new BasicAction[]{Actions.ABOUT.getAction(), Separator.INSTANCE, Actions.EXIT.getAction()});
+public class AboutDialog extends JDialog {
+    private JPanel myContentPane;
+    private JTabbedPane myTabbedPane;
 
-    private final ActionGroup myActionGroup;
+    public AboutDialog() {
+        super();
+        setTitle("About");
+        setContentPane(myContentPane);
+        setModal(false);
+        setDefaultCloseOperation(HIDE_ON_CLOSE);
 
-    ActionGroups(final String name, final BasicAction[] actions) {
-        myActionGroup = new ActionGroup(actions);
-        myActionGroup.setName(name);
-    }
+        addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusLost(final FocusEvent e) {
+                setVisible(false);
+            }
+        });
 
-    public ActionGroup getActionGroup() {
-        return myActionGroup;
-    }
-
-    public JMenuItem createMenuItem() {
-        return myActionGroup.createMenuItem();
+        pack();
     }
 }

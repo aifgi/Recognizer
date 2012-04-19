@@ -39,7 +39,7 @@ class ExitAction extends MyAction {
                                                             JOptionPane.YES_NO_OPTION,
                                                             JOptionPane.QUESTION_MESSAGE);
         if (confirmed == JOptionPane.YES_OPTION) {
-            mainWindow.dispose();
+            System.exit(0);
         }
     }
 

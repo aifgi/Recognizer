@@ -1,4 +1,5 @@
 package ru.aifgi.recognizer.view.actions;
+
 /*
  * Copyright 2012 Alexey Ivanov
  *
@@ -15,27 +16,29 @@ package ru.aifgi.recognizer.view.actions;
  * limitations under the License.
  */
 
+import ru.aifgi.recognizer.view.dialogs.AboutDialog;
+
 import javax.swing.*;
+import java.awt.*;
 
 /**
  * @author aifgi
  */
 
-public enum ActionGroups {
-    HELP_MENU("Help", new BasicAction[]{Actions.ABOUT.getAction(), Separator.INSTANCE, Actions.EXIT.getAction()});
+public class AboutAction extends MyAction {
+    private JDialog myAboutDialog = new AboutDialog();
 
-    private final ActionGroup myActionGroup;
-
-    ActionGroups(final String name, final BasicAction[] actions) {
-        myActionGroup = new ActionGroup(actions);
-        myActionGroup.setName(name);
+    public AboutAction() {
+        super("About");
     }
 
-    public ActionGroup getActionGroup() {
-        return myActionGroup;
+    @Override
+    public boolean update() {
+        return !myAboutDialog.isShowing();
     }
 
-    public JMenuItem createMenuItem() {
-        return myActionGroup.createMenuItem();
+    @Override
+    public void perform(final AWTEvent event) {
+        myAboutDialog.setVisible(true);
     }
 }
