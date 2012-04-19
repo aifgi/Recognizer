@@ -75,6 +75,11 @@ public class ActionGroup implements BasicAction {
         return res;
     }
 
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
     public void setName(final String name) {
         myPresentation.myName = name;
     }

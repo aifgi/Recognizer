@@ -34,6 +34,8 @@ public interface BasicAction {
      */
     boolean update();
 
+    boolean isEnabled();
+
     Presentation getPresentation();
 
     JMenuItem createMenuItem();

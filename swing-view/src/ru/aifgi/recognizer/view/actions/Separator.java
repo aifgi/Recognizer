@@ -41,6 +41,11 @@ public class Separator implements BasicAction {
     }
 
     @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
+    @Override
     public Presentation getPresentation() {
         return null;
     }

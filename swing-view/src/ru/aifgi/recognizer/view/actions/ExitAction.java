@@ -31,7 +31,7 @@ class ExitAction extends MyAction {
     }
 
     @Override
-    public void perform(final AWTEvent e) {
+    public void performImpl(final AWTEvent e) {
         final Window mainWindow = ViewUtil.getMainWindow();
         final int confirmed = JOptionPane.showConfirmDialog(mainWindow,
                                                             "Are you sure to want to quit?",

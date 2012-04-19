@@ -20,19 +20,35 @@ import ru.aifgi.recognizer.view.Presentation;
 import ru.aifgi.recognizer.view.components.ActionBasedMenuItem;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 /**
  * @author aifgi
  */
 
 public abstract class MyAction extends AbstractAction implements BasicAction, Presentation {
+    private boolean myUpdated = false;
+
     public MyAction(final String name) {
         super(name);
+        init();
     }
 
     public MyAction(final String name, final Icon icon) {
         super(name, icon);
+        init();
+    }
+
+    private void init() {
+        addPropertyChangeListener(new PropertyChangeListener() {
+            @Override
+            public void propertyChange(final PropertyChangeEvent evt) {
+                myUpdated = true;
+            }
+        });
     }
 
     @Override
@@ -41,8 +57,23 @@ public abstract class MyAction extends AbstractAction implements BasicAction, Pr
     }
 
     @Override
+    public void perform(final AWTEvent event) {
+        if (isEnabled()) {
+            performImpl(event);
+        }
+    }
+
+    protected abstract void performImpl(final AWTEvent event);
+
+    @Override
     public boolean update() {
-        return false;
+        final boolean t = myUpdated;
+        myUpdated = false;
+        System.out.println("in");
+        if (t) {
+            System.out.println("true");
+        }
+        return t;
     }
 
     @Override

@@ -38,7 +38,7 @@ public class AboutAction extends MyAction {
     }
 
     @Override
-    public void perform(final AWTEvent event) {
+    public void performImpl(final AWTEvent event) {
         myAboutDialog.setVisible(true);
     }
 }

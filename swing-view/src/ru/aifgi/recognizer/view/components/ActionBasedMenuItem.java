@@ -31,7 +31,7 @@ public class ActionBasedMenuItem extends JMenuItem {
     public ActionBasedMenuItem(final MyAction action) {
         super("");
         myAction = action;
-        addActionListener(myAction);
+        setAction(myAction);
     }
 
     // TODO:
@@ -42,7 +42,7 @@ public class ActionBasedMenuItem extends JMenuItem {
 
     @Override
     public String getToolTipText() {
-        return myAction.getPresentation().getMessage();
+        return (myAction == null) ? super.getToolTipText() : myAction.getPresentation().getMessage();
     }
 
     @Override
