@@ -69,10 +69,6 @@ public abstract class MyAction extends AbstractAction implements BasicAction, Pr
     public boolean update() {
         final boolean t = myUpdated;
         myUpdated = false;
-        System.out.println("in");
-        if (t) {
-            System.out.println("true");
-        }
         return t;
     }
 
