@@ -27,6 +27,11 @@ import java.awt.*;
 public interface BasicAction {
     void perform(final AWTEvent event);
 
+    /**
+     * Update action state
+     *
+     * @return <tt>true</tt> if action state changed
+     */
     boolean update();
 
     Presentation getPresentation();

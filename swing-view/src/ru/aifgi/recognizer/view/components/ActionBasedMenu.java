@@ -20,6 +20,8 @@ import ru.aifgi.recognizer.view.actions.ActionGroup;
 import ru.aifgi.recognizer.view.actions.BasicAction;
 
 import javax.swing.*;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.util.Collection;
 
 /**
@@ -34,9 +36,20 @@ public class ActionBasedMenu extends JMenu {
         myActionGroup = actionGroup;
         setText(myActionGroup.getPresentation().getName());
         fillMenu();
+        addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(final ItemEvent e) {
+                if (e.getStateChange() == ItemEvent.SELECTED) {
+                    if (myActionGroup.update()) {
+                        fillMenu();
+                    }
+                }
+            }
+        });
     }
 
     private void fillMenu() {
+        removeAll();
         final Collection<BasicAction> actions = myActionGroup.getActions();
         for (final BasicAction action : actions) {
             add(action.createMenuItem());
