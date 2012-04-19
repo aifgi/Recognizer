@@ -19,7 +19,7 @@ import ru.aifgi.recognizer.view.actions.ActionGroup;
 import ru.aifgi.recognizer.view.actions.ActionGroups;
 import ru.aifgi.recognizer.view.actions.Actions;
 import ru.aifgi.recognizer.view.actions.BasicAction;
-import ru.aifgi.recognizer.view.components.ImagePanel;
+import ru.aifgi.recognizer.view.components.image.ImagePanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -27,12 +27,13 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
 
 /**
  * @author aifgi
  */
 
-class MainWindow extends JFrame {
+public class MainWindow extends JFrame {
     private JPanel myContentPane;
     private ImagePanel myImagePanel;
     private JSplitPane mySplitPane;
@@ -40,7 +41,7 @@ class MainWindow extends JFrame {
 
     private double myDividerLocation = 0.5;
 
-    public MainWindow() {
+    MainWindow() {
         super();
         setContentPane(myContentPane);
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -63,6 +64,11 @@ class MainWindow extends JFrame {
         createMainMenu();
 
         pack();
+    }
+
+    // TODO: find better way
+    public void setImage(final BufferedImage image) {
+        myImagePanel.setImage(image);
     }
 
     private void createMainMenu() {

@@ -29,7 +29,7 @@
             <properties/>
             <border type="none"/>
             <children>
-              <component id="3a1d0" class="ru.aifgi.recognizer.view.components.ImagePanel" binding="myImagePanel">
+              <component id="3a1d0" class="ru.aifgi.recognizer.view.components.image.ImagePanel" binding="myImagePanel">
                 <constraints/>
                 <properties/>
               </component>

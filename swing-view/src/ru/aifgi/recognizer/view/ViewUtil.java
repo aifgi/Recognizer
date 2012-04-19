@@ -16,16 +16,15 @@ package ru.aifgi.recognizer.view;
  * limitations under the License.
  */
 
-import java.awt.*;
-
 /**
  * @author aifgi
  */
 
 public class ViewUtil {
-    private static /*volatile*/ Window ourMainWindow;
+    private static /*volatile*/ MainWindow ourMainWindow;
 
-    public static Window getMainWindow() {
+    // TODO: change return type to Window?
+    public static MainWindow getMainWindow() {
         if (ourMainWindow == null) {
             synchronized (ViewUtil.class) {
                 if (ourMainWindow == null) {

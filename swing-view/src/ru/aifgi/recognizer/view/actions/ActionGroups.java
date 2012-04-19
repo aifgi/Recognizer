@@ -22,8 +22,9 @@ import javax.swing.*;
  */
 
 public enum ActionGroups {
+    FILE_MENU("File", new BasicAction[]{Actions.OPEN_IMAGE.getAction()}),
     HELP_MENU("Help", new BasicAction[]{Actions.ABOUT.getAction(), Separator.INSTANCE, Actions.EXIT.getAction()}),
-    MAIN_MENU(new BasicAction[]{HELP_MENU.getActionGroup()});
+    MAIN_MENU(new BasicAction[]{FILE_MENU.getActionGroup(), HELP_MENU.getActionGroup()});
 
     private final ActionGroup myActionGroup;
 
