@@ -17,8 +17,10 @@ package ru.aifgi.recognizer.view.actions;
 
 import ru.aifgi.recognizer.view.Presentation;
 
+import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -26,9 +28,28 @@ import java.util.List;
  * @author aifgi
  */
 
-public abstract class ActionGroup implements BasicAction {
+public class ActionGroup implements BasicAction {
+    private class GroupPresentation implements Presentation {
+        private String myName = "";
+
+        @Override
+        public String getName() {
+            return myName;
+        }
+
+        @Override
+        public String getMessage() {
+            return null;
+        }
+
+        @Override
+        public Icon getIcon() {
+            return null;
+        }
+    }
+
     private final List<BasicAction> myActions;
-    private Presentation myPresentation;
+    private final GroupPresentation myPresentation = new GroupPresentation();
 
     public ActionGroup(final List<BasicAction> actions) {
         myActions = actions;
@@ -53,8 +74,16 @@ public abstract class ActionGroup implements BasicAction {
         return res;
     }
 
+    public void setName(final String name) {
+        myPresentation.myName = name;
+    }
+
     @Override
     public Presentation getPresentation() {
         return myPresentation;
+    }
+
+    public Collection<BasicAction> getActions() {
+        return Collections.unmodifiableCollection(myActions);
     }
 }

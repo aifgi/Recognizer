@@ -26,6 +26,10 @@ import java.awt.*;
  */
 
 class ExitAction extends MyAction {
+    public ExitAction() {
+        super("Exit");
+    }
+
     @Override
     public void perform(final AWTEvent e) {
         final Window mainWindow = ViewUtil.getMainWindow();

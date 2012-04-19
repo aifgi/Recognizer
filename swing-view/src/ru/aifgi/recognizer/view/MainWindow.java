@@ -15,7 +15,9 @@ package ru.aifgi.recognizer.view;
  * limitations under the License.
  */
 
+import ru.aifgi.recognizer.view.actions.ActionGroups;
 import ru.aifgi.recognizer.view.actions.Actions;
+import ru.aifgi.recognizer.view.components.ActionMenu;
 import ru.aifgi.recognizer.view.components.ImagePanel;
 
 import javax.swing.*;
@@ -57,6 +59,14 @@ class MainWindow extends JFrame {
             }
         });
 
+        createMainMenu();
+
         pack();
+    }
+
+    private void createMainMenu() {
+        final JMenuBar menuBar = new JMenuBar();
+        menuBar.add(new ActionMenu(ActionGroups.HELP_MENU.getActionGroup()));
+        setJMenuBar(menuBar);
     }
 }

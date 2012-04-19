@@ -25,8 +25,14 @@ import java.awt.event.ActionEvent;
  * @author aifgi
  */
 
-public abstract class MyAction extends AbstractAction implements BasicAction {
-    protected Presentation myPresentation;
+public abstract class MyAction extends AbstractAction implements BasicAction, Presentation {
+    public MyAction(final String name) {
+        super(name);
+    }
+
+    public MyAction(final String name, final Icon icon) {
+        super(name, icon);
+    }
 
     @Override
     public void actionPerformed(final ActionEvent e) {
@@ -40,6 +46,22 @@ public abstract class MyAction extends AbstractAction implements BasicAction {
 
     @Override
     public Presentation getPresentation() {
-        return myPresentation;
+        return this;
+    }
+
+    @Override
+    public String getName() {
+        return (String) getValue(Action.NAME);
+    }
+
+    @Override
+    public String getMessage() {
+        final String value = (String) getValue(Action.SHORT_DESCRIPTION);
+        return (value != null) ? value : getName();
+    }
+
+    @Override
+    public Icon getIcon() {
+        return (Icon) getValue(Action.SMALL_ICON);
     }
 }
