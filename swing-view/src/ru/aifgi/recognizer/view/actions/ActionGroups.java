@@ -22,13 +22,18 @@ import javax.swing.*;
  */
 
 public enum ActionGroups {
-    HELP_MENU("Help", new BasicAction[]{Actions.ABOUT.getAction(), Separator.INSTANCE, Actions.EXIT.getAction()});
+    HELP_MENU("Help", new BasicAction[]{Actions.ABOUT.getAction(), Separator.INSTANCE, Actions.EXIT.getAction()}),
+    MAIN_MENU(new BasicAction[]{HELP_MENU.getActionGroup()});
 
     private final ActionGroup myActionGroup;
 
     ActionGroups(final String name, final BasicAction[] actions) {
         myActionGroup = new ActionGroup(actions);
         myActionGroup.setName(name);
+    }
+
+    ActionGroups(final BasicAction[] actions) {
+        myActionGroup = new ActionGroup(actions);
     }
 
     public ActionGroup getActionGroup() {

@@ -15,8 +15,10 @@ package ru.aifgi.recognizer.view;
  * limitations under the License.
  */
 
+import ru.aifgi.recognizer.view.actions.ActionGroup;
 import ru.aifgi.recognizer.view.actions.ActionGroups;
 import ru.aifgi.recognizer.view.actions.Actions;
+import ru.aifgi.recognizer.view.actions.BasicAction;
 import ru.aifgi.recognizer.view.components.ImagePanel;
 
 import javax.swing.*;
@@ -65,7 +67,10 @@ class MainWindow extends JFrame {
 
     private void createMainMenu() {
         final JMenuBar menuBar = new JMenuBar();
-        menuBar.add(ActionGroups.HELP_MENU.createMenuItem());
+        final ActionGroup mainMenuGroup = ActionGroups.MAIN_MENU.getActionGroup();
+        for (BasicAction action : mainMenuGroup.getActions()) {
+            menuBar.add(action.createMenuItem());
+        }
         setJMenuBar(menuBar);
     }
 }
