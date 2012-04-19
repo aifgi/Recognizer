@@ -15,16 +15,21 @@ package ru.aifgi.recognizer.view;
  * limitations under the License.
  */
 
+import ru.aifgi.recognizer.view.actions.Actions;
+import ru.aifgi.recognizer.view.components.ImagePanel;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 /**
  * @author aifgi
  */
 
-public class MainWindow extends JFrame {
+class MainWindow extends JFrame {
     private JPanel myContentPane;
     private ImagePanel myImagePanel;
     private JSplitPane mySplitPane;
@@ -35,8 +40,15 @@ public class MainWindow extends JFrame {
     public MainWindow() {
         super();
         setContentPane(myContentPane);
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         setMinimumSize(new Dimension(640, 480));
+
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(final WindowEvent e) {
+                Actions.EXIT.getAction().perform(e);
+            }
+        });
 
         addComponentListener(new ComponentAdapter() {
             @Override

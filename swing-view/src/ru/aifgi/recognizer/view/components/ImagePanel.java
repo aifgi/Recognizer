@@ -1,4 +1,4 @@
-package ru.aifgi.recognizer.view;
+package ru.aifgi.recognizer.view.components;
 
 /*
  * Copyright 2012 Alexey Ivanov

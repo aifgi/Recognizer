@@ -16,7 +16,7 @@ package ru.aifgi.recognizer;
 * limitations under the License.
 */
 
-import ru.aifgi.recognizer.view.MainWindow;
+import ru.aifgi.recognizer.view.ViewUtil;
 
 /**
  * @author aifgi
@@ -24,6 +24,6 @@ import ru.aifgi.recognizer.view.MainWindow;
 
 public class Main {
     public static void main(String[] args) {
-        new MainWindow().setVisible(true);
+        ViewUtil.getMainWindow().setVisible(true);
     }
 }
