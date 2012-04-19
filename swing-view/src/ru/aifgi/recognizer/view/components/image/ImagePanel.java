@@ -1,4 +1,4 @@
-package ru.aifgi.recognizer.view.components;
+package ru.aifgi.recognizer.view.components.image;
 
 /*
  * Copyright 2012 Alexey Ivanov
@@ -19,6 +19,8 @@ package ru.aifgi.recognizer.view.components;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author aifgi
@@ -26,6 +28,9 @@ import java.awt.image.BufferedImage;
 
 
 public class ImagePanel extends JPanel implements Scrollable {
+    private static final EventQueue EVENT_QUEUE = Toolkit.getDefaultToolkit().getSystemEventQueue();
+
+    private final Set<ImageChangedListener> myListeners = new HashSet<>();
     private BufferedImage myImage;
 
     public ImagePanel() {
@@ -33,19 +38,50 @@ public class ImagePanel extends JPanel implements Scrollable {
     }
 
     public ImagePanel(final BufferedImage image) {
-        super(true);
+        super();
         myImage = image;
         setAutoscrolls(true);
+
+        addImageChangedListener(new ImageChangedListener() {
+            @Override
+            public void imageChanged(final ImageChangedEvent event) {
+                revalidate();
+                repaint();
+            }
+        });
     }
 
     public Image getImage() {
         return myImage;
     }
 
-    public void setImage(final BufferedImage image) {
-        myImage = image;
-        revalidate();
-        repaint();
+    public void setImage(final BufferedImage newImage) {
+        final BufferedImage oldImage = myImage;
+        myImage = newImage;
+        EVENT_QUEUE.postEvent(new ImageChangedEvent(this, oldImage, newImage));
+    }
+
+    public synchronized void addImageChangedListener(final ImageChangedListener listener) {
+        myListeners.add(listener);
+    }
+
+    public synchronized void removeImageChangedListener(final ImageChangedListener listener) {
+        myListeners.remove(listener);
+    }
+
+    @Override
+    protected void processEvent(final AWTEvent e) {
+        if (e instanceof ImageChangedEvent) {
+            processImageChangedEvent((ImageChangedEvent) e);
+            return;
+        }
+        super.processEvent(e);
+    }
+
+    private void processImageChangedEvent(final ImageChangedEvent e) {
+        for (final ImageChangedListener listener : myListeners) {
+            listener.imageChanged(e);
+        }
     }
 
     @Override
