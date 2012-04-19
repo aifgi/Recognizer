@@ -17,6 +17,7 @@ package ru.aifgi.recognizer.view.actions;
 
 import ru.aifgi.recognizer.view.Presentation;
 
+import javax.swing.*;
 import java.awt.*;
 
 /**
@@ -29,4 +30,6 @@ public interface BasicAction {
     boolean update();
 
     Presentation getPresentation();
+
+    JMenuItem createMenuItem();
 }

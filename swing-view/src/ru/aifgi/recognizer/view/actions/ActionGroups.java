@@ -15,12 +15,14 @@ package ru.aifgi.recognizer.view.actions;
  * limitations under the License.
  */
 
+import javax.swing.*;
+
 /**
  * @author aifgi
  */
 
 public enum ActionGroups {
-    HELP_MENU("Help", new BasicAction[]{Actions.EXIT.getAction()});
+    HELP_MENU("Help", new BasicAction[]{Actions.EXIT.getAction(), Separator.INSTANCE});
 
     private final ActionGroup myActionGroup;
 
@@ -31,5 +33,9 @@ public enum ActionGroups {
 
     public ActionGroup getActionGroup() {
         return myActionGroup;
+    }
+
+    public JMenuItem createMenuItem() {
+        return myActionGroup.createMenuItem();
     }
 }

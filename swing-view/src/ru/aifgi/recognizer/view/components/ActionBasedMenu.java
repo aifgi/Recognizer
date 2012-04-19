@@ -18,7 +18,6 @@ package ru.aifgi.recognizer.view.components;
 
 import ru.aifgi.recognizer.view.actions.ActionGroup;
 import ru.aifgi.recognizer.view.actions.BasicAction;
-import ru.aifgi.recognizer.view.actions.MyAction;
 
 import javax.swing.*;
 import java.util.Collection;
@@ -27,10 +26,10 @@ import java.util.Collection;
  * @author aifgi
  */
 
-public class ActionMenu extends JMenu {
+public class ActionBasedMenu extends JMenu {
     private final ActionGroup myActionGroup;
 
-    public ActionMenu(final ActionGroup actionGroup) {
+    public ActionBasedMenu(final ActionGroup actionGroup) {
         super();
         myActionGroup = actionGroup;
         setText(myActionGroup.getPresentation().getName());
@@ -40,16 +39,7 @@ public class ActionMenu extends JMenu {
     private void fillMenu() {
         final Collection<BasicAction> actions = myActionGroup.getActions();
         for (final BasicAction action : actions) {
-            if (action instanceof MyAction) {
-                add((MyAction) action);
-            }
+            add(action.createMenuItem());
         }
     }
-
-    private JMenuItem add(final MyAction action) {
-        final JMenuItem menuItem = new ActionBasedMenuItem(action);
-        add(menuItem);
-        return menuItem;
-    }
-
 }

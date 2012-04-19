@@ -16,6 +16,7 @@ package ru.aifgi.recognizer.view.actions;
  */
 
 import ru.aifgi.recognizer.view.Presentation;
+import ru.aifgi.recognizer.view.components.ActionBasedMenu;
 
 import javax.swing.*;
 import java.awt.*;
@@ -55,7 +56,7 @@ public class ActionGroup implements BasicAction {
         myActions = actions;
     }
 
-    public ActionGroup(final BasicAction[] actions) {
+    public ActionGroup(final BasicAction... actions) {
         myActions = new ArrayList<>(actions.length);
         Collections.addAll(myActions, actions);
     }
@@ -85,5 +86,10 @@ public class ActionGroup implements BasicAction {
 
     public Collection<BasicAction> getActions() {
         return Collections.unmodifiableCollection(myActions);
+    }
+
+    @Override
+    public JMenuItem createMenuItem() {
+        return new ActionBasedMenu(this);
     }
 }

@@ -1,5 +1,4 @@
 package ru.aifgi.recognizer.view.actions;
-
 /*
  * Copyright 2012 Alexey Ivanov
  *
@@ -17,27 +16,23 @@ package ru.aifgi.recognizer.view.actions;
  */
 
 import ru.aifgi.recognizer.view.Presentation;
-import ru.aifgi.recognizer.view.components.ActionBasedMenuItem;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
+import java.awt.*;
 
 /**
  * @author aifgi
  */
 
-public abstract class MyAction extends AbstractAction implements BasicAction, Presentation {
-    public MyAction(final String name) {
-        super(name);
-    }
+public class Separator implements BasicAction {
+    public static final Separator INSTANCE = new Separator();
 
-    public MyAction(final String name, final Icon icon) {
-        super(name, icon);
+    private Separator() {
     }
 
     @Override
-    public void actionPerformed(final ActionEvent e) {
-        perform(e);
+    public void perform(final AWTEvent event) {
+        throw new UnsupportedOperationException("Couldn't perform separator");
     }
 
     @Override
@@ -47,27 +42,19 @@ public abstract class MyAction extends AbstractAction implements BasicAction, Pr
 
     @Override
     public Presentation getPresentation() {
-        return this;
+        return null;
     }
 
-    @Override
-    public String getName() {
-        return (String) getValue(Action.NAME);
-    }
-
-    @Override
-    public String getMessage() {
-        final String value = (String) getValue(Action.SHORT_DESCRIPTION);
-        return (value != null) ? value : getName();
-    }
-
-    @Override
-    public Icon getIcon() {
-        return (Icon) getValue(Action.SMALL_ICON);
-    }
-
+    // TODO: Do something with this terrible code!!!!!!!!!!
     @Override
     public JMenuItem createMenuItem() {
-        return new ActionBasedMenuItem(this);
+        return new JMenuItem() {
+            private final JSeparator mySeparator = new JSeparator(HORIZONTAL);
+
+            @Override
+            public void paint(final Graphics g) {
+                mySeparator.paint(g);
+            }
+        };
     }
 }
