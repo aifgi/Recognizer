@@ -37,7 +37,7 @@ public class Separator implements BasicAction {
 
     @Override
     public boolean update() {
-        return true;
+        return false;
     }
 
     @Override

@@ -34,7 +34,7 @@ public class AboutAction extends MyAction {
 
     @Override
     public boolean update() {
-        return !myAboutDialog.isShowing();
+        return false;
     }
 
     @Override

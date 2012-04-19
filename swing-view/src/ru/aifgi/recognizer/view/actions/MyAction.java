@@ -42,7 +42,7 @@ public abstract class MyAction extends AbstractAction implements BasicAction, Pr
 
     @Override
     public boolean update() {
-        return true;
+        return false;
     }
 
     @Override
