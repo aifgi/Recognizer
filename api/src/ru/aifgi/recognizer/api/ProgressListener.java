@@ -20,10 +20,12 @@ package ru.aifgi.recognizer.api;
  * @author aifgi
  */
 
-public interface ModelFacade {
-    void addProgressListener(final ProgressListener progressListener);
+public interface ProgressListener {
+    void started(final String message);
 
-    void removeProgressListener(final ProgressListener progressListener);
+    void progress(final int percent);
 
-    String recognize(final ImageWrapper inputImage);
+    void progress(final int percent, final String taskText);
+
+    void done(final String message);
 }

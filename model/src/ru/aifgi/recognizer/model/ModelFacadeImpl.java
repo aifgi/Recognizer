@@ -18,14 +18,69 @@ package ru.aifgi.recognizer.model;
 
 import ru.aifgi.recognizer.api.ImageWrapper;
 import ru.aifgi.recognizer.api.ModelFacade;
+import ru.aifgi.recognizer.api.ProgressListener;
+
+import java.awt.*;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author aifgi
  */
 
-public class ModelFacadeImpl implements ModelFacade {
+class ModelFacadeImpl implements ModelFacade {
+    private final Set<ProgressListener> myProgressListeners = new HashSet<>();
+
+    @Override
+    public void addProgressListener(final ProgressListener progressListener) {
+        myProgressListeners.add(progressListener);
+    }
+
+    @Override
+    public void removeProgressListener(final ProgressListener progressListener) {
+        myProgressListeners.remove(progressListener);
+    }
+
     @Override
     public String recognize(final ImageWrapper inputImage) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        if (EventQueue.isDispatchThread()) {
+            // TODO: exceptions
+            throw new RuntimeException("Recognition couldn't work in event dispatch thread");
+        }
+        notifyStarted("Recognition started");
+
+        // debug code
+        final int s = 100_000_000;
+        for (int i = 0; i < s; ++i) {
+            notifyProgress(Math.round(100.f * i / s), String.valueOf(i));
+        }
+
+        notifyDone("Recognition done");
+        return null;
+    }
+
+    // TODO: another thread?
+    private void notifyStarted(final String message) {
+        for (final ProgressListener progressListener : myProgressListeners) {
+            progressListener.started(message);
+        }
+    }
+
+    private void notifyProgress(final int progress) {
+        for (final ProgressListener progressListener : myProgressListeners) {
+            progressListener.progress(progress);
+        }
+    }
+
+    private void notifyProgress(final int progress, final String message) {
+        for (final ProgressListener progressListener : myProgressListeners) {
+            progressListener.progress(progress, message);
+        }
+    }
+
+    private void notifyDone(final String message) {
+        for (final ProgressListener progressListener : myProgressListeners) {
+            progressListener.done(message);
+        }
     }
 }
