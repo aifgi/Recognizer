@@ -32,13 +32,24 @@ public class Separator implements BasicAction {
             setBorder(null);
             setBorderPainted(false);
             setEnabled(false);
-            setMaximumSize(new Dimension(Integer.MAX_VALUE, 1));
+
+            LookAndFeel.installColors(this, "Separator.background", "Separator.foreground");
+            LookAndFeel.installProperty(this, "opaque", Boolean.FALSE);
+        }
+
+        @Override
+        public Dimension getPreferredSize() {
+            return new Dimension(0, 3);
         }
 
         @Override
         protected void paintComponent(final Graphics g) {
-            final int y = getHeight() / 2;
-            g.drawLine(1, y, getWidth() - 2, y);
+            final int lineWidth = getWidth() - 2;
+            g.setColor(getForeground());
+            g.drawLine(1, 1, lineWidth, 1);
+
+            g.setColor(getBackground());
+            g.drawLine(1, 2, lineWidth, 2);
         }
     }
 
