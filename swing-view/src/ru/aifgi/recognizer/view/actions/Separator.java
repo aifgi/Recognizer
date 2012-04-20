@@ -39,7 +39,7 @@ public class Separator implements BasicAction {
 
         @Override
         public Dimension getPreferredSize() {
-            return new Dimension(0, 3);
+            return new Dimension(0, 4);
         }
 
         @Override
