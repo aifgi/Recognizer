@@ -64,7 +64,7 @@ public class OpenImageAction extends MyAction {
                         mainWindow.setImage(bufferedImage);
                     }
                     catch (IOException e) {
-                        throw new RuntimeException(e);
+                        throw new ImageOpeningException(e.getLocalizedMessage());
                     }
                 }
             });
