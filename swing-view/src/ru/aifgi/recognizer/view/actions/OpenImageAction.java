@@ -16,6 +16,7 @@ package ru.aifgi.recognizer.view.actions;
  */
 
 import ru.aifgi.recognizer.model.thread_factories.MyThreadFactory;
+import ru.aifgi.recognizer.view.Bundle;
 import ru.aifgi.recognizer.view.MainWindow;
 import ru.aifgi.recognizer.view.ViewUtil;
 
@@ -46,13 +47,13 @@ public class OpenImageAction extends MyAction {
     private final ExecutorService myService = Executors.newSingleThreadExecutor(new MyThreadFactory("OpenImage"));
 
     public OpenImageAction() {
-        super("Open image");
+        super(Bundle.getString("open.image.action.name"));
     }
 
     @Override
     protected void performImpl(final AWTEvent event) {
         final JFileChooser fileChooser = new JFileChooser(System.getProperty("user.dir"));
-        fileChooser.setDialogTitle("Open image");
+        fileChooser.setDialogTitle(Bundle.getString("open.image"));
         final MainWindow mainWindow = ViewUtil.getMainWindow();
         final int returnVal = fileChooser.showOpenDialog(mainWindow);
         if (returnVal == JFileChooser.APPROVE_OPTION) {

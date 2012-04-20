@@ -15,6 +15,8 @@ package ru.aifgi.recognizer.view.actions;
  * limitations under the License.
  */
 
+import ru.aifgi.recognizer.view.Bundle;
+
 import javax.swing.*;
 
 /**
@@ -22,10 +24,12 @@ import javax.swing.*;
  */
 
 public enum ActionGroups {
-    FILE_MENU("File", new BasicAction[]{
+    FILE_MENU(Bundle.getString("file.menu"), new BasicAction[]{
             Actions.OPEN_IMAGE.getAction(), Separator.INSTANCE, Actions.RECOGNIZE.getAction()
     }),
-    HELP_MENU("Help", new BasicAction[]{Actions.ABOUT.getAction(), Separator.INSTANCE, Actions.EXIT.getAction()}),
+    HELP_MENU(Bundle.getString("help.menu"), new BasicAction[]{
+            Actions.ABOUT.getAction(), Separator.INSTANCE, Actions.EXIT.getAction()
+    }),
     MAIN_MENU(new BasicAction[]{FILE_MENU.getActionGroup(), HELP_MENU.getActionGroup()});
 
     private final ActionGroup myActionGroup;

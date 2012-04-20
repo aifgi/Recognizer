@@ -19,6 +19,7 @@ package ru.aifgi.recognizer.view.actions;
 import ru.aifgi.recognizer.model.Model;
 import ru.aifgi.recognizer.model.thread_factories.MyThreadFactory;
 import ru.aifgi.recognizer.view.BufferedImageWrapper;
+import ru.aifgi.recognizer.view.Bundle;
 import ru.aifgi.recognizer.view.ViewUtil;
 
 import java.awt.*;
@@ -33,7 +34,7 @@ public class RecognizeAction extends MyAction {
     private final ExecutorService myService = Executors.newSingleThreadExecutor(new MyThreadFactory("RecognizeAction"));
 
     public RecognizeAction() {
-        super("Recognize");
+        super(Bundle.getString("recognize.action.name"));
     }
 
     @Override

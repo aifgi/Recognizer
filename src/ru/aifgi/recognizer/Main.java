@@ -18,13 +18,33 @@ package ru.aifgi.recognizer;
 
 import ru.aifgi.recognizer.view.ViewUtil;
 
+import java.util.Locale;
+
 /**
  * @author aifgi
  */
 
 public class Main {
     public static void main(final String[] args) {
+        setLocale(args);
         Thread.setDefaultUncaughtExceptionHandler(ViewUtil.getApplicationUncaughtExceptionHandler());
         ViewUtil.getMainWindow().setVisible(true);
+    }
+
+    private static void setLocale(final String[] args) {
+        final String language;
+        final String country;
+
+        if (args.length < 2) {
+            language = "en";
+            country = "US";
+        }
+        else {
+            language = args[0];
+            country = args[1];
+        }
+
+        final Locale locale = new Locale(language, country);
+        Locale.setDefault(locale);
     }
 }
