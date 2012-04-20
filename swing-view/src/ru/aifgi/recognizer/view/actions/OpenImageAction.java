@@ -33,6 +33,12 @@ import java.util.concurrent.Executors;
  */
 
 public class OpenImageAction extends MyAction {
+    public static class ImageOpeningException extends RuntimeException {
+        public ImageOpeningException(final String message) {
+            super(message);
+        }
+    }
+
     private final ExecutorService myService = Executors.newSingleThreadExecutor(new MyThreadFactory("OpenImage"));
 
     public OpenImageAction() {
@@ -52,11 +58,12 @@ public class OpenImageAction extends MyAction {
                     final File file = fileChooser.getSelectedFile();
                     try {
                         final BufferedImage bufferedImage = ImageIO.read(file);
+                        if (bufferedImage == null) {
+                            throw new ImageOpeningException("Couldn't open image: " + file.getName());
+                        }
                         mainWindow.setImage(bufferedImage);
                     }
                     catch (IOException e) {
-                        // TODO:
-                        e.printStackTrace();
                         throw new RuntimeException(e);
                     }
                 }

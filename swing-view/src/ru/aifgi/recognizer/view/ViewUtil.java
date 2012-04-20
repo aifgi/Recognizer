@@ -27,6 +27,7 @@ public class ViewUtil {
     private static final Thread.UncaughtExceptionHandler HANDLER = new Thread.UncaughtExceptionHandler() {
         @Override
         public void uncaughtException(final Thread t, final Throwable e) {
+            e.printStackTrace();
             showErrorMessage(e);
         }
     };
