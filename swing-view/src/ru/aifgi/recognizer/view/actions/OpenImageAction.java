@@ -37,6 +37,10 @@ public class OpenImageAction extends MyAction {
         public ImageOpeningException(final String message) {
             super(message);
         }
+
+        public ImageOpeningException(final String message, final Throwable cause) {
+            super(message, cause);
+        }
     }
 
     private final ExecutorService myService = Executors.newSingleThreadExecutor(new MyThreadFactory("OpenImage"));
@@ -64,7 +68,7 @@ public class OpenImageAction extends MyAction {
                         mainWindow.setImage(bufferedImage);
                     }
                     catch (IOException e) {
-                        throw new ImageOpeningException(e.getLocalizedMessage());
+                        throw new ImageOpeningException(e.getLocalizedMessage(), e);
                     }
                 }
             });
