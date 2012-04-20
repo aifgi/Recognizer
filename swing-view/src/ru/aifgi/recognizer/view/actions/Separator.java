@@ -25,6 +25,23 @@ import java.awt.*;
  */
 
 public class Separator implements BasicAction {
+    // TODO: Better way?
+    private static class SeparatorMenuItem extends JMenuItem {
+        private SeparatorMenuItem() {
+            super();
+            setBorder(null);
+            setBorderPainted(false);
+            setEnabled(false);
+            setMaximumSize(new Dimension(Integer.MAX_VALUE, 1));
+        }
+
+        @Override
+        protected void paintComponent(final Graphics g) {
+            final int y = getHeight() / 2;
+            g.drawLine(1, y, getWidth() - 2, y);
+        }
+    }
+
     public static final Separator INSTANCE = new Separator();
 
     private Separator() {
@@ -50,16 +67,8 @@ public class Separator implements BasicAction {
         return null;
     }
 
-    // TODO: Do something with this terrible code!!!!!!!!!!
     @Override
     public JMenuItem createMenuItem() {
-        return new JMenuItem() {
-            private final JSeparator mySeparator = new JSeparator(HORIZONTAL);
-
-            @Override
-            public void paint(final Graphics g) {
-                mySeparator.paint(g);
-            }
-        };
+        return new SeparatorMenuItem();
     }
 }
