@@ -22,6 +22,7 @@ package ru.aifgi.recognizer.view.actions;
 
 public enum Actions {
     OPEN_IMAGE(new OpenImageAction()),
+    RECOGNIZE(new RecognizeAction()),
     ABOUT(new AboutAction()),
     EXIT(new ExitAction());
 

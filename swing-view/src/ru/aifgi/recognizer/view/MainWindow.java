@@ -101,6 +101,10 @@ public class MainWindow extends JFrame {
         myImagePanel.setImage(image);
     }
 
+    public BufferedImage getImage() {
+        return myImagePanel.getImage();
+    }
+
     private void createMainMenu() {
         final JMenuBar menuBar = new JMenuBar();
         final ActionGroup mainMenuGroup = ActionGroups.MAIN_MENU.getActionGroup();

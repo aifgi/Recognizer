@@ -51,7 +51,7 @@ public class ImagePanel extends JPanel implements Scrollable {
         });
     }
 
-    public Image getImage() {
+    public BufferedImage getImage() {
         return myImage;
     }
 
