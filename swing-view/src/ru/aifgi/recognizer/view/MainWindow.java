@@ -15,12 +15,12 @@ package ru.aifgi.recognizer.view;
  * limitations under the License.
  */
 
-import ru.aifgi.recognizer.api.ProgressListener;
 import ru.aifgi.recognizer.model.Model;
 import ru.aifgi.recognizer.view.actions.ActionGroup;
 import ru.aifgi.recognizer.view.actions.ActionGroups;
 import ru.aifgi.recognizer.view.actions.Actions;
 import ru.aifgi.recognizer.view.actions.BasicAction;
+import ru.aifgi.recognizer.view.components.ProgressBar;
 import ru.aifgi.recognizer.view.components.image.ImagePanel;
 
 import javax.swing.*;
@@ -40,7 +40,7 @@ public class MainWindow extends JFrame {
     private ImagePanel myImagePanel;
     private JSplitPane mySplitPane;
     private JTextArea myTextArea;
-    private JProgressBar myProgressBar;
+    private ProgressBar myProgressBar;
 
     private double myDividerLocation = 0.5;
 
@@ -50,9 +50,7 @@ public class MainWindow extends JFrame {
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         setMinimumSize(new Dimension(640, 480));
 
-        myProgressBar.setMinimum(0);
-        myProgressBar.setMaximum(100);
-        myProgressBar.setStringPainted(true);
+        myProgressBar.setVisible(false);
 
         addWindowListener(new WindowAdapter() {
             @Override
@@ -68,28 +66,7 @@ public class MainWindow extends JFrame {
             }
         });
 
-        Model.getFacade().addProgressListener(new ProgressListener() {
-            @Override
-            public void started(final String message) {
-                myProgressBar.setValue(0);
-            }
-
-            @Override
-            public void progress(final int percent) {
-                myProgressBar.setValue(percent);
-            }
-
-            @Override
-            public void progress(final int percent, final String taskText) {
-                progress(percent);
-                myProgressBar.setString(taskText);
-            }
-
-            @Override
-            public void done(final String message) {
-                JOptionPane.showMessageDialog(MainWindow.this, "Finish");
-            }
-        });
+        Model.getFacade().addProgressListener(myProgressBar);
 
         createMainMenu();
 
