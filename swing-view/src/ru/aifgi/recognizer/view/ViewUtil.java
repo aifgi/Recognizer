@@ -16,14 +16,22 @@ package ru.aifgi.recognizer.view;
  * limitations under the License.
  */
 
+import javax.swing.*;
+
 /**
  * @author aifgi
  */
 
 public class ViewUtil {
     private static /*volatile*/ MainWindow ourMainWindow;
+    private static final Thread.UncaughtExceptionHandler HANDLER = new Thread.UncaughtExceptionHandler() {
+        @Override
+        public void uncaughtException(final Thread t, final Throwable e) {
+            showErrorMessage(e);
+        }
+    };
 
-    // TODO: change return type to Window?
+    // TODO: change return type to Window or make MainWindow interface?
     public static MainWindow getMainWindow() {
         if (ourMainWindow == null) {
             synchronized (ViewUtil.class) {
@@ -33,6 +41,19 @@ public class ViewUtil {
             }
         }
         return ourMainWindow;
+    }
+
+    // TODO: move to another place?
+    public static Thread.UncaughtExceptionHandler getApplicationUncaughtExceptionHandler() {
+        return HANDLER;
+    }
+
+    public static void showErrorMessage(final Throwable throwable) {
+        showErrorMessage(throwable.getClass().getName(), throwable.getLocalizedMessage());
+    }
+
+    public static void showErrorMessage(final String title, final String message) {
+        JOptionPane.showMessageDialog(ourMainWindow, message, title, JOptionPane.ERROR_MESSAGE);
     }
 
     private ViewUtil() {

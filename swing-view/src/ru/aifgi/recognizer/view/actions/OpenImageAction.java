@@ -15,6 +15,7 @@ package ru.aifgi.recognizer.view.actions;
  * limitations under the License.
  */
 
+import ru.aifgi.recognizer.model.thread_factories.MyThreadFactory;
 import ru.aifgi.recognizer.view.MainWindow;
 import ru.aifgi.recognizer.view.ViewUtil;
 
@@ -32,7 +33,7 @@ import java.util.concurrent.Executors;
  */
 
 public class OpenImageAction extends MyAction {
-    private final ExecutorService myService = Executors.newSingleThreadExecutor();
+    private final ExecutorService myService = Executors.newSingleThreadExecutor(new MyThreadFactory("OpenImage"));
 
     public OpenImageAction() {
         super("Open image");
@@ -45,7 +46,7 @@ public class OpenImageAction extends MyAction {
         final MainWindow mainWindow = ViewUtil.getMainWindow();
         final int returnVal = fileChooser.showOpenDialog(mainWindow);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
-            myService.submit(new Runnable() {
+            myService.execute(new Runnable() {
                 @Override
                 public void run() {
                     final File file = fileChooser.getSelectedFile();
@@ -56,6 +57,7 @@ public class OpenImageAction extends MyAction {
                     catch (IOException e) {
                         // TODO:
                         e.printStackTrace();
+                        throw new RuntimeException(e);
                     }
                 }
             });

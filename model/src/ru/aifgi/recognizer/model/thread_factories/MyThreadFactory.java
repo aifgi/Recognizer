@@ -1,5 +1,4 @@
-package ru.aifgi.recognizer.model;
-
+package ru.aifgi.recognizer.model.thread_factories;
 /*
  * Copyright 2012 Alexey Ivanov
  *
@@ -23,18 +22,17 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author aifgi
  */
 
-public class DaemonThreadFactory implements ThreadFactory {
+public class MyThreadFactory implements ThreadFactory {
     private final String myPoolName;
     private final AtomicInteger myNumber = new AtomicInteger(0);
 
-    public DaemonThreadFactory(final String poolName) {
+    public MyThreadFactory(final String poolName) {
         myPoolName = poolName;
     }
 
     @Override
     public Thread newThread(final Runnable r) {
         final Thread thread = new Thread(r, myPoolName + " Pool[Thread-" + myNumber.getAndIncrement() + "]");
-        thread.setDaemon(true);
         return thread;
     }
 }

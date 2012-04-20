@@ -23,7 +23,8 @@ import ru.aifgi.recognizer.view.ViewUtil;
  */
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
+        Thread.setDefaultUncaughtExceptionHandler(ViewUtil.getApplicationUncaughtExceptionHandler());
         ViewUtil.getMainWindow().setVisible(true);
     }
 }

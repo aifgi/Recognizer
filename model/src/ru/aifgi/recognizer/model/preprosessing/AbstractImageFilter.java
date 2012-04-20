@@ -17,8 +17,8 @@ package ru.aifgi.recognizer.model.preprosessing;
  */
 
 import ru.aifgi.recognizer.api.ImageFilter;
-import ru.aifgi.recognizer.model.DaemonThreadFactory;
 import ru.aifgi.recognizer.model.ReadWriteLocker;
+import ru.aifgi.recognizer.model.thread_factories.DaemonThreadFactory;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
@@ -59,13 +59,17 @@ public abstract class AbstractImageFilter implements ImageFilter {
 
         for (int i = 0; i < width; ++i) {
             final int x = i;
-            THREAD_POOL.submit(new Runnable() {
+            THREAD_POOL.execute(new Runnable() {
                 @Override
                 public void run() {
-                    for (int j = 0; j < height; ++j) {
-                        result[x][j] = applyImpl(inputImage, x, j);
+                    try {
+                        for (int j = 0; j < height; ++j) {
+                            result[x][j] = applyImpl(inputImage, x, j);
+                        }
                     }
-                    latch.countDown();
+                    finally {
+                        latch.countDown();
+                    }
                 }
             });
         }
