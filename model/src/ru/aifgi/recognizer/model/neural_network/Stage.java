@@ -16,6 +16,9 @@ package ru.aifgi.recognizer.model.neural_network;
  * limitations under the License.
  */
 
+import ru.aifgi.recognizer.model.neural_network.layers.impl.ConvolutionalLayer;
+import ru.aifgi.recognizer.model.neural_network.layers.impl.SubsamplingLayer;
+
 /**
  * @author aifgi
  */

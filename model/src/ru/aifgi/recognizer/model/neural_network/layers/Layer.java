@@ -1,4 +1,4 @@
-package ru.aifgi.recognizer.model.neural_network;
+package ru.aifgi.recognizer.model.neural_network.layers;
 
 /*
  * Copyright 2012 Alexey Ivanov
@@ -23,18 +23,6 @@ import ru.aifgi.recognizer.api.neural_network.Function;
  */
 
 public interface Layer {
-    double[][] computeOutput(double[][] input);
-
-    double[][] backPropagation(final double[][] gradients);
-
-    /**
-     * @param deltas weight deltas
-     * @return old weights
-     */
-    double[][] updateWeights(final double[][] deltas);
-
-    double[][] updateWeights(final double[][] deltas, final double regularizationParameter);
-
     Function getFunction();
 
     void setFunction(Function function);

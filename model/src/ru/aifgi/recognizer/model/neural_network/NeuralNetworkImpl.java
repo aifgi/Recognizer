@@ -19,6 +19,9 @@ package ru.aifgi.recognizer.model.neural_network;
 import ru.aifgi.recognizer.api.neural_network.Function;
 import ru.aifgi.recognizer.api.neural_network.NeuralNetwork;
 import ru.aifgi.recognizer.api.neural_network.TrainSet;
+import ru.aifgi.recognizer.model.ArrayUtil;
+import ru.aifgi.recognizer.model.neural_network.layers.OneDimensionalLayer;
+import ru.aifgi.recognizer.model.neural_network.layers.impl.FullyConnectedLayer;
 
 /**
  * @author aifgi
@@ -26,6 +29,7 @@ import ru.aifgi.recognizer.api.neural_network.TrainSet;
 
 public class NeuralNetworkImpl implements NeuralNetwork {
     private final Stage[] myStages;
+    private final OneDimensionalLayer myOutputLayer;
     private final int myInputSize;
 
     private final int myMinInput = 0;
@@ -37,30 +41,18 @@ public class NeuralNetworkImpl implements NeuralNetwork {
         for (Stage stage : myStages) {
             stage = new Stage(4, 5, 2);
         }
+        myOutputLayer = new FullyConnectedLayer(40, 40);
     }
 
+    // TODO: merge network output with stageOutputs
     @Override
     public double[] computeOutput(final double[][] input) {
         final double[][] normalizedInput = normalize(input);
         final Stage.StageOutput stageOutput = new Stage.StageOutput(normalizedInput);
         final Stage.StageOutput[] stageOutputs = forwardComputation(stageOutput);
-        return toArray(stageOutputs[myStages.length].getStageOutput());
-    }
-
-    // TODO: get rid this method
-    private double[] toArray(final double[][][] stageOutput) {
-        final int length1 = stageOutput.length;
-        final int length2 = stageOutput[0].length;
-        final int length3 = stageOutput[0][0].length;
-        final double[] res = new double[length1 * length2 * length3];
-        for (int i = 0; i < length1; ++i) {
-            for (int j = 0; j < length2; ++j) {
-                for (int k = 0; k < length3; ++k) {
-                    res[i * length1 + j * length2 + k] = stageOutput[i][j][k];
-                }
-            }
-        }
-        return res;
+        final double[] doubles = ArrayUtil.toOneDimensionalArray(stageOutputs[myStages.length].getStageOutput());
+        final double[] networkOutput = myOutputLayer.computeOutput(doubles);
+        return networkOutput;
     }
 
     private Stage.StageOutput[] forwardComputation(final Stage.StageOutput input) {

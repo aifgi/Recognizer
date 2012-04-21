@@ -82,6 +82,10 @@ public class MathUtil {
         return ((input > 0.0) ? (y - 1.0) : (1.0 - y)) / (y + 1.0);
     }
 
+    public static double getRandom() {
+        return 0.6 * Math.random() - 0.3;
+    }
+
     private MathUtil() {
     }
 }

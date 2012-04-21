@@ -1,4 +1,5 @@
-package ru.aifgi.recognizer.model.neural_network;
+package ru.aifgi.recognizer.model.neural_network.layers.impl;
+
 /*
  * Copyright 2012 Alexey Ivanov
  *
@@ -15,47 +16,50 @@ package ru.aifgi.recognizer.model.neural_network;
  * limitations under the License.
  */
 
-import ru.aifgi.recognizer.api.neural_network.Function;
+import ru.aifgi.recognizer.model.MathUtil;
+import ru.aifgi.recognizer.model.neural_network.layers.TwoDimensionalLayer;
 
 /**
  * @author aifgi
  */
 
-public class ConvolutionalLayer implements Layer {
-    private final double[][] myConvolutionalMask;
-    private Function myFunction = Functions.TANH;
+public class SubsamplingLayer extends AbstractLayer implements TwoDimensionalLayer {
+    private final int myMaskSize;
+    private double myWeight;
     private double myBias;
 
-    public ConvolutionalLayer(final int maskSize) {
-        myConvolutionalMask = new double[maskSize][maskSize];
+    public SubsamplingLayer(final int maskSize) {
+        super();
+        myMaskSize = maskSize;
+    }
+
+    @Override
+    protected void init() {
+        myBias = MathUtil.getRandom();
+        myWeight = MathUtil.getRandom();
     }
 
     @Override
     public double[][] computeOutput(final double[][] input) {
-        final double[][] output = convolution(input);
-        final int length = output.length;
-        for (final double[] arr : output) {
-            for (int i = 0; i < length; i++) {
+        final double[][] result = subsampling(input);
+        final int length = result.length;
+        for (final double[] arr : result) {
+            for (int i = 0; i < length; ++i) {
                 arr[i] = myFunction.apply(arr[i] + myBias);
             }
         }
-        return output;
+        return result;
     }
 
-    private double[][] convolution(final double[][] input) {
-        final int maskSize = myConvolutionalMask.length;
-        final int resultSize = input.length - maskSize + 1;
+    private double[][] subsampling(final double[][] input) {
+        final int length = input.length;
+        final int resultSize = length / myMaskSize;
+        final double denominator = MathUtil.sqr(myMaskSize);
         final double[][] result = new double[resultSize][resultSize];
-        for (int i = 0; i < resultSize; ++i) {
-            final double[] arr = result[i];
+        for (int i = 0; i < length; ++i) {
+            final double[] arr = result[i / myMaskSize];
             for (int j = 0; j < resultSize; ++j) {
-                double value = 0;
-                for (int c = 0; c < maskSize; ++c) {
-                    for (int k = 0; k < maskSize; ++k) {
-                        value += input[i + c][j + k] * myConvolutionalMask[c][k];
-                    }
-                }
-                arr[j] = value;
+                arr[j / myMaskSize] += input[i][j] * myWeight / denominator;
             }
         }
         return result;
@@ -74,15 +78,5 @@ public class ConvolutionalLayer implements Layer {
     @Override
     public double[][] updateWeights(final double[][] deltas, final double regularizationParameter) {
         return new double[0][];  //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
-    public Function getFunction() {
-        return myFunction;
-    }
-
-    @Override
-    public void setFunction(final Function function) {
-        myFunction = function;
     }
 }
