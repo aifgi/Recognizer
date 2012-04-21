@@ -17,7 +17,6 @@ package ru.aifgi.recognizer.model.neural_network;
  */
 
 import ru.aifgi.recognizer.api.neural_network.Function;
-import ru.aifgi.recognizer.api.neural_network.Functions;
 import ru.aifgi.recognizer.model.MathUtil;
 
 /**

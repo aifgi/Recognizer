@@ -1,4 +1,4 @@
-package ru.aifgi.recognizer.api.neural_network;
+package ru.aifgi.recognizer.model.neural_network;
 /*
  * Copyright 2012 Alexey Ivanov
  *
@@ -14,6 +14,9 @@ package ru.aifgi.recognizer.api.neural_network;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+import ru.aifgi.recognizer.api.neural_network.Function;
+import ru.aifgi.recognizer.model.MathUtil;
 
 /**
  * @author aifgi
@@ -48,7 +51,7 @@ public enum Functions implements Function {
 
         @Override
         public double apply(final double input) {
-            return A * Math.tanh(input/*, B*/);
+            return A * MathUtil.fastTanh(input, B);
         }
 
         @Override
