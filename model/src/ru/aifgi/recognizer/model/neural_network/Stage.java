@@ -16,6 +16,8 @@ package ru.aifgi.recognizer.model.neural_network;
  * limitations under the License.
  */
 
+import ru.aifgi.recognizer.model.ArrayUtil;
+import ru.aifgi.recognizer.model.neural_network.layers.LayerOutput;
 import ru.aifgi.recognizer.model.neural_network.layers.impl.ConvolutionalLayer;
 import ru.aifgi.recognizer.model.neural_network.layers.impl.SubsamplingLayer;
 
@@ -24,28 +26,37 @@ import ru.aifgi.recognizer.model.neural_network.layers.impl.SubsamplingLayer;
  */
 
 public class Stage {
-    public static class StageOutput {
+    private static class StageOutput implements LayerOutput {
         private final double[][][] myConvolutionalLayerOutput;
         private final double[][][] mySabsamplingLayerOutput;
-
-        public StageOutput(final double[][] input) {
-            myConvolutionalLayerOutput = null;
-            final double[][][] t = new double[1][][];
-            t[0] = input;
-            mySabsamplingLayerOutput = t;
-        }
 
         public StageOutput(final double[][][] conv, final double[][][] sub) {
             myConvolutionalLayerOutput = conv;
             mySabsamplingLayerOutput = sub;
         }
 
-        public double[][][] getStageOutput() {
+        @Override
+        public double[][][] getOutput3d() {
             return mySabsamplingLayerOutput;
+        }
+
+        @Override
+        public double[] getOutput1d() {
+            return ArrayUtil.toOneDimensionalArray(mySabsamplingLayerOutput);
         }
 
         public double[][] getStageOutput(final int index) {
             return mySabsamplingLayerOutput[index];
+        }
+
+        @Override
+        public boolean is3d() {
+            return true;
+        }
+
+        @Override
+        public boolean is1d() {
+            return false;
         }
     }
 
@@ -66,13 +77,14 @@ public class Stage {
     }
 
     // TODO: fix "0"
-    public StageOutput getOutput(final StageOutput input) {
+    public LayerOutput getOutput(final LayerOutput input) {
         final int length = myLayers.length;
         final double[][][] conv = new double[length][][];
         final double[][][] sub = new double[length][][];
+        final double[][][] input3d = input.getOutput3d();
         for (int i = 0; i < length; ++i) {
             final LayerPair layerPair = myLayers[i];
-            conv[i] = layerPair.convolutional.computeOutput(input.getStageOutput(0));
+            conv[i] = layerPair.convolutional.computeOutput(input3d[0]);
             sub[i] = layerPair.subsampling.computeOutput(conv[i]);
         }
         return new StageOutput(conv, sub);

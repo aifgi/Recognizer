@@ -18,8 +18,10 @@ package ru.aifgi.recognizer.model.neural_network;
 
 import ru.aifgi.recognizer.api.neural_network.Function;
 import ru.aifgi.recognizer.api.neural_network.NeuralNetwork;
+import ru.aifgi.recognizer.api.neural_network.NeuralNetworkStructure;
 import ru.aifgi.recognizer.api.neural_network.TrainSet;
 import ru.aifgi.recognizer.model.ArrayUtil;
+import ru.aifgi.recognizer.model.neural_network.layers.LayerOutput;
 import ru.aifgi.recognizer.model.neural_network.layers.OneDimensionalLayer;
 import ru.aifgi.recognizer.model.neural_network.layers.impl.FullyConnectedLayer;
 
@@ -28,43 +30,106 @@ import ru.aifgi.recognizer.model.neural_network.layers.impl.FullyConnectedLayer;
  */
 
 public class NeuralNetworkImpl implements NeuralNetwork {
+    private static class Input implements LayerOutput {
+        private final double[][][] myValue;
+
+        private Input(final double[][] value) {
+            myValue = new double[1][][];
+            myValue[0] = value;
+        }
+
+        @Override
+        public double[][][] getOutput3d() {
+            return myValue;
+        }
+
+        @Override
+        public double[] getOutput1d() {
+            return ArrayUtil.toOneDimensionalArray(myValue);
+        }
+
+        @Override
+        public boolean is3d() {
+            return true;
+        }
+
+        @Override
+        public boolean is1d() {
+            return false;
+        }
+    }
+
     private final Stage[] myStages;
-    private final OneDimensionalLayer myOutputLayer;
+    private final OneDimensionalLayer[] myFullyConnectedLayers;
     private final int myInputSize;
 
     private final int myMinInput = 0;
     private final int myMaxInput = 255;
 
-    public NeuralNetworkImpl(final int stageNumber, final int inputSize) {
+    public NeuralNetworkImpl(final NeuralNetworkStructure networkStructure) {
+        int inputSize = networkStructure.getInputSize();
         myInputSize = inputSize;
-        myStages = new Stage[stageNumber];
-        for (Stage stage : myStages) {
-            stage = new Stage(4, 5, 2);
+
+        final NeuralNetworkStructure.StageStructure[] stageStructures = networkStructure.getStageStructures();
+        final int stageStructuresLength = stageStructures.length;
+        myStages = new Stage[stageStructuresLength];
+        for (int i = 0; i < stageStructuresLength; ++i) {
+            final NeuralNetworkStructure.StageStructure stageStructure = stageStructures[i];
+            final int convolutionalReceptiveFieldSize = stageStructure.getConvolutionalReceptiveFieldSize();
+            final int subsamplingReceptiveFieldSize = stageStructure.getSubsamplingReceptiveFieldSize();
+            myStages[i] = new Stage(stageStructure.getNumberOfFeatureMaps(),
+                                    convolutionalReceptiveFieldSize,
+                                    subsamplingReceptiveFieldSize);
+            inputSize -= convolutionalReceptiveFieldSize - 1;
+            inputSize /= subsamplingReceptiveFieldSize;
         }
-        myOutputLayer = new FullyConnectedLayer(40, 40);
+
+        final int[] fullyConnectedLayersSizes = networkStructure.getFullyConnectedLayersSizes();
+        final int length = fullyConnectedLayersSizes.length;
+        myFullyConnectedLayers = new OneDimensionalLayer[stageStructuresLength];
+        int prevSize = inputSize;
+        for (int i = 0; i < length; ++i) {
+            final int outputSize = fullyConnectedLayersSizes[i];
+            myFullyConnectedLayers[i] = new FullyConnectedLayer(prevSize, outputSize);
+            prevSize = outputSize;
+        }
     }
 
-    // TODO: merge network output with stageOutputs
     @Override
     public double[] computeOutput(final double[][] input) {
         final double[][] normalizedInput = normalize(input);
-        final Stage.StageOutput stageOutput = new Stage.StageOutput(normalizedInput);
-        final Stage.StageOutput[] stageOutputs = forwardComputation(stageOutput);
-        final double[] doubles = ArrayUtil.toOneDimensionalArray(stageOutputs[myStages.length].getStageOutput());
-        final double[] networkOutput = myOutputLayer.computeOutput(doubles);
-        return networkOutput;
+        final LayerOutput layerOutput = new Input(normalizedInput);
+        final LayerOutput[] layerOutputs = forwardComputation(layerOutput);
+        return layerOutputs[layerOutputs.length - 1].getOutput1d();
     }
 
-    private Stage.StageOutput[] forwardComputation(final Stage.StageOutput input) {
-        final int length = myStages.length;
-        final Stage.StageOutput[] stageOutputs = new Stage.StageOutput[length + 1];
-        stageOutputs[0] = input;
-        for (int i = 0; i < length; i++) {
+    private LayerOutput[] forwardComputation(final LayerOutput input) {
+        final LayerOutput[] layerOutputs = new LayerOutput[myStages.length + myFullyConnectedLayers.length + 1];
+
+        layerOutputs[0] = input;
+        forwardThroughStages(layerOutputs);
+        forwardThroughFullyConnected(layerOutputs);
+
+        return layerOutputs;
+    }
+
+    private void forwardThroughStages(final LayerOutput[] layerOutputs) {
+        final int stagesLength = myStages.length;
+        for (int i = 0; i < stagesLength; i++) {
             final Stage stage = myStages[i];
-            final Stage.StageOutput output = stage.getOutput(stageOutputs[i]);
-            stageOutputs[i + 1] = output;
+            final LayerOutput output = stage.getOutput(layerOutputs[i]);
+            layerOutputs[i + 1] = output;
         }
-        return stageOutputs;
+    }
+
+    private void forwardThroughFullyConnected(final LayerOutput[] layerOutputs) {
+        final int stagesLength = myStages.length;
+        final int fcLength = myFullyConnectedLayers.length;
+        double[] prevOutput = layerOutputs[stagesLength].getOutput1d();
+        for (int i = 0; i < fcLength; ++i) {
+            prevOutput = myFullyConnectedLayers[i].computeOutput(prevOutput);
+            layerOutputs[i + stagesLength + 1] = new FullyConnectedLayer.LayerOutputImpl(prevOutput);
+        }
     }
 
     private double[][] normalize(final double[][] input) {
