@@ -137,6 +137,6 @@ public class ProgressBar extends JPanel implements ProgressListener {
     @Override
     public void done(final String message) {
         JOptionPane.showMessageDialog(ViewUtil.getMainWindow(), "Finish");
-        myProgressBar.setVisible(false);
+        setVisible(false);
     }
 }
