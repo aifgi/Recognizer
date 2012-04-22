@@ -45,7 +45,7 @@ public class SubsamplingLayer extends AbstractLayer implements TwoDimensionalLay
         final int length = result.length;
         for (final double[] arr : result) {
             for (int i = 0; i < length; ++i) {
-                arr[i] = myFunction.apply(arr[i] + myBias);
+                arr[i] = myFunction.apply(arr[i] * myWeight + myBias);
             }
         }
         return result;
@@ -54,12 +54,11 @@ public class SubsamplingLayer extends AbstractLayer implements TwoDimensionalLay
     private double[][] subsampling(final double[][] input) {
         final int length = input.length;
         final int resultSize = length / myMaskSize;
-        final double denominator = MathUtil.sqr(myMaskSize);
         final double[][] result = new double[resultSize][resultSize];
         for (int i = 0; i < length; ++i) {
             final double[] arr = result[i / myMaskSize];
             for (int j = 0; j < resultSize; ++j) {
-                arr[j / myMaskSize] += input[i][j] * myWeight / denominator;
+                arr[j / myMaskSize] += input[i][j];
             }
         }
         return result;
