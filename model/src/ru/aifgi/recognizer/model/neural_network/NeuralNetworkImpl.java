@@ -107,7 +107,7 @@ public class NeuralNetworkImpl implements NeuralNetwork {
 
     private void forwardThroughStages(final StageOutput[] stageOutputs) {
         final int stagesLength = myStages.length;
-        for (int i = 0; i < stagesLength; i++) {
+        for (int i = 0; i < stagesLength; ++i) {
             final Stage stage = myStages[i];
             final StageOutput output = stage.getOutput(stageOutputs[i]);
             stageOutputs[i + 1] = output;
