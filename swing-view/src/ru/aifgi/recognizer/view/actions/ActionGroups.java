@@ -25,12 +25,17 @@ import javax.swing.*;
 
 public enum ActionGroups {
     FILE_MENU(Bundle.getString("file.menu"), new BasicAction[]{
-            Actions.OPEN_IMAGE.getAction(), Separator.INSTANCE, Actions.RECOGNIZE.getAction()
+            Actions.OPEN_IMAGE.getAction(), Separator.INSTANCE, Actions.EXIT.getAction()
+    }),
+    RECOGNIZE_MENU(Bundle.getString("recognize.menu"), new BasicAction[]{
+            Actions.RECOGNIZE.getAction()
     }),
     HELP_MENU(Bundle.getString("help.menu"), new BasicAction[]{
-            Actions.ABOUT.getAction(), Separator.INSTANCE, Actions.EXIT.getAction()
+            Actions.ABOUT.getAction()
     }),
-    MAIN_MENU(new BasicAction[]{FILE_MENU.getActionGroup(), HELP_MENU.getActionGroup()});
+    MAIN_MENU(new BasicAction[]{
+            FILE_MENU.getActionGroup(), RECOGNIZE_MENU.getActionGroup(), HELP_MENU.getActionGroup()
+    });
 
     private final ActionGroup myActionGroup;
 
