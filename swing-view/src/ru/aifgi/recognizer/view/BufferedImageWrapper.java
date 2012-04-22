@@ -26,6 +26,7 @@ import java.awt.image.BufferedImage;
 
 public class BufferedImageWrapper implements ImageWrapper {
     private final BufferedImage myBufferedImage;
+    private double[][] myBrightnessesCache;
 
     public BufferedImageWrapper(final BufferedImage bufferedImage) {
         myBufferedImage = bufferedImage;
@@ -41,9 +42,46 @@ public class BufferedImageWrapper implements ImageWrapper {
         return myBufferedImage.getHeight();
     }
 
-    // TODO:
     @Override
     public double[][] getBrightnesses() {
-        return new double[0][];  //To change body of implemented methods use File | Settings | File Templates.
+        if (myBrightnessesCache == null) {
+            computeBrightnesses();
+        }
+        return myBrightnessesCache;
+    }
+
+    private synchronized void computeBrightnesses() {
+        final int width = myBufferedImage.getWidth();
+        final int height = myBufferedImage.getHeight();
+        myBrightnessesCache = new double[width][height];
+        for (int i = 0; i < width; ++i) {
+            for (int j = 0; j < height; ++j) {
+                myBrightnessesCache[i][j] = getBrightness(i, j);
+            }
+        }
+    }
+
+    private double getBrightness(final int x, final int y) {
+        final int rgb = myBufferedImage.getRGB(x, y);
+        final int red = getRed(rgb);
+        final int green = getGreen(rgb);
+        final int blue = getBlue(rgb);
+        return 0.299 * red + 0.587 * green + 0.114 * blue;
+    }
+
+    private static int getRed(final int rgb) {
+        return doGet(rgb, 16);
+    }
+
+    private static int getGreen(final int rgb) {
+        return doGet(rgb, 8);
+    }
+
+    private static int getBlue(final int rgb) {
+        return doGet(rgb, 0);
+    }
+
+    private static int doGet(final int rgb, final int s) {
+        return (rgb >> s) & 0xFF;
     }
 }
