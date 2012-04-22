@@ -15,9 +15,7 @@ package ru.aifgi.recognizer.model.neural_network.layers.impl;
  * limitations under the License.
  */
 
-import ru.aifgi.recognizer.model.ArrayUtil;
 import ru.aifgi.recognizer.model.MathUtil;
-import ru.aifgi.recognizer.model.neural_network.layers.LayerOutput;
 import ru.aifgi.recognizer.model.neural_network.layers.OneDimensionalLayer;
 
 /**
@@ -25,40 +23,6 @@ import ru.aifgi.recognizer.model.neural_network.layers.OneDimensionalLayer;
  */
 
 public class FullyConnectedLayer extends AbstractLayer implements OneDimensionalLayer {
-    public static class LayerOutputImpl implements LayerOutput {
-        private final double[] myOutput;
-
-        public LayerOutputImpl(final double[] output) {
-            myOutput = output;
-        }
-
-        public LayerOutputImpl(final double[][][] output) {
-            myOutput = ArrayUtil.toOneDimensionalArray(output);
-        }
-
-        @Override
-        public double[][][] getOutput3d() {
-            final double[][][] doubles = new double[1][1][];
-            doubles[0][0] = myOutput;
-            return doubles;
-        }
-
-        @Override
-        public double[] getOutput1d() {
-            return myOutput;
-        }
-
-        @Override
-        public boolean is3d() {
-            return false;
-        }
-
-        @Override
-        public boolean is1d() {
-            return true;
-        }
-    }
-
     private double[][] myWeights;
 
     public FullyConnectedLayer(final int prevLayerSize, final int layerSize) {

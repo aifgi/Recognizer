@@ -21,16 +21,17 @@ import ru.aifgi.recognizer.api.neural_network.NeuralNetwork;
 import ru.aifgi.recognizer.api.neural_network.NeuralNetworkStructure;
 import ru.aifgi.recognizer.api.neural_network.TrainSet;
 import ru.aifgi.recognizer.model.ArrayUtil;
-import ru.aifgi.recognizer.model.neural_network.layers.LayerOutput;
-import ru.aifgi.recognizer.model.neural_network.layers.OneDimensionalLayer;
-import ru.aifgi.recognizer.model.neural_network.layers.impl.FullyConnectedLayer;
+import ru.aifgi.recognizer.model.neural_network.layers.StageOutput;
+import ru.aifgi.recognizer.model.neural_network.stages.ConvolutionalStage;
+import ru.aifgi.recognizer.model.neural_network.stages.FullyConnectedStage;
+import ru.aifgi.recognizer.model.neural_network.stages.Stage;
 
 /**
  * @author aifgi
  */
 
 public class NeuralNetworkImpl implements NeuralNetwork {
-    private static class Input implements LayerOutput {
+    private static class Input implements StageOutput {
         private final double[][][] myValue;
 
         private Input(final double[][] value) {
@@ -60,7 +61,6 @@ public class NeuralNetworkImpl implements NeuralNetwork {
     }
 
     private final Stage[] myStages;
-    private final OneDimensionalLayer[] myFullyConnectedLayers;
     private final int myInputSize;
 
     private final int myMinInput = 0;
@@ -72,63 +72,45 @@ public class NeuralNetworkImpl implements NeuralNetwork {
 
         final NeuralNetworkStructure.StageStructure[] stageStructures = networkStructure.getStageStructures();
         final int stageStructuresLength = stageStructures.length;
-        myStages = new Stage[stageStructuresLength];
+        myStages = new Stage[stageStructuresLength + 1];
         for (int i = 0; i < stageStructuresLength; ++i) {
             final NeuralNetworkStructure.StageStructure stageStructure = stageStructures[i];
             final int convolutionalReceptiveFieldSize = stageStructure.getConvolutionalReceptiveFieldSize();
             final int subsamplingReceptiveFieldSize = stageStructure.getSubsamplingReceptiveFieldSize();
-            myStages[i] = new Stage(stageStructure.getNumberOfFeatureMaps(),
-                                    convolutionalReceptiveFieldSize,
-                                    subsamplingReceptiveFieldSize);
+            myStages[i] = new ConvolutionalStage(stageStructure.getNumberOfFeatureMaps(),
+                                                 convolutionalReceptiveFieldSize,
+                                                 subsamplingReceptiveFieldSize);
             inputSize -= convolutionalReceptiveFieldSize - 1;
             inputSize /= subsamplingReceptiveFieldSize;
         }
 
         final int[] fullyConnectedLayersSizes = networkStructure.getFullyConnectedLayersSizes();
-        final int length = fullyConnectedLayersSizes.length;
-        myFullyConnectedLayers = new OneDimensionalLayer[stageStructuresLength];
-        int prevSize = inputSize;
-        for (int i = 0; i < length; ++i) {
-            final int outputSize = fullyConnectedLayersSizes[i];
-            myFullyConnectedLayers[i] = new FullyConnectedLayer(prevSize, outputSize);
-            prevSize = outputSize;
-        }
+        myStages[stageStructuresLength] = new FullyConnectedStage(fullyConnectedLayersSizes, inputSize);
     }
 
     @Override
     public double[] computeOutput(final double[][] input) {
         final double[][] normalizedInput = normalize(input);
-        final LayerOutput layerOutput = new Input(normalizedInput);
-        final LayerOutput[] layerOutputs = forwardComputation(layerOutput);
-        return layerOutputs[layerOutputs.length - 1].getOutput1d();
+        final StageOutput stageOutput = new Input(normalizedInput);
+        final StageOutput[] stageOutputs = forwardComputation(stageOutput);
+        return stageOutputs[stageOutputs.length - 1].getOutput1d();
     }
 
-    private LayerOutput[] forwardComputation(final LayerOutput input) {
-        final LayerOutput[] layerOutputs = new LayerOutput[myStages.length + myFullyConnectedLayers.length + 1];
+    private StageOutput[] forwardComputation(final StageOutput input) {
+        final StageOutput[] stageOutputs = new StageOutput[myStages.length + 1];
 
-        layerOutputs[0] = input;
-        forwardThroughStages(layerOutputs);
-        forwardThroughFullyConnected(layerOutputs);
+        stageOutputs[0] = input;
+        forwardThroughStages(stageOutputs);
 
-        return layerOutputs;
+        return stageOutputs;
     }
 
-    private void forwardThroughStages(final LayerOutput[] layerOutputs) {
+    private void forwardThroughStages(final StageOutput[] stageOutputs) {
         final int stagesLength = myStages.length;
         for (int i = 0; i < stagesLength; i++) {
             final Stage stage = myStages[i];
-            final LayerOutput output = stage.getOutput(layerOutputs[i]);
-            layerOutputs[i + 1] = output;
-        }
-    }
-
-    private void forwardThroughFullyConnected(final LayerOutput[] layerOutputs) {
-        final int stagesLength = myStages.length;
-        final int fcLength = myFullyConnectedLayers.length;
-        double[] prevOutput = layerOutputs[stagesLength].getOutput1d();
-        for (int i = 0; i < fcLength; ++i) {
-            prevOutput = myFullyConnectedLayers[i].computeOutput(prevOutput);
-            layerOutputs[i + stagesLength + 1] = new FullyConnectedLayer.LayerOutputImpl(prevOutput);
+            final StageOutput output = stage.getOutput(stageOutputs[i]);
+            stageOutputs[i + 1] = output;
         }
     }
 

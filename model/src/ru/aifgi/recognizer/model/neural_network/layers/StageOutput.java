@@ -21,7 +21,7 @@ package ru.aifgi.recognizer.model.neural_network.layers;
  */
 
 // TODO: create better OO-design!
-public interface LayerOutput {
+public interface StageOutput {
     double[][][] getOutput3d();
 
     double[] getOutput1d();
