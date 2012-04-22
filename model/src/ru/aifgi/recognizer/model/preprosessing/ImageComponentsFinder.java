@@ -72,7 +72,7 @@ public class ImageComponentsFinder {
     }
 
     private int findMinimumNeighbour(final int x, final int y) {
-        int res = 0;
+        int res = Integer.MAX_VALUE;
         for (int i = -1; i <= 1; ++i) {
             for (int j = -1; j <= 1; ++j) {
                 final int value = getValue(x + i, y + j);
@@ -81,11 +81,11 @@ public class ImageComponentsFinder {
                 }
             }
         }
-        return res;
+        return (res != Integer.MAX_VALUE) ? res : 0;
     }
 
     private int getValue(final int x, final int y) {
-        if (x < 0 || y < 0) {
+        if (x < 0 || y < 0 || x >= myImage.length || y >= myImage[0].length) {
             return 0;
         }
         return myMask[x][y];

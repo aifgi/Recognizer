@@ -76,7 +76,7 @@ public class BufferedImageWrapper implements ImageWrapper {
         final int red = getRed(rgb);
         final int green = getGreen(rgb);
         final int blue = getBlue(rgb);
-        return 0.299 * red + 0.587 * green + 0.114 * blue;
+        return 255 - (0.299 * red + 0.587 * green + 0.114 * blue);
     }
 
     private static int getRed(final int rgb) {
