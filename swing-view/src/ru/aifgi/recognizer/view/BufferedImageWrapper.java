@@ -19,6 +19,8 @@ package ru.aifgi.recognizer.view;
 import ru.aifgi.recognizer.api.ImageWrapper;
 
 import java.awt.image.BufferedImage;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * @author aifgi
@@ -26,6 +28,7 @@ import java.awt.image.BufferedImage;
 
 public class BufferedImageWrapper implements ImageWrapper {
     private final BufferedImage myBufferedImage;
+    private final Lock myCacheLock = new ReentrantLock();
     private double[][] myBrightnessesCache;
 
     public BufferedImageWrapper(final BufferedImage bufferedImage) {
@@ -45,12 +48,19 @@ public class BufferedImageWrapper implements ImageWrapper {
     @Override
     public double[][] getBrightnesses() {
         if (myBrightnessesCache == null) {
-            computeBrightnesses();
+            if (myCacheLock.tryLock()) {
+                try {
+                    computeBrightnesses();
+                }
+                finally {
+                    myCacheLock.unlock();
+                }
+            }
         }
         return myBrightnessesCache;
     }
 
-    private synchronized void computeBrightnesses() {
+    private void computeBrightnesses() {
         final int width = myBufferedImage.getWidth();
         final int height = myBufferedImage.getHeight();
         myBrightnessesCache = new double[width][height];
