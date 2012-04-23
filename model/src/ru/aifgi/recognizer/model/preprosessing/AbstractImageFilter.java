@@ -31,8 +31,7 @@ import java.util.concurrent.locks.Lock;
 
 public abstract class AbstractImageFilter implements ImageFilter {
     private static final ExecutorService THREAD_POOL =
-            Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() - 1,
-                                         new DaemonThreadFactory("ImageFilters"));
+            Executors.newCachedThreadPool(new DaemonThreadFactory("ImageFilters"));
 
     @Override
     public double[][] apply(final double[][] inputImage) {
