@@ -69,7 +69,7 @@ public class FullyConnectedStage implements Stage {
     }
 
     @Override
-    public StageOutput getOutput(final StageOutput input) {
+    public StageOutput forwardComputation(final StageOutput input) {
         double[] prevOutput = input.getOutput1d();
         final int length = myLayers.length;
         final double[][] outputs = new double[length][];
@@ -81,7 +81,7 @@ public class FullyConnectedStage implements Stage {
     }
 
     @Override
-    public double[][][] train(final double[][][] input) {
+    public double[][][] backwardComputation(final double[][][] input) {
         return new double[0][][];  //To change body of implemented methods use File | Settings | File Templates.
     }
 }

@@ -24,4 +24,6 @@ public interface TrainElement {
     double[][] getData();
 
     int getLabel();
+
+    void normalize(final Normalizer normalizer);
 }

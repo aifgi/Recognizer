@@ -37,12 +37,12 @@ public enum Functions implements Function {
 
         @Override
         public double getMaxValue() {
-            return 1;
+            return 0.9;
         }
 
         @Override
         public double getMinValue() {
-            return 0;
+            return 0.1;
         }
     },
     TANH("Hyperbolic tangent") {
@@ -61,12 +61,12 @@ public enum Functions implements Function {
 
         @Override
         public double getMaxValue() {
-            return A;
+            return 1;
         }
 
         @Override
         public double getMinValue() {
-            return -A;
+            return -1;
         }
     };
 

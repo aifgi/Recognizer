@@ -1,4 +1,5 @@
-package ru.aifgi.recognizer.model.neural_network.stages;
+package ru.aifgi.recognizer.api.neural_network;
+
 /*
  * Copyright 2012 Alexey Ivanov
  *
@@ -15,14 +16,9 @@ package ru.aifgi.recognizer.model.neural_network.stages;
  * limitations under the License.
  */
 
-import ru.aifgi.recognizer.model.neural_network.layers.StageOutput;
-
 /**
  * @author aifgi
  */
-
-public interface Stage {
-    StageOutput forwardComputation(StageOutput input);
-
-    double[][][] backwardComputation(double[][][] input);
+public interface Normalizer {
+    double[][] normalize(final double[][] input);
 }

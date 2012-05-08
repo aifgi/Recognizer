@@ -78,7 +78,7 @@ public class ConvolutionalStage implements Stage {
 
     // TODO: fix "0"
     @Override
-    public StageOutput getOutput(final StageOutput input) {
+    public StageOutput forwardComputation(final StageOutput input) {
         final int length = myLayers.length;
         final double[][][] conv = new double[length][][];
         final double[][][] sub = new double[length][][];
@@ -92,7 +92,7 @@ public class ConvolutionalStage implements Stage {
     }
 
     @Override
-    public double[][][] train(final double[][][] input) {
+    public double[][][] backwardComputation(final double[][][] input) {
         return null;
     }
 }

@@ -23,5 +23,5 @@ package ru.aifgi.recognizer.api.neural_network;
 public interface NeuralNetwork {
     double[] computeOutput(final double[][] input);
 
-    void train(final TrainSet trainSet);
+    TrainingResult train(final TrainingSet trainingSet);
 }

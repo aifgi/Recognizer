@@ -1,4 +1,5 @@
-package ru.aifgi.recognizer.model.neural_network.stages;
+package ru.aifgi.recognizer.api.neural_network;
+
 /*
  * Copyright 2012 Alexey Ivanov
  *
@@ -15,14 +16,15 @@ package ru.aifgi.recognizer.model.neural_network.stages;
  * limitations under the License.
  */
 
-import ru.aifgi.recognizer.model.neural_network.layers.StageOutput;
+import java.util.List;
 
 /**
  * @author aifgi
  */
+public interface TrainingResult {
+    double getLastError();
 
-public interface Stage {
-    StageOutput forwardComputation(StageOutput input);
+    List<Double> getErrors();
 
-    double[][][] backwardComputation(double[][][] input);
+    int getEpochNumber();
 }
