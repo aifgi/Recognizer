@@ -24,5 +24,5 @@ import ru.aifgi.recognizer.model.neural_network.layers.StageOutput;
 public interface Stage {
     StageOutput forwardComputation(StageOutput input);
 
-    double[][][] backwardComputation(double[][][] input);
+    StageOutput backwardComputation(final StageOutput stageOutput, final StageOutput errors);
 }

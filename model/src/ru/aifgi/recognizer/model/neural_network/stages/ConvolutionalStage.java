@@ -92,7 +92,7 @@ public class ConvolutionalStage implements Stage {
     }
 
     @Override
-    public double[][][] backwardComputation(final double[][][] input) {
+    public StageOutput backwardComputation(final StageOutput stageOutput, final StageOutput errors) {
         return null;
     }
 }

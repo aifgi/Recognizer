@@ -103,18 +103,27 @@ public class NeuralNetworkImpl implements NeuralNetwork, Normalizer {
             double averageError = 0;
             for (final TrainElement element : myTrainingSet) {
                 final StageOutput inputVector = makeInput(element.getData());
-                final StageOutput[] layersOutputs = forwardComputation(inputVector);
+                final StageOutput[] stagesOutputs = forwardComputation(inputVector);
                 final double[] rightAnswer = myRightAnswers[element.getLabel()];
-                backwardComputation(layersOutputs, rightAnswer);
+                backwardComputation(stagesOutputs, rightAnswer);
 
-                final double[] networkOutput = layersOutputs[layersOutputs.length - 1].getOutput1d();
+                final double[] networkOutput = stagesOutputs[stagesOutputs.length - 1].getOutput1d();
                 final double error = computeError(rightAnswer, networkOutput);
                 averageError += error;
             }
             return averageError / myTrainingSet.size();
         }
 
-        private void backwardComputation(final StageOutput[] layersOutputs, final double[] rightAnswer) {
+        private void backwardComputation(final StageOutput[] stagesOutputs, final double[] rightAnswer) {
+            final double[][] gradients = computeGradients(stagesOutputs, rightAnswer);
+            updateWeights(gradients, stagesOutputs);
+        }
+
+        private double[][] computeGradients(final StageOutput[] stagesOutputs, final double[] rightAnswer) {
+            return new double[0][];  //To change body of created methods use File | Settings | File Templates.
+        }
+
+        private void updateWeights(final double[][] gradients, final StageOutput[] stagesOutputs) {
             //To change body of created methods use File | Settings | File Templates.
         }
 

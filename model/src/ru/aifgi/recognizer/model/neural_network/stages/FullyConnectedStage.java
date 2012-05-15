@@ -81,7 +81,7 @@ public class FullyConnectedStage implements Stage {
     }
 
     @Override
-    public double[][][] backwardComputation(final double[][][] input) {
-        return new double[0][][];  //To change body of implemented methods use File | Settings | File Templates.
+    public StageOutput backwardComputation(final StageOutput stageOutput, final StageOutput errors) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 }
