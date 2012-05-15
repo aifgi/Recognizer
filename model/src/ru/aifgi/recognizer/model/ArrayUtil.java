@@ -16,12 +16,29 @@ package ru.aifgi.recognizer.model;
  * limitations under the License.
  */
 
+import java.util.Arrays;
+
 /**
  * @author aifgi
  */
 
 public class ArrayUtil {
     private ArrayUtil() {
+    }
+
+    public static <T> T[] join(T[]... arrays) {
+        int length = 0;
+        for (final T[] array : arrays) {
+            length += array.length;
+        }
+        final T[] res = (T[]) new Object[length];
+        int pos = 0;
+        for (final T[] array : arrays) {
+            for (final T elem : array) {
+                res[pos++] = elem;
+            }
+        }
+        return res;
     }
 
     public static double[] toOneDimensionalArray(final double[][][] array) {
