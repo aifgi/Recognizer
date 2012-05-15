@@ -17,16 +17,16 @@ package ru.aifgi.recognizer.model.neural_network;
  */
 
 import ru.aifgi.recognizer.api.neural_network.Normalizer;
-import ru.aifgi.recognizer.api.neural_network.TrainElement;
+import ru.aifgi.recognizer.api.neural_network.TrainingElement;
 
 /**
  * @author aifgi
  */
-public class TrainElementImpl implements TrainElement {
+public class TrainingElementImpl implements TrainingElement {
     private final int myLabel;
     private double[][] myData;
 
-    public TrainElementImpl(final double[][] data, final int label) {
+    public TrainingElementImpl(final double[][] data, final int label) {
         myData = data;
         myLabel = label;
     }

@@ -20,7 +20,7 @@ package ru.aifgi.recognizer.api.neural_network;
  * @author aifgi
  */
 
-public interface TrainingSet extends Iterable<TrainElement> {
+public interface TrainingSet extends Iterable<TrainingElement> {
     void shuffle();
 
     void normalize(final Normalizer normalizer);

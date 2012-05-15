@@ -101,7 +101,7 @@ public class NeuralNetworkImpl implements NeuralNetwork, Normalizer {
             myTrainingSet.shuffle();
 
             double averageError = 0;
-            for (final TrainElement element : myTrainingSet) {
+            for (final TrainingElement element : myTrainingSet) {
                 final StageOutput inputVector = makeInput(element.getData());
                 final StageOutput[] stagesOutputs = forwardComputation(inputVector);
                 final double[] rightAnswer = myRightAnswers[element.getLabel()];

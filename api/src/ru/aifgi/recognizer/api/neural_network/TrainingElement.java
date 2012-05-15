@@ -20,7 +20,7 @@ package ru.aifgi.recognizer.api.neural_network;
  * @author aifgi
  */
 
-public interface TrainElement {
+public interface TrainingElement {
     double[][] getData();
 
     int getLabel();

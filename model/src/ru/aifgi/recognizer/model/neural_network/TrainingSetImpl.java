@@ -17,7 +17,7 @@ package ru.aifgi.recognizer.model.neural_network;
  */
 
 import ru.aifgi.recognizer.api.neural_network.Normalizer;
-import ru.aifgi.recognizer.api.neural_network.TrainElement;
+import ru.aifgi.recognizer.api.neural_network.TrainingElement;
 import ru.aifgi.recognizer.api.neural_network.TrainingSet;
 
 import java.util.Collections;
@@ -28,34 +28,34 @@ import java.util.List;
  * @author aifgi
  */
 public class TrainingSetImpl implements TrainingSet {
-    private final List<TrainElement> myTrainElements;
+    private final List<TrainingElement> myTrainingElements;
     private final int myNumberOfClusters;
 
-    public TrainingSetImpl(final List<TrainElement> trainElements, final int numberOfClusters) {
-        myTrainElements = trainElements;
+    public TrainingSetImpl(final List<TrainingElement> trainingElements, final int numberOfClusters) {
+        myTrainingElements = trainingElements;
         myNumberOfClusters = numberOfClusters;
     }
 
     @Override
     public void shuffle() {
-        Collections.shuffle(myTrainElements);
+        Collections.shuffle(myTrainingElements);
     }
 
     @Override
     public void normalize(final Normalizer normalizer) {
-        for (final TrainElement element : myTrainElements) {
+        for (final TrainingElement element : myTrainingElements) {
             element.normalize(normalizer);
         }
     }
 
     @Override
     public int size() {
-        return myTrainElements.size();
+        return myTrainingElements.size();
     }
 
     @Override
-    public Iterator<TrainElement> iterator() {
-        return myTrainElements.iterator();
+    public Iterator<TrainingElement> iterator() {
+        return myTrainingElements.iterator();
     }
 
     @Override
