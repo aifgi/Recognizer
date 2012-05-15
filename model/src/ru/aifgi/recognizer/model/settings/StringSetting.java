@@ -1,0 +1,63 @@
+package ru.aifgi.recognizer.model.settings;
+
+/*
+ * Copyright 2012 Alexey Ivanov
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+import ru.aifgi.recognizer.api.settings.InvalidValueException;
+import ru.aifgi.recognizer.api.settings.Validator;
+
+import java.util.prefs.Preferences;
+
+/**
+ * @author aifgi
+ */
+public class StringSetting extends AbstractSetting<String> {
+    private final Validator<String> myValidator;
+
+    public StringSetting(final Preferences preferences, final String key,
+                         final String defaultValue, final Validator<String> validator) {
+        super(preferences, key, defaultValue);
+        myValidator = validator;
+    }
+
+    public StringSetting(final Preferences preferences, final String key) {
+        this(preferences, key, "", null);
+    }
+
+    public StringSetting(final Preferences preferences, final String key,
+                         final Validator<String> validator) {
+        this(preferences, key, "", validator);
+    }
+
+    @Override
+    public String get() {
+        return myPreferences.get(myKey, myDefaultValue);
+    }
+
+    @Override
+    protected void checkValueValid(final String value) throws InvalidValueException {
+        if (myValidator != null) {
+            if (myValidator.isValid(value)) {
+                throw new InvalidValueException("Invalid value");
+            }
+        }
+    }
+
+    @Override
+    protected void setImpl(final String value) {
+        myPreferences.put(myKey, value);
+    }
+}
