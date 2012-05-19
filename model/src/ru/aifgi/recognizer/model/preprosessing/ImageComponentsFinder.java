@@ -167,7 +167,7 @@ public class ImageComponentsFinder {
     private Collection<? extends Rectangle> mergeComponentsToWords() {
         final Map<Integer, RectangleImpl> boundingBoxes = buildBoundingBoxes();
         final Collection<? extends Rectangle> rectangles = expandAndMergeRectangles(boundingBoxes, 3, 1);
-        final ArrayList<Rectangle> list = new ArrayList<>(rectangles);
+        final List<Rectangle> list = new ArrayList<>(rectangles);
         Collections.sort(list);
         return list;
     }
