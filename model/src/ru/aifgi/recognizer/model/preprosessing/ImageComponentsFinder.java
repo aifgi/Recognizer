@@ -39,14 +39,12 @@ public class ImageComponentsFinder {
         public void update(final int x, final int y) {
             if (x < x1) {
                 x1 = x;
-            }
-            else if (x > x2) {
+            } else if (x > x2) {
                 x2 = x;
             }
             if (y < y1) {
                 y1 = y;
-            }
-            else if (y > y2) {
+            } else if (y > y2) {
                 y2 = y;
             }
         }
@@ -83,6 +81,12 @@ public class ImageComponentsFinder {
         @Override
         public int getHeight() {
             return y2 - y1;
+        }
+
+        @Override
+        public int compareTo(final Rectangle o) {
+            final int dy = y1 - o.getY();
+            return (dy == 0) ? (x1 - o.getX()) : dy;
         }
     }
 
@@ -135,8 +139,7 @@ public class ImageComponentsFinder {
                     if (newValue < res) {
                         mergedComponents.put(res, newValue);
                         res = newValue;
-                    }
-                    else if (newValue != res) {
+                    } else if (newValue != res) {
                         mergedComponents.put(newValue, res);
                     }
                 }
@@ -163,7 +166,10 @@ public class ImageComponentsFinder {
 
     private Collection<? extends Rectangle> mergeComponentsToWords() {
         final Map<Integer, RectangleImpl> boundingBoxes = buildBoundingBoxes();
-        return expandAndMergeRectangles(boundingBoxes, 3, 1);
+        final Collection<? extends Rectangle> rectangles = expandAndMergeRectangles(boundingBoxes, 3, 1);
+        final ArrayList<Rectangle> list = new ArrayList<>(rectangles);
+        Collections.sort(list);
+        return list;
     }
 
     private Map<Integer, RectangleImpl> buildBoundingBoxes() {
@@ -178,8 +184,7 @@ public class ImageComponentsFinder {
                     final RectangleImpl rectangle = boundingBoxes.get(componentLabel);
                     if (rectangle == null) {
                         boundingBoxes.put(componentLabel, new RectangleImpl(x, y));
-                    }
-                    else {
+                    } else {
                         rectangle.update(x, y);
                     }
                 }

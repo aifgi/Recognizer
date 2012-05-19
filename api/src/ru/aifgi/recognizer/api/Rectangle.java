@@ -20,7 +20,7 @@ package ru.aifgi.recognizer.api;
  * @author aifgi
  */
 
-public interface Rectangle {
+public interface Rectangle extends Comparable<Rectangle> {
     int getX();
 
     int getY();
