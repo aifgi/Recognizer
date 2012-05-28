@@ -49,6 +49,8 @@ class ModelFacadeImpl implements ModelFacade {
         }
         notifyStarted("Recognition started");
 
+        doRecognize(inputImage);
+
         // debug code
         final int s = 100_000_000;
         for (int i = 0; i < s; ++i) {
@@ -57,6 +59,10 @@ class ModelFacadeImpl implements ModelFacade {
 
         notifyDone("Recognition done");
         return null;
+    }
+
+    private void doRecognize(final ImageWrapper inputImage) {
+        //To change body of created methods use File | Settings | File Templates.
     }
 
     // TODO: another thread?
