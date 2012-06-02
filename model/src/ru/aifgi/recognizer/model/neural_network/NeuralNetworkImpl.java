@@ -158,8 +158,9 @@ public class NeuralNetworkImpl implements NeuralNetwork, Normalizer {
             final int convolutionalReceptiveFieldSize = stageStructure.getConvolutionalReceptiveFieldSize();
             final int subsamplingReceptiveFieldSize = stageStructure.getSubsamplingReceptiveFieldSize();
             myStages[i] = new ConvolutionalStage(stageStructure.getNumberOfFeatureMaps(),
-                                                 convolutionalReceptiveFieldSize,
-                                                 subsamplingReceptiveFieldSize);
+                    stageStructure.getMask(),
+                    convolutionalReceptiveFieldSize,
+                    subsamplingReceptiveFieldSize);
             inputSize -= convolutionalReceptiveFieldSize - 1;
             inputSize /= subsamplingReceptiveFieldSize;
         }

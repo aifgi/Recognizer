@@ -66,9 +66,12 @@ public class ConvolutionalStage implements Stage {
     }
 
     private final LayerPair[] myLayers;
+    private final int[][] myMask;
 
-    public ConvolutionalStage(final int size, final int convolutionalMask, final int subsamplingMask) {
+    public ConvolutionalStage(final int size, final int[][] mask,
+                              final int convolutionalMask, final int subsamplingMask) {
         myLayers = new LayerPair[size];
+        myMask = mask;
         for (LayerPair layerPair : myLayers) {
             layerPair = new LayerPair();
             layerPair.convolutional = new ConvolutionalLayer(convolutionalMask);
@@ -76,7 +79,6 @@ public class ConvolutionalStage implements Stage {
         }
     }
 
-    // TODO: fix "0"
     @Override
     public StageOutput forwardComputation(final StageOutput input) {
         final int length = myLayers.length;
@@ -85,10 +87,24 @@ public class ConvolutionalStage implements Stage {
         final double[][][] input3d = input.getOutput3d();
         for (int i = 0; i < length; ++i) {
             final LayerPair layerPair = myLayers[i];
-            conv[i] = layerPair.convolutional.computeOutput(input3d[0]);
+            conv[i] = layerPair.convolutional.computeOutput(computeInput(i, input3d));
             sub[i] = layerPair.subsampling.computeOutput(conv[i]);
         }
         return new StageOutputImpl(conv, sub);
+    }
+
+    private double[][] computeInput(final int layerIndex, double[][][] input3d) {
+        final int length = input3d[0].length;
+        final double[][] res = new double[length][length];
+        final int[] mask = myMask[layerIndex];
+        for (int i = 0; i < length; ++i) {
+            for (int j = 0; j < length; ++j) {
+                for (int k = 0; k < mask.length; ++k) {
+                    res[i][j] += input3d[k][i][j];
+                }
+            }
+        }
+        return res;
     }
 
     @Override

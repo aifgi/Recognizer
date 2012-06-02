@@ -27,6 +27,8 @@ public interface NeuralNetworkStructure {
         int getConvolutionalReceptiveFieldSize();
 
         int getSubsamplingReceptiveFieldSize();
+
+        int[][] getMask();
     }
 
     Function getActivationFunction();
