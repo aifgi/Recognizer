@@ -21,6 +21,7 @@ import ru.aifgi.recognizer.api.ModelFacade;
 import ru.aifgi.recognizer.api.ProgressListener;
 
 import java.awt.*;
+import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -88,5 +89,10 @@ class ModelFacadeImpl implements ModelFacade {
         for (final ProgressListener progressListener : myProgressListeners) {
             progressListener.done(message);
         }
+    }
+
+    @Override
+    public void study(File file) {
+        //To change body of implemented methods use File | Settings | File Templates.
     }
 }

@@ -28,7 +28,7 @@ public enum ActionGroups {
             Actions.OPEN_IMAGE.getAction(), Separator.INSTANCE, Actions.EXIT.getAction()
     }),
     RECOGNIZE_MENU(Bundle.getString("recognize.menu"), new BasicAction[]{
-            Actions.RECOGNIZE.getAction()
+            Actions.RECOGNIZE.getAction(), Actions.STUDY.getAction()
     }),
     HELP_MENU(Bundle.getString("help.menu"), new BasicAction[]{
             Actions.ABOUT.getAction()

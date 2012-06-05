@@ -18,34 +18,37 @@ package ru.aifgi.recognizer.view.actions;
 
 import ru.aifgi.recognizer.model.Model;
 import ru.aifgi.recognizer.model.thread_factories.MyThreadFactory;
-import ru.aifgi.recognizer.view.BufferedImageWrapper;
 import ru.aifgi.recognizer.view.Bundle;
 import ru.aifgi.recognizer.view.ViewUtil;
 
+import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
  * @author aifgi
  */
+class StudyAction extends MyAction {
+    private final ExecutorService myService = Executors.newSingleThreadExecutor(new MyThreadFactory("Study"));
 
-public class RecognizeAction extends MyAction {
-    private final ExecutorService myService = Executors.newSingleThreadExecutor(new MyThreadFactory("RecognizeAction"));
-
-    public RecognizeAction() {
+    public StudyAction() {
         super(Bundle.getString("recognize.action.name"));
     }
 
     @Override
     protected void performImpl(final AWTEvent event) {
-        myService.execute(new Runnable() {
-            @Override
-            public void run() {
-                final BufferedImageWrapper inputImage = new BufferedImageWrapper(ViewUtil.getMainWindow().getImage());
-                final String text = Model.getFacade().recognize(inputImage);
-                ViewUtil.getMainWindow().setText(text);
-            }
-        });
+        final JFileChooser fileChooser = new JFileChooser(System.getProperty("user.dir"));
+        final int approve = fileChooser.showOpenDialog(ViewUtil.getMainWindow());
+        if (approve == JFileChooser.APPROVE_OPTION) {
+            myService.execute(new Runnable() {
+                @Override
+                public void run() {
+                    final File file = fileChooser.getSelectedFile();
+                    Model.getFacade().study(file);
+                }
+            });
+        }
     }
 }

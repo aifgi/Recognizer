@@ -78,6 +78,10 @@ public class MainWindow extends JFrame {
         myImagePanel.setImage(image);
     }
 
+    public void setText(final String text) {
+        myTextArea.setText(text);
+    }
+
     public BufferedImage getImage() {
         return myImagePanel.getImage();
     }

@@ -16,6 +16,8 @@ package ru.aifgi.recognizer.api;
  * limitations under the License.
  */
 
+import java.io.File;
+
 /**
  * @author aifgi
  */
@@ -26,4 +28,6 @@ public interface ModelFacade {
     void removeProgressListener(final ProgressListener progressListener);
 
     String recognize(final ImageWrapper inputImage);
+
+    void study(final File file);
 }
