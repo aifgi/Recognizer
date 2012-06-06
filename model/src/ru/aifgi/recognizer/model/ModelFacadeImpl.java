@@ -19,9 +19,13 @@ package ru.aifgi.recognizer.model;
 import ru.aifgi.recognizer.api.ImageWrapper;
 import ru.aifgi.recognizer.api.ModelFacade;
 import ru.aifgi.recognizer.api.ProgressListener;
+import ru.aifgi.recognizer.api.Rectangle;
+import ru.aifgi.recognizer.model.preprosessing.Binarizer;
+import ru.aifgi.recognizer.model.preprosessing.ImageComponentsFinder;
 
 import java.awt.*;
 import java.io.File;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -31,6 +35,12 @@ import java.util.Set;
 
 class ModelFacadeImpl implements ModelFacade {
     private final Set<ProgressListener> myProgressListeners = new HashSet<>();
+    private final Binarizer myBinarizer = new Binarizer();
+    private final Labels myLabels = new Labels(new char[] {
+            'а', 'б', 'в', 'г', 'д', 'Е', 'ж', 'и', 'к', 'л', 'м', 'н', 'п', 'р', 'с',
+            'т', 'у', 'ф', 'х', 'ц', 'ш', 'щ', 'ъ', 'ь', 'э', 'ю', 'я', 'е',
+            '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0'
+    });
 
     @Override
     public void addProgressListener(final ProgressListener progressListener) {
@@ -50,7 +60,7 @@ class ModelFacadeImpl implements ModelFacade {
         }
         notifyStarted("Recognition started");
 
-        doRecognize(inputImage);
+        final String result = doRecognize(inputImage);
 
         // debug code
         final int s = 100_000_000;
@@ -59,11 +69,21 @@ class ModelFacadeImpl implements ModelFacade {
         }
 
         notifyDone("Recognition done");
-        return null;
+        return result;
     }
 
-    private void doRecognize(final ImageWrapper inputImage) {
-        //To change body of created methods use File | Settings | File Templates.
+    private String doRecognize(final ImageWrapper inputImage) {
+        double[][] input = inputImage.getBrightnesses();
+        input = myBinarizer.apply(input);
+        final ImageComponentsFinder imageComponentsFinder = new ImageComponentsFinder(input);
+        final Collection<Rectangle> words = imageComponentsFinder.getWords();
+        final WordRecognizer wordRecognizer = new WordRecognizer(input, myLabels);
+        final StringBuilder builder = new StringBuilder();
+        for (final Rectangle word : words) {
+            final String w = wordRecognizer.recognize(word);
+            builder.append(w);
+        }
+        return builder.toString();
     }
 
     // TODO: another thread?
