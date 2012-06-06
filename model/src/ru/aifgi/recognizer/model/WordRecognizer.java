@@ -40,13 +40,13 @@ public class WordRecognizer {
         return buildRecognitionResult(labels);
     }
 
-    // TODO: delete hardcoded 20
+    // TODO: delete hardcoded 24
     private double[][] getWord(final Rectangle wordRectangle) {
         final int x = wordRectangle.getX();
         final int y = wordRectangle.getY();
         final int width = wordRectangle.getWidth();
         final int height = wordRectangle.getHeight();
-        final int annInputHeight = 20;
+        final int annInputHeight = 24;
         final double[][] res;
         if (height <= annInputHeight) {
             res = new double[width][annInputHeight];
