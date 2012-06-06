@@ -86,7 +86,7 @@ public class ImageComponentsFinder {
         @Override
         public int compareTo(final Rectangle o) {
             final int dy = y1 - o.getY();
-            return (dy == 0) ? (x1 - o.getX()) : dy;
+            return (Math.abs(dy) < 7) ? (x1 - o.getX()) : dy;
         }
     }
 
