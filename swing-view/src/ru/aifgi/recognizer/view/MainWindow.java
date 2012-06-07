@@ -82,6 +82,10 @@ public class MainWindow extends JFrame {
         myTextArea.setText(text);
     }
 
+    public String getText() {
+        return myTextArea.getText();
+    }
+
     public BufferedImage getImage() {
         return myImagePanel.getImage();
     }

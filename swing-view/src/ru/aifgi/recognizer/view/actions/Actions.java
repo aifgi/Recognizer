@@ -25,6 +25,7 @@ public enum Actions {
     RECOGNIZE(new RecognizeAction()),
     STUDY(new StudyAction()),
     ABOUT(new AboutAction()),
+    SAVE_TEXT(new SaveTextAction()),
     EXIT(new ExitAction());
 
     private final MyAction myAction;
