@@ -20,6 +20,7 @@ import ru.aifgi.recognizer.api.ImageWrapper;
 import ru.aifgi.recognizer.api.ModelFacade;
 import ru.aifgi.recognizer.api.ProgressListener;
 import ru.aifgi.recognizer.api.Rectangle;
+import ru.aifgi.recognizer.api.neural_network.NeuralNetwork;
 import ru.aifgi.recognizer.model.preprosessing.Binarizer;
 import ru.aifgi.recognizer.model.preprosessing.ImageComponentsFinder;
 
@@ -35,6 +36,7 @@ import java.util.Set;
 
 class ModelFacadeImpl implements ModelFacade {
     private final Set<ProgressListener> myProgressListeners = new HashSet<>();
+    private final NeuralNetwork myNeuralNetwork = null;
     private final Binarizer myBinarizer = new Binarizer();
     private final Labels myLabels = new Labels(new char[] {
             'а', 'б', 'в', 'г', 'д', 'Е', 'ж', 'и', 'к', 'л', 'м', 'н', 'п', 'р', 'с',
@@ -77,7 +79,7 @@ class ModelFacadeImpl implements ModelFacade {
         input = myBinarizer.apply(input);
         final ImageComponentsFinder imageComponentsFinder = new ImageComponentsFinder(input);
         final Collection<Rectangle> words = imageComponentsFinder.getWords();
-        final WordRecognizer wordRecognizer = new WordRecognizer(input, myLabels);
+        final WordRecognizer wordRecognizer = new WordRecognizer(input, myLabels, myNeuralNetwork);
         final StringBuilder builder = new StringBuilder();
         for (final Rectangle word : words) {
             final String w = wordRecognizer.recognize(word);

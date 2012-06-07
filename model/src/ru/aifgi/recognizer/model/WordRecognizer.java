@@ -18,19 +18,26 @@ package ru.aifgi.recognizer.model;
 
 import ru.aifgi.recognizer.api.Rectangle;
 import ru.aifgi.recognizer.api.graph.Graph;
+import ru.aifgi.recognizer.api.neural_network.NeuralNetwork;
+import ru.aifgi.recognizer.model.viterbi.GraphImpl;
 import ru.aifgi.recognizer.model.viterbi.ViterbiAlgorithm;
 
 /**
  * @author aifgi
  */
 
+// TODO: delete hardcoded numbers
 public class WordRecognizer {
+    private static final int STEP = 5;
+
     private final double[][] myInputImage;
     private final Labels myLabels;
+    private final NeuralNetwork myNeuralNetwork;
 
-    public WordRecognizer(final double[][] inputImage, final Labels labels) {
+    public WordRecognizer(final double[][] inputImage, final Labels labels, final NeuralNetwork neuralNetwork) {
         myInputImage = inputImage;
         myLabels = labels;
+        myNeuralNetwork = neuralNetwork;
     }
 
     public String recognize(final Rectangle wordRectangle) {
@@ -40,13 +47,12 @@ public class WordRecognizer {
         return buildRecognitionResult(labels);
     }
 
-    // TODO: delete hardcoded 24
     private double[][] getWord(final Rectangle wordRectangle) {
         final int x = wordRectangle.getX();
         final int y = wordRectangle.getY();
         final int width = wordRectangle.getWidth();
         final int height = wordRectangle.getHeight();
-        final int annInputHeight = 24;
+        final int annInputHeight = 32;
         final double[][] res;
         if (height <= annInputHeight) {
             res = new double[width][annInputHeight];
@@ -70,7 +76,25 @@ public class WordRecognizer {
     }
 
     private Graph buildGraph(final double[][] word) {
-        return null;  //To change body of created methods use File | Settings | File Templates.
+        final int width = word.length;
+        final Graph graph = new GraphImpl(width / STEP + 6);
+        for (int size = STEP; size <= 30; size += STEP) {
+            for (int pos = 0; pos < width; pos += STEP) {
+                final double[] outputVector = myNeuralNetwork.computeOutput(getNeuralNetworkInput(word, pos, size));
+                final int from = pos / STEP;
+                graph.setWeights(from, from + size / STEP, outputVector);
+            }
+        }
+        return graph;
+    }
+
+    private double[][] getNeuralNetworkInput(final double[][] word, final int pos, final int size) {
+        final double[][] res = new double[32][32];
+        final int leftMargin = (32 - size) / 2;
+        for (int i = 0; i < size; ++i) {
+            System.arraycopy(word[pos + i], 0, res[leftMargin + i], 0, 32);
+        }
+        return res;
     }
 
     private String buildRecognitionResult(final int[] labels) {
