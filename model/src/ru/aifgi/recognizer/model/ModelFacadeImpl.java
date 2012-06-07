@@ -76,11 +76,15 @@ class ModelFacadeImpl implements ModelFacade {
 
     private String doRecognize(final ImageWrapper inputImage) {
         double[][] input = inputImage.getBrightnesses();
+        notifyProgress(1, "Binarization");
         input = myBinarizer.apply(input);
+        notifyProgress(20, "Find connected components");
         final ImageComponentsFinder imageComponentsFinder = new ImageComponentsFinder(input);
         final Collection<Rectangle> words = imageComponentsFinder.getWords();
+        notifyProgress(40, "Word components recognition");
         final WordRecognizer wordRecognizer = new WordRecognizer(input, myLabels, myNeuralNetwork);
         final StringBuilder builder = new StringBuilder();
+        double i = 0;
         for (final Rectangle word : words) {
             final String w = wordRecognizer.recognize(word);
             builder.append(w);

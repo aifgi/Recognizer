@@ -65,7 +65,7 @@ public class WordRecognizer {
         else {
             final double scale = ((double) annInputHeight) / height;
             final double newWidth = width * scale;
-            res = new double[(int) newWidth][annInputHeight];
+            res = new double[(int) newWidth + 1][annInputHeight];
             for (int i = 0; i < newWidth; ++i) {
                 for (int j = 0; j < annInputHeight; ++j) {
                     res[i][j] = myInputImage[((int) (i * scale))][((int) (j * scale))];
