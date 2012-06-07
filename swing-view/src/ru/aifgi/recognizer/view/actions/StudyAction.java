@@ -34,7 +34,7 @@ class StudyAction extends MyAction {
     private final ExecutorService myService = Executors.newSingleThreadExecutor(new MyThreadFactory("Study"));
 
     public StudyAction() {
-        super(Bundle.getString("recognize.action.name"));
+        super(Bundle.getString("study.action.name"));
     }
 
     @Override
