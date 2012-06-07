@@ -166,6 +166,7 @@ public class NeuralNetworkImpl implements NeuralNetwork, Normalizer {
         }
 
         final int[] fullyConnectedLayersSizes = networkStructure.getFullyConnectedLayersSizes();
+        inputSize = MathUtil.sqr(inputSize) * stageStructures[stageStructures.length - 1].getNumberOfFeatureMaps();
         myStages[stageStructuresLength] = new FullyConnectedStage(fullyConnectedLayersSizes, inputSize);
         myFunction = networkStructure.getActivationFunction();
     }

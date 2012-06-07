@@ -26,7 +26,6 @@ public class FullyConnectedLayer extends AbstractLayer implements OneDimensional
     private double[][] myWeights;
 
     public FullyConnectedLayer(final int prevLayerSize, final int layerSize) {
-        super();
         myWeights = new double[layerSize][prevLayerSize + 1];
         init();
     }
@@ -76,7 +75,7 @@ public class FullyConnectedLayer extends AbstractLayer implements OneDimensional
     }
 
     @Override
-    public double[] backPropagation(final double[] gradients) {
+    public double[] backPropagation(final double[] layerOutput, final double[] errors) {
         final int length = myWeights.length;
         final int inputLength = myWeights[0].length;
 
@@ -85,7 +84,7 @@ public class FullyConnectedLayer extends AbstractLayer implements OneDimensional
             final double[] weights = myWeights[i];
 
             for (int j = 0; j < inputLength; ++j) {
-                weightedSum[j] += gradients[i] * weights[j];
+                weightedSum[j] += errors[i] * weights[j];
             }
         }
         return weightedSum;

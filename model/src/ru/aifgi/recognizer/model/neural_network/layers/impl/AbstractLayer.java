@@ -27,10 +27,6 @@ import ru.aifgi.recognizer.model.neural_network.layers.Layer;
 public abstract class AbstractLayer implements Layer {
     protected Function myFunction = Functions.TANH;
 
-    protected AbstractLayer() {
-        init();
-    }
-
     protected abstract void init();
 
     @Override

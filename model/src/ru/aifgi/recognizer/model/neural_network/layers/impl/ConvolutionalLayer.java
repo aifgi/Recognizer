@@ -28,8 +28,8 @@ public class ConvolutionalLayer extends AbstractLayer implements TwoDimensionalL
     private double myBias;
 
     public ConvolutionalLayer(final int maskSize) {
-        super();
         myConvolutionalMask = new double[maskSize][maskSize];
+        init();
     }
 
     @Override

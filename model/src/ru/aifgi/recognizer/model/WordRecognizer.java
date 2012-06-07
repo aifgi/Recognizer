@@ -92,9 +92,18 @@ public class WordRecognizer {
         final double[][] res = new double[32][32];
         final int leftMargin = (32 - size) / 2;
         for (int i = 0; i < size; ++i) {
-            System.arraycopy(word[pos + i], 0, res[leftMargin + i], 0, 32);
+            for (int j = 0; j < 32; ++j) {
+                res[leftMargin + i][j] = getElement(word, pos + i, j);
+            }
         }
         return res;
+    }
+
+    private double getElement(double[][] word, int i, int j) {
+        if (i >= word.length) {
+            return 0;
+        }
+        return word[i][j];
     }
 
     private String buildRecognitionResult(final int[] labels) {

@@ -72,10 +72,12 @@ public class ConvolutionalStage implements Stage {
                               final int convolutionalMask, final int subsamplingMask) {
         myLayers = new LayerPair[size];
         myMask = mask;
-        for (LayerPair layerPair : myLayers) {
-            layerPair = new LayerPair();
+        final int length = myLayers.length;
+        for (int i = 0; i < length; i++) {
+            final LayerPair layerPair = new LayerPair();
             layerPair.convolutional = new ConvolutionalLayer(convolutionalMask);
             layerPair.subsampling = new SubsamplingLayer(subsamplingMask);
+            myLayers[i] = layerPair;
         }
     }
 

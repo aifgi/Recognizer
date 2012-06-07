@@ -21,6 +21,8 @@ import ru.aifgi.recognizer.api.ModelFacade;
 import ru.aifgi.recognizer.api.ProgressListener;
 import ru.aifgi.recognizer.api.Rectangle;
 import ru.aifgi.recognizer.api.neural_network.NeuralNetwork;
+import ru.aifgi.recognizer.model.neural_network.NeuralNetworkImpl;
+import ru.aifgi.recognizer.model.neural_network.NeuralNetworkStructureImpl;
 import ru.aifgi.recognizer.model.preprosessing.Binarizer;
 import ru.aifgi.recognizer.model.preprosessing.ImageComponentsFinder;
 
@@ -36,7 +38,7 @@ import java.util.Set;
 
 class ModelFacadeImpl implements ModelFacade {
     private final Set<ProgressListener> myProgressListeners = new HashSet<>();
-    private final NeuralNetwork myNeuralNetwork = null;
+    private final NeuralNetwork myNeuralNetwork = new NeuralNetworkImpl(new NeuralNetworkStructureImpl());
     private final Binarizer myBinarizer = new Binarizer();
     private final Labels myLabels = new Labels(new char[] {
             'а', 'б', 'в', 'г', 'д', 'Е', 'ж', 'и', 'к', 'л', 'м', 'н', 'п', 'р', 'с',
@@ -64,12 +66,6 @@ class ModelFacadeImpl implements ModelFacade {
 
         final String result = doRecognize(inputImage);
 
-        // debug code
-        final int s = 100_000_000;
-        for (int i = 0; i < s; ++i) {
-            notifyProgress(Math.round(100.f * i / s), String.valueOf(i));
-        }
-
         notifyDone("Recognition done");
         return result;
     }
@@ -84,10 +80,11 @@ class ModelFacadeImpl implements ModelFacade {
         notifyProgress(40, "Word components recognition");
         final WordRecognizer wordRecognizer = new WordRecognizer(input, myLabels, myNeuralNetwork);
         final StringBuilder builder = new StringBuilder();
-        double i = 0;
+        int i = 0;
         for (final Rectangle word : words) {
             final String w = wordRecognizer.recognize(word);
-            builder.append(w);
+            builder.append(w).append(' ');
+            notifyProgress((int) (40 + 60 * ((double) ++i) / words.size()));
         }
         return builder.toString();
     }
