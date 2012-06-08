@@ -77,15 +77,23 @@ public class WordRecognizer {
 
     private Graph buildGraph(final double[][] word) {
         final int width = word.length;
-        final Graph graph = new GraphImpl(width / STEP + 6);
+        final Graph graph = new GraphImpl(width / STEP + 1);
         for (int size = STEP; size <= 30; size += STEP) {
             for (int pos = 0; pos < width; pos += STEP) {
                 final double[] outputVector = myNeuralNetwork.computeOutput(getNeuralNetworkInput(word, pos, size));
                 final int from = pos / STEP;
-                graph.setWeights(from, from + size / STEP, outputVector);
+                graph.setWeights(from, getToVertexNumber(graph, from, size), outputVector);
             }
         }
         return graph;
+    }
+
+    private int getToVertexNumber(final Graph graph, final int from, final int size) {
+        final int to = from + size / STEP;
+        if (to >= graph.getVertexesNumber()) {
+            return graph.getVertexesNumber() - 1;
+        }
+        return to;
     }
 
     private double[][] getNeuralNetworkInput(final double[][] word, final int pos, final int size) {
