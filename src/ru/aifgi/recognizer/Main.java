@@ -18,6 +18,7 @@ package ru.aifgi.recognizer;
 
 import ru.aifgi.recognizer.view.ViewUtil;
 
+import javax.swing.*;
 import java.util.Locale;
 
 /**
@@ -28,7 +29,12 @@ public class Main {
     public static void main(final String[] args) {
         setLocale(args);
         Thread.setDefaultUncaughtExceptionHandler(ViewUtil.getApplicationUncaughtExceptionHandler());
-        ViewUtil.getMainWindow().setVisible(true);
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                ViewUtil.getMainWindow().setVisible(true);
+            }
+        });
     }
 
     private static void setLocale(final String[] args) {
