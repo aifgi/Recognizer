@@ -74,17 +74,17 @@ class ModelFacadeImpl implements ModelFacade {
         double[][] input = inputImage.getBrightnesses();
         notifyProgress(1, "Binarization");
         input = myBinarizer.apply(input);
-        notifyProgress(20, "Find connected components");
+        notifyProgress(5, "Find connected components");
         final ImageComponentsFinder imageComponentsFinder = new ImageComponentsFinder(input);
         final Collection<Rectangle> words = imageComponentsFinder.getWords();
-        notifyProgress(40, "Word components recognition");
+        notifyProgress(20, "Word components recognition");
         final WordRecognizer wordRecognizer = new WordRecognizer(input, myLabels, myNeuralNetwork);
         final StringBuilder builder = new StringBuilder();
         int i = 0;
         for (final Rectangle word : words) {
             final String w = wordRecognizer.recognize(word);
             builder.append(w).append(' ');
-            notifyProgress((int) (40 + 60 * ((double) ++i) / words.size()));
+            notifyProgress((int) (20 + 80 * ((double) ++i) / words.size()));
         }
         return builder.toString();
     }
