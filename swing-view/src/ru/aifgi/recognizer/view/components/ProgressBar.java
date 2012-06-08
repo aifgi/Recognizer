@@ -53,7 +53,9 @@ public class ProgressBar extends JPanel implements ProgressListener {
                 @Override
                 public void componentHidden(final ComponentEvent e) {
                     ProgressBar.this.addComponents();
-                    ProgressBar.this.setVisible(true);
+                    if (!done) {
+                        ProgressBar.this.setVisible(true);
+                    }
                 }
             });
 
@@ -69,6 +71,8 @@ public class ProgressBar extends JPanel implements ProgressListener {
     private final JProgressBar myProgressBar;
     private final JLabel myLabel;
     private JDialog myDialog;
+
+    private boolean done;
 
     public ProgressBar() {
         super(new BorderLayout(2, 1));
@@ -109,6 +113,8 @@ public class ProgressBar extends JPanel implements ProgressListener {
                 }
             }
         });
+
+        setBorder(BorderFactory.createEmptyBorder(2, 5, 3, 5));
     }
 
     private void addComponents() {
@@ -118,6 +124,7 @@ public class ProgressBar extends JPanel implements ProgressListener {
 
     @Override
     public void started(final String message) {
+        done = false;
         myProgressBar.setValue(0);
         setVisible(true);
     }
@@ -136,7 +143,11 @@ public class ProgressBar extends JPanel implements ProgressListener {
 
     @Override
     public void done(final String message) {
+        done = true;
         JOptionPane.showMessageDialog(ViewUtil.getMainWindow(), "Finish");
         setVisible(false);
+        if (myDialog != null) {
+            myDialog.setVisible(false);
+        }
     }
 }
