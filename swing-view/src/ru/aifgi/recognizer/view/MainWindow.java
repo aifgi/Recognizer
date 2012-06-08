@@ -30,6 +30,8 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 /**
  * @author aifgi
@@ -63,6 +65,13 @@ public class MainWindow extends JFrame {
             @Override
             public void componentResized(final ComponentEvent e) {
                 mySplitPane.setDividerLocation(myDividerLocation);
+            }
+        });
+        mySplitPane.addPropertyChangeListener(JSplitPane.DIVIDER_LOCATION_PROPERTY, new PropertyChangeListener() {
+            @Override
+            public void propertyChange(final PropertyChangeEvent evt) {
+                myDividerLocation = ((double) mySplitPane.getDividerLocation()) /
+                        (mySplitPane.getWidth() - mySplitPane.getDividerSize());
             }
         });
 
