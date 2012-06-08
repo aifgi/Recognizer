@@ -29,8 +29,8 @@ public class SubsamplingLayer extends AbstractLayer implements TwoDimensionalLay
     private double myBias;
 
     public SubsamplingLayer(final int maskSize) {
-        super();
         myMaskSize = maskSize;
+        init();
     }
 
     @Override
