@@ -167,9 +167,20 @@ public class ImageComponentsFinder {
     private Collection<? extends Rectangle> mergeComponentsToWords() {
         final Map<Integer, RectangleImpl> boundingBoxes = buildBoundingBoxes();
         final Collection<? extends Rectangle> rectangles = expandAndMergeRectangles(boundingBoxes, 3, 1);
+        filter(rectangles);
         final List<Rectangle> list = new ArrayList<>(rectangles);
         Collections.sort(list);
         return list;
+    }
+
+    private void filter(final Collection<? extends Rectangle> collection) {
+        final Iterator<? extends Rectangle> iterator = collection.iterator();
+        while (iterator.hasNext()) {
+            final Rectangle rectangle = iterator.next();
+            if (rectangle.getWidth() * rectangle.getHeight() < 100) {
+                iterator.remove();
+            }
+        }
     }
 
     private Map<Integer, RectangleImpl> buildBoundingBoxes() {
