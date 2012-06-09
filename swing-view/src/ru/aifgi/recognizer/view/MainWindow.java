@@ -49,6 +49,7 @@ public class MainWindow extends JFrame {
 
     MainWindow() {
         super();
+        setTitle(Bundle.getString("application.title"));
         setContentPane(myContentPane);
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         setMinimumSize(new Dimension(640, 480));
