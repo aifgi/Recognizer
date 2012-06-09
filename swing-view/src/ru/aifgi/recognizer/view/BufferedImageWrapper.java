@@ -19,8 +19,6 @@ package ru.aifgi.recognizer.view;
 import ru.aifgi.recognizer.api.ImageWrapper;
 
 import java.awt.image.BufferedImage;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * @author aifgi
@@ -28,8 +26,6 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class BufferedImageWrapper implements ImageWrapper {
     private final BufferedImage myBufferedImage;
-    private final Lock myCacheLock = new ReentrantLock();
-    private double[][] myBrightnessesCache;
 
     public BufferedImageWrapper(final BufferedImage bufferedImage) {
         myBufferedImage = bufferedImage;
@@ -47,29 +43,20 @@ public class BufferedImageWrapper implements ImageWrapper {
 
     @Override
     public double[][] getBrightnesses() {
-        if (myBrightnessesCache == null) {
-            if (myCacheLock.tryLock()) {
-                try {
-                    computeBrightnesses();
-                }
-                finally {
-                    myCacheLock.unlock();
-                }
-            }
-        }
-        return myBrightnessesCache;
+        return computeBrightnesses();
     }
 
     // TODO: remove + 3 and +1 !!!
-    private void computeBrightnesses() {
+    private double[][] computeBrightnesses() {
         final int width = myBufferedImage.getWidth();
         final int height = myBufferedImage.getHeight();
-        myBrightnessesCache = new double[width  + 6][height + 2];
+        final double[][] brightnesses = new double[width  + 6][height + 2];
         for (int i = 0; i < width; ++i) {
             for (int j = 0; j < height; ++j) {
-                myBrightnessesCache[i + 3][j + 1] = getBrightness(i, j);
+                brightnesses[i + 3][j + 1] = getBrightness(i, j);
             }
         }
+        return brightnesses;
     }
 
     private double getBrightness(final int x, final int y) {

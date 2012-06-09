@@ -45,6 +45,7 @@ public class RecognizeAction extends MyAction {
                 final BufferedImageWrapper inputImage = new BufferedImageWrapper(ViewUtil.getMainWindow().getImage());
                 final String text = Model.getFacade().recognize(inputImage);
                 ViewUtil.getMainWindow().setText(text);
+                System.gc();
             }
         });
     }
