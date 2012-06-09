@@ -31,6 +31,30 @@ import java.awt.event.MouseEvent;
  */
 
 public class ProgressBar extends JPanel implements ProgressListener {
+    private static class MyLabel extends JLabel {
+        public MyLabel() {
+            this("");
+        }
+
+        public MyLabel(final String text) {
+            this(text, SwingConstants.LEFT);
+        }
+
+        public MyLabel(final String text, final int horizontalAlignment) {
+            super(text, horizontalAlignment);
+            setPreferredSize(new Dimension(150, getPreferredSize().height));
+        }
+
+        @Override
+        public void setText(String text) {
+            text = text.trim();
+            if (!text.endsWith(":")) {
+                text += ":";
+            }
+            super.setText(text);
+        }
+    }
+
     private class MyDialog extends JDialog {
         private final JPanel myContentPane;
 
@@ -77,8 +101,8 @@ public class ProgressBar extends JPanel implements ProgressListener {
     public ProgressBar() {
         super(new BorderLayout(2, 1));
 
-        myLabel = new JLabel();
-        myLabel.setText("Message: ");
+        myLabel = new MyLabel();
+        myLabel.setText("Task: ");
 
         myProgressBar = new JProgressBar(SwingConstants.HORIZONTAL, 0, 100);
         myProgressBar.setStringPainted(true);
@@ -144,7 +168,7 @@ public class ProgressBar extends JPanel implements ProgressListener {
     @Override
     public void done(final String message) {
         done = true;
-        JOptionPane.showMessageDialog(ViewUtil.getMainWindow(), "Finish");
+        JOptionPane.showMessageDialog(ViewUtil.getMainWindow(), message);
         setVisible(false);
         if (myDialog != null) {
             myDialog.setVisible(false);
