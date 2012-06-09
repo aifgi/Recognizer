@@ -48,4 +48,11 @@ public class RecognizeAction extends MyAction {
             }
         });
     }
+
+    @Override
+    public boolean update() {
+        final boolean oldEnabled = isEnabled();
+        setEnabled(ViewUtil.getMainWindow().getImage() != null);
+        return super.update() || oldEnabled != isEnabled();
+    }
 }

@@ -16,6 +16,7 @@ package ru.aifgi.recognizer.view.actions;
  * limitations under the License.
  */
 
+import com.google.common.base.Strings;
 import ru.aifgi.recognizer.view.Bundle;
 import ru.aifgi.recognizer.view.ViewUtil;
 
@@ -44,5 +45,12 @@ public class SaveTextAction extends MyAction {
                 e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
             }
         }
+    }
+
+    @Override
+    public boolean update() {
+        final boolean oldEnabled = isEnabled();
+        setEnabled(!Strings.isNullOrEmpty(ViewUtil.getMainWindow().getText()));
+        return super.update() || oldEnabled != isEnabled();
     }
 }
