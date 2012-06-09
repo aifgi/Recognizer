@@ -87,7 +87,7 @@ public class FullyConnectedStage implements Stage {
         final double[][] outputs = ((StageOutputImpl) stageOutput).myOutputs;
         for (int i = outputs.length - 1; i >= 0; --i) {
             final double[] layerOutput = outputs[i];
-            errorsArray = myLayers[i].backPropagation(layerOutput, errorsArray);
+            errorsArray = myLayers[i].backPropagation(errorsArray);
         }
 
         return new StageOutputImpl(ArrayUtil.wrapTo2d(errorsArray));

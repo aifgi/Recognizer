@@ -75,7 +75,26 @@ public class FullyConnectedLayer extends AbstractLayer implements OneDimensional
     }
 
     @Override
-    public double[] backPropagation(final double[] layerOutput, final double[] errors) {
+    public double[][] computeDeltas(final double[] layerInput, final double[] layerOutput,
+                                    final double[] errors, final double learningRate) {
+        final int length = errors.length;
+        final int inputLength = layerInput.length + 1;
+        final double[][] deltas = new double[length][inputLength];
+        for (int i = 0; i < length; ++i) {
+            final double[] delta = deltas[i];
+            final double v = learningRate * errors[i] * myFunction.diff(layerOutput[i]);
+
+            final int t = inputLength - 1;
+            for (int j = 0; j < t; ++j) {
+                delta[j] = v * layerInput[j];
+            }
+            delta[t] = v;
+        }
+        return deltas;
+    }
+
+    @Override
+    public double[] backPropagation(final double[] errors) {
         final int length = myWeights.length;
         final int inputLength = myWeights[0].length;
 
@@ -91,10 +110,9 @@ public class FullyConnectedLayer extends AbstractLayer implements OneDimensional
     }
 
     @Override
-    public double[][] updateWeights(final double[][] deltas, final double regularizationParameter) {
+    public void updateWeights(final double[][] deltas, final double regularizationParameter) {
         final int length = myWeights.length;
         final int inputLength = myWeights[0].length;
-        final double[][] oldWeights = copyWeights(inputLength, length);
         for (int i = 0; i < length; ++i) {
             final double[] weights = myWeights[i];
             final double[] delta = deltas[i];
@@ -105,7 +123,6 @@ public class FullyConnectedLayer extends AbstractLayer implements OneDimensional
             }
             weights[l] += delta[l];
         }
-        return oldWeights;
     }
 
     private double computeRegularization(final double regularizationParameter, final double weight) {
@@ -114,16 +131,7 @@ public class FullyConnectedLayer extends AbstractLayer implements OneDimensional
     }
 
     @Override
-    public double[][] updateWeights(final double[][] deltas) {
-        return updateWeights(deltas, 0);
+    public void updateWeights(final double[][] deltas) {
+        updateWeights(deltas, 0);
     }
-
-    private double[][] copyWeights(final int inputLength, final int length) {
-        final double[][] oldWeights = new double[length][inputLength];
-        for (int i = 0; i < length; ++i) {
-            System.arraycopy(myWeights[i], 0, oldWeights[i], 0, inputLength);
-        }
-        return oldWeights;
-    }
-
 }

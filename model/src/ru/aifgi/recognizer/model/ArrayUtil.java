@@ -16,8 +16,6 @@ package ru.aifgi.recognizer.model;
  * limitations under the License.
  */
 
-import java.util.Arrays;
-
 /**
  * @author aifgi
  */
@@ -38,6 +36,18 @@ public class ArrayUtil {
                 res[pos++] = elem;
             }
         }
+        return res;
+    }
+
+    public static double[][] wrapTo2d(final double[] a) {
+        final double[][] res = new double[1][];
+        res[0] = a;
+        return res;
+    }
+
+    public static double[][][] wrapTo3d(final double[] a) {
+        final double[][][] res = new double[1][1][];
+        res[0][0] = a;
         return res;
     }
 

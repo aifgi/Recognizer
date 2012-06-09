@@ -25,13 +25,12 @@ public interface OneDimensionalLayer {
 
     double[] computeOutput(double[] input);
 
-    double[] backPropagation(final double[] gradients);
+    double[][] computeDeltas(final double[] layerInput, final double[] layerOutput,
+                             final double[] errors, final double learningRate);
 
-    /**
-     * @param deltas weight deltas
-     * @return old weights
-     */
-    double[][] updateWeights(final double[][] deltas);
+    double[] backPropagation(final double[] errors);
 
-    double[][] updateWeights(final double[][] deltas, final double regularizationParameter);
+    void updateWeights(final double[][] deltas);
+
+    void updateWeights(final double[][] deltas, final double regularizationParameter);
 }
