@@ -32,6 +32,7 @@ import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.File;
 
 /**
  * @author aifgi
@@ -75,11 +76,22 @@ public class MainWindow extends JFrame {
             }
         });
 
+        loadRecognizer();
         Model.getFacade().addProgressListener(myProgressBar);
 
         createMainMenu();
 
         pack();
+    }
+
+    private void loadRecognizer() {
+        final String settingsDirPath = System.getProperty("user.home") + "/.recognizer/";
+        final File file = new File(settingsDirPath + "previous.rec");
+        if (!file.exists()) {
+            ViewUtil.showErrorMessage(Bundle.getString("recognizer.not.studied"));
+            return;
+        }
+        Model.getFacade().loadRecognizer(file);
     }
 
     // TODO: find better way

@@ -53,6 +53,10 @@ public class ViewUtil {
         showErrorMessage(throwable.getClass().getName(), throwable.getLocalizedMessage());
     }
 
+    public static void showErrorMessage(final String message) {
+        showErrorMessage("Error", message);
+    }
+
     public static void showErrorMessage(final String title, final String message) {
         JOptionPane.showMessageDialog(ourMainWindow, message, title, JOptionPane.ERROR_MESSAGE);
     }

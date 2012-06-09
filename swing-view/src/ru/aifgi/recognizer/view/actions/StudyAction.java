@@ -47,6 +47,16 @@ class StudyAction extends MyAction {
                 public void run() {
                     final File file = fileChooser.getSelectedFile();
                     Model.getFacade().study(file);
+                    saveRecognizer();
+                }
+
+                private void saveRecognizer() {
+                    final String settingsDirPath = System.getProperty("user.home") + "/.recognizer/";
+                    final File settingsDir = new File(settingsDirPath);
+                    if (!settingsDir.exists()) {
+                        settingsDir.mkdir();
+                    }
+                    Model.getFacade().saveRecognizer(new File(settingsDir + ".previous.rec"));
                 }
             });
         }
