@@ -16,28 +16,28 @@ package ru.aifgi.recognizer.view.actions;
  * limitations under the License.
  */
 
+import ru.aifgi.recognizer.view.Bundle;
+import ru.aifgi.recognizer.view.ViewUtil;
+
+import java.awt.*;
+
 /**
  * @author aifgi
  */
-
-public enum Actions {
-    OPEN_IMAGE(new OpenImageAction()),
-    CLOSE_IMAGE(new CloseImageAction()),
-    RECOGNIZE(new RecognizeAction()),
-    STUDY(new StudyAction()),
-    SAVE_RECOGNIZER(new SaveRecognizerAction()),
-    LOAD_RECOGNIZER(new LoadRecognizerAction()),
-    ABOUT(new AboutAction()),
-    SAVE_TEXT(new SaveTextAction()),
-    EXIT(new ExitAction());
-
-    private final MyAction myAction;
-
-    Actions(final MyAction action) {
-        myAction = action;
+public class CloseImageAction extends MyAction {
+    public CloseImageAction() {
+        super(Bundle.getString("close.image.action.name"));
     }
 
-    public MyAction getAction() {
-        return myAction;
+    @Override
+    protected void performImpl(final AWTEvent event) {
+        ViewUtil.getMainWindow().setImage(null);
+    }
+
+    @Override
+    public boolean update() {
+        final boolean oldEnabled = isEnabled();
+        setEnabled(ViewUtil.getMainWindow().getImage() != null);
+        return super.update() || oldEnabled != isEnabled();
     }
 }

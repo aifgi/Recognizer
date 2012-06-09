@@ -25,7 +25,8 @@ import javax.swing.*;
 
 public enum ActionGroups {
     FILE_MENU(Bundle.getString("file.menu"), new BasicAction[]{
-            Actions.OPEN_IMAGE.getAction(), Actions.SAVE_TEXT.getAction(), Separator.INSTANCE, Actions.EXIT.getAction()
+            Actions.OPEN_IMAGE.getAction(), Actions.SAVE_TEXT.getAction(), Actions.CLOSE_IMAGE.getAction(),
+            Separator.INSTANCE, Actions.EXIT.getAction()
     }),
     RECOGNIZE_MENU(Bundle.getString("recognize.menu"), new BasicAction[]{
             Actions.RECOGNIZE.getAction(), Separator.INSTANCE, 
