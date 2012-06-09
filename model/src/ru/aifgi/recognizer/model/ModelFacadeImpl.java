@@ -25,18 +25,24 @@ import ru.aifgi.recognizer.model.neural_network.NeuralNetworkImpl;
 import ru.aifgi.recognizer.model.neural_network.NeuralNetworkStructureImpl;
 import ru.aifgi.recognizer.model.preprosessing.Binarizer;
 import ru.aifgi.recognizer.model.preprosessing.ImageComponentsFinder;
+import ru.aifgi.recognizer.model.thread_factories.MyThreadFactory;
 
 import java.awt.*;
 import java.io.*;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * @author aifgi
  */
 
 class ModelFacadeImpl implements ModelFacade {
+    private final ExecutorService myExecutorService = Executors.newCachedThreadPool(new MyThreadFactory("Recognition"));
+
     private final Set<ProgressListener> myProgressListeners = new HashSet<>();
     private final Binarizer myBinarizer = new Binarizer();
     private NeuralNetwork myNeuralNetwork = new NeuralNetworkImpl(new NeuralNetworkStructureImpl());
@@ -78,13 +84,42 @@ class ModelFacadeImpl implements ModelFacade {
         final ImageComponentsFinder imageComponentsFinder = new ImageComponentsFinder(input);
         final Collection<Rectangle> words = imageComponentsFinder.getWords();
         notifyProgress(20, "Word components recognition");
+
+        final String[] recognizedWords = recognizeWords(input, words);
+
+        return buildResult(recognizedWords);
+    }
+
+    private String[] recognizeWords(final double[][] input, final Collection<Rectangle> words) {
         final WordRecognizer wordRecognizer = new WordRecognizer(input, myLabels, myNeuralNetwork);
-        final StringBuilder builder = new StringBuilder();
+        final int size = words.size();
+        final CountDownLatch latch = new CountDownLatch(size);
+        final String[] recognizedWords = new String[size];
         int i = 0;
         for (final Rectangle word : words) {
-            final String w = wordRecognizer.recognize(word);
-            builder.append(w).append(' ');
-            notifyProgress((int) (20 + 80 * ((double) ++i) / words.size()));
+            final int pos = i++;
+            myExecutorService.execute(new Runnable() {
+                @Override
+                public void run() {
+                    recognizedWords[pos] = wordRecognizer.recognize(word);
+                    latch.countDown();
+                    notifyProgress((int) (20 + 80 * ((double) size - latch.getCount()) / size));
+            }
+            });
+        }
+        try {
+            latch.await();
+        }
+        catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        return recognizedWords;
+    }
+
+    private String buildResult(final String[] recognizedWords) {
+        final StringBuilder builder = new StringBuilder();
+        for (final String word : recognizedWords) {
+            builder.append(word).append(' ');
         }
         return builder.toString();
     }
