@@ -30,4 +30,8 @@ public interface ModelFacade {
     String recognize(final ImageWrapper inputImage);
 
     void study(final File file);
+
+    void loadRecognizer(final File file);
+
+    void saveRecognizer(final File file);
 }

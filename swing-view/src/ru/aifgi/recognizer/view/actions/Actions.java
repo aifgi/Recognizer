@@ -24,6 +24,8 @@ public enum Actions {
     OPEN_IMAGE(new OpenImageAction()),
     RECOGNIZE(new RecognizeAction()),
     STUDY(new StudyAction()),
+    SAVE_RECOGNIZER(new SaveRecognizerAction()),
+    LOAD_RECOGNIZER(new LoadRecognizerAction()),
     ABOUT(new AboutAction()),
     SAVE_TEXT(new SaveTextAction()),
     EXIT(new ExitAction());

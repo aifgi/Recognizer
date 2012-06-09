@@ -16,11 +16,13 @@ package ru.aifgi.recognizer.api.neural_network;
  * limitations under the License.
  */
 
+import java.io.Serializable;
+
 /**
  * @author aifgi
  */
 
-public interface NeuralNetwork {
+public interface NeuralNetwork extends Serializable {
     double[] computeOutput(final double[][] input);
 
     TrainingResult train(final TrainingSet trainingSet);

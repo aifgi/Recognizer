@@ -21,6 +21,8 @@ import ru.aifgi.recognizer.model.neural_network.layers.StageOutput;
 import ru.aifgi.recognizer.model.neural_network.layers.impl.ConvolutionalLayer;
 import ru.aifgi.recognizer.model.neural_network.layers.impl.SubsamplingLayer;
 
+import java.io.Serializable;
+
 /**
  * @author aifgi
  */
@@ -60,7 +62,7 @@ public class ConvolutionalStage implements Stage {
         }
     }
 
-    private static class LayerPair {
+    private static class LayerPair implements Serializable {
         ConvolutionalLayer convolutional;
         SubsamplingLayer subsampling;
     }

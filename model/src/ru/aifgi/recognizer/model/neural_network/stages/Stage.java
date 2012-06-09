@@ -17,11 +17,13 @@ package ru.aifgi.recognizer.model.neural_network.stages;
 
 import ru.aifgi.recognizer.model.neural_network.layers.StageOutput;
 
+import java.io.Serializable;
+
 /**
  * @author aifgi
  */
 
-public interface Stage {
+public interface Stage extends Serializable {
     StageOutput forwardComputation(StageOutput input);
 
     StageOutput backwardComputation(final StageOutput stageOutput, final StageOutput errors);

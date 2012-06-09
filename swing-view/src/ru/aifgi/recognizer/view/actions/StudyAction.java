@@ -39,7 +39,7 @@ class StudyAction extends MyAction {
 
     @Override
     protected void performImpl(final AWTEvent event) {
-        final JFileChooser fileChooser = new JFileChooser(System.getProperty("user.dir"));
+        final JFileChooser fileChooser = ViewUtil.createFileChooser();
         final int approve = fileChooser.showOpenDialog(ViewUtil.getMainWindow());
         if (approve == JFileChooser.APPROVE_OPTION) {
             myService.execute(new Runnable() {

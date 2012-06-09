@@ -57,6 +57,10 @@ public class ViewUtil {
         JOptionPane.showMessageDialog(ourMainWindow, message, title, JOptionPane.ERROR_MESSAGE);
     }
 
+    public static JFileChooser createFileChooser() {
+        return new JFileChooser(System.getProperty("user.dir"));
+    }
+
     private ViewUtil() {
     }
 }

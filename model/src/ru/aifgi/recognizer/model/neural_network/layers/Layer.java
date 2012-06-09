@@ -18,11 +18,13 @@ package ru.aifgi.recognizer.model.neural_network.layers;
 
 import ru.aifgi.recognizer.api.neural_network.Function;
 
+import java.io.Serializable;
+
 /**
  * @author aifgi
  */
 
-public interface Layer {
+public interface Layer extends Serializable {
     Function getFunction();
 
     void setFunction(Function function);

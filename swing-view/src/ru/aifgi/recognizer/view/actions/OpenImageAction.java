@@ -52,7 +52,7 @@ public class OpenImageAction extends MyAction {
 
     @Override
     protected void performImpl(final AWTEvent event) {
-        final JFileChooser fileChooser = new JFileChooser(System.getProperty("user.dir"));
+        final JFileChooser fileChooser = ViewUtil.createFileChooser();
         fileChooser.setDialogTitle(Bundle.getString("open.image"));
         final MainWindow mainWindow = ViewUtil.getMainWindow();
         final int returnVal = fileChooser.showOpenDialog(mainWindow);

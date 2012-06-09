@@ -27,7 +27,7 @@ import ru.aifgi.recognizer.model.preprosessing.Binarizer;
 import ru.aifgi.recognizer.model.preprosessing.ImageComponentsFinder;
 
 import java.awt.*;
-import java.io.File;
+import java.io.*;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -38,9 +38,9 @@ import java.util.Set;
 
 class ModelFacadeImpl implements ModelFacade {
     private final Set<ProgressListener> myProgressListeners = new HashSet<>();
-    private final NeuralNetwork myNeuralNetwork = new NeuralNetworkImpl(new NeuralNetworkStructureImpl());
     private final Binarizer myBinarizer = new Binarizer();
-    private final Labels myLabels = new Labels(new char[] {
+    private NeuralNetwork myNeuralNetwork = new NeuralNetworkImpl(new NeuralNetworkStructureImpl());
+    private Labels myLabels = new Labels(new char[] {
             'а', 'б', 'в', 'г', 'д', 'Е', 'ж', 'и', 'к', 'л', 'м', 'н', 'п', 'р', 'с',
             'т', 'у', 'ф', 'х', 'ц', 'ш', 'щ', 'ъ', 'ь', 'э', 'ю', 'я', 'е',
             '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'
@@ -117,5 +117,32 @@ class ModelFacadeImpl implements ModelFacade {
     @Override
     public void study(File file) {
         //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void saveRecognizer(final File file) {
+        try (final ObjectOutputStream stream = new ObjectOutputStream(new FileOutputStream(file))) {
+            stream.writeObject(myLabels);
+            stream.writeObject(myNeuralNetwork);
+        }
+        catch (IOException e) {
+            // TODO:
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void loadRecognizer(final File file) {
+        try (final ObjectInputStream stream = new ObjectInputStream(new FileInputStream(file))) {
+            myLabels = (Labels) stream.readObject();
+            myNeuralNetwork = (NeuralNetwork) stream.readObject();
+        }
+        catch (IOException e) {
+            // TODO:
+            throw new RuntimeException(e);
+        }
+        catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

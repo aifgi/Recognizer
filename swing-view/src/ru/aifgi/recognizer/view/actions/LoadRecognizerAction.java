@@ -16,33 +16,29 @@ package ru.aifgi.recognizer.view.actions;
  * limitations under the License.
  */
 
+import ru.aifgi.recognizer.model.Model;
 import ru.aifgi.recognizer.view.Bundle;
 import ru.aifgi.recognizer.view.ViewUtil;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.*;
+import java.io.File;
 
 /**
  * @author aifgi
  */
-public class SaveTextAction extends MyAction {
-    public SaveTextAction() {
-        super(Bundle.getString("save.text.action.name"));
+public class LoadRecognizerAction extends MyAction {
+    public LoadRecognizerAction() {
+        super(Bundle.getString("load.recognizer.action.name"));
     }
 
     @Override
-    protected void performImpl(AWTEvent event) {
+    protected void performImpl(final AWTEvent event) {
         final JFileChooser fileChooser = ViewUtil.createFileChooser();
-        final int approve = fileChooser.showSaveDialog(ViewUtil.getMainWindow());
-        if (approve == JFileChooser.APPROVE_OPTION) {
-            final File selectedFile = fileChooser.getSelectedFile();
-            try {
-                final Writer writer = new PrintWriter(new BufferedOutputStream(new FileOutputStream(selectedFile)));
-                writer.write(ViewUtil.getMainWindow().getText());
-            } catch (IOException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-            }
+        final int res = fileChooser.showOpenDialog(ViewUtil.getMainWindow());
+        if (res == JFileChooser.APPROVE_OPTION) {
+            final File file = fileChooser.getSelectedFile();
+            Model.getFacade().loadRecognizer(file);
         }
     }
 }
