@@ -44,13 +44,8 @@ class ModelFacadeImpl implements ModelFacade {
     private final ExecutorService myExecutorService = Executors.newCachedThreadPool(new MyThreadFactory("Recognition"));
 
     private final Set<ProgressListener> myProgressListeners = new HashSet<>();
-    private final Binarizer myBinarizer = new Binarizer();
-    private NeuralNetwork myNeuralNetwork = new NeuralNetworkImpl(new NeuralNetworkStructureImpl());
-    private Labels myLabels = new Labels(new char[] {
-            'а', 'б', 'в', 'г', 'д', 'Е', 'ж', 'и', 'к', 'л', 'м', 'н', 'п', 'р', 'с',
-            'т', 'у', 'ф', 'х', 'ц', 'ш', 'щ', 'ъ', 'ь', 'э', 'ю', 'я', 'е',
-            '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'
-    });
+    private NeuralNetwork myNeuralNetwork;
+    private Labels myLabels;
 
     @Override
     public void addProgressListener(final ProgressListener progressListener) {
@@ -77,9 +72,10 @@ class ModelFacadeImpl implements ModelFacade {
     }
 
     private String doRecognize(final ImageWrapper inputImage) {
+        init();
         double[][] input = inputImage.getBrightnesses();
         notifyProgress(1, "Binarization");
-        input = myBinarizer.apply(input);
+        input = new Binarizer().apply(input);
         notifyProgress(5, "Find connected components");
         final ImageComponentsFinder imageComponentsFinder = new ImageComponentsFinder(input);
         final Collection<Rectangle> words = imageComponentsFinder.getWords();
@@ -88,6 +84,19 @@ class ModelFacadeImpl implements ModelFacade {
         final String[] recognizedWords = recognizeWords(input, words);
 
         return buildResult(recognizedWords);
+    }
+
+    private void init() {
+        if (myNeuralNetwork == null) {
+            myNeuralNetwork = new NeuralNetworkImpl(new NeuralNetworkStructureImpl());
+        }
+        if (myLabels == null) {
+            myLabels = new Labels(new char[] {
+                    'а', 'б', 'в', 'г', 'д', 'Е', 'ж', 'и', 'к', 'л', 'м', 'н', 'п', 'р', 'с',
+                    'т', 'у', 'ф', 'х', 'ц', 'ш', 'щ', 'ъ', 'ь', 'э', 'ю', 'я', 'е',
+                    '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'
+            });
+        }
     }
 
     private String[] recognizeWords(final double[][] input, final Collection<Rectangle> words) {
@@ -151,7 +160,7 @@ class ModelFacadeImpl implements ModelFacade {
 
     @Override
     public void study(File file) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        init();
     }
 
     @Override
