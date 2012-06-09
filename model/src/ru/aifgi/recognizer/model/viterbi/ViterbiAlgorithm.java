@@ -45,7 +45,7 @@ public class ViterbiAlgorithm {
         final List<Pair<Edge, Integer>> path = new ArrayList<>();
         for (int i = 1; i < vertexNumber; ++i) {
             final Iterable<Edge> edgesToVertex = graph.getEdgesToVertex(i);
-            double min = Double.MIN_VALUE;
+            double min = Double.MAX_VALUE;
             final Pair<Edge, Integer> minEdge = new Pair<>();
             for (final Edge edge : edgesToVertex) {
                 final double previousPenalty = vertexPenalties[edge.getFromVertex()];

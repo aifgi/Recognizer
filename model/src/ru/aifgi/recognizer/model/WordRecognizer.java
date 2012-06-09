@@ -82,10 +82,20 @@ public class WordRecognizer {
             for (int pos = 0; pos < width; pos += STEP) {
                 final double[] outputVector = myNeuralNetwork.computeOutput(getNeuralNetworkInput(word, pos, size));
                 final int from = pos / STEP;
-                graph.setWeights(from, getToVertexNumber(graph, from, size), outputVector);
+                graph.setWeights(from, getToVertexNumber(graph, from, size), convertToPenalties(outputVector));
             }
         }
         return graph;
+    }
+
+    // TODO: remove hardcoded 1.7159
+    private double[] convertToPenalties(final double[] outputVector) {
+        final int length = outputVector.length;
+        final double[] penalties = new double[length];
+        for (int i = 0; i < length; ++i) {
+            penalties[i] = 3.34318 / (outputVector[i] + 1.7159);
+        }
+        return penalties;
     }
 
     private int getToVertexNumber(final Graph graph, final int from, final int size) {
