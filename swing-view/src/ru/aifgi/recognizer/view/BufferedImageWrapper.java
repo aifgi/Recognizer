@@ -64,10 +64,10 @@ public class BufferedImageWrapper implements ImageWrapper {
     private void computeBrightnesses() {
         final int width = myBufferedImage.getWidth();
         final int height = myBufferedImage.getHeight();
-        myBrightnessesCache = new double[width  + 3][height + 1];
+        myBrightnessesCache = new double[width  + 6][height + 2];
         for (int i = 0; i < width; ++i) {
             for (int j = 0; j < height; ++j) {
-                myBrightnessesCache[i][j] = getBrightness(i, j);
+                myBrightnessesCache[i + 3][j + 1] = getBrightness(i, j);
             }
         }
     }
