@@ -25,10 +25,12 @@ public interface OneDimensionalLayer {
 
     double[] computeOutput(double[] input);
 
-    double[][] computeDeltas(final double[] layerInput, final double[] layerOutput,
-                             final double[] errors, final double learningRate);
+    double[] computeGradients(final double[] layerOutput, final double[] errors);
 
-    double[] backPropagation(final double[] errors);
+    double[][] computeDeltas(final double[] layerInput, final double[] layerOutput,
+                             final double[] gradients, final double learningRate);
+
+    double[] backPropagation(final double[] gradients);
 
     void updateWeights(final double[][] deltas);
 

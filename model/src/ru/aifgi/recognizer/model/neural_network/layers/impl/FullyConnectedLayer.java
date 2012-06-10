@@ -75,14 +75,24 @@ public class FullyConnectedLayer extends AbstractLayer implements OneDimensional
     }
 
     @Override
-    public double[][] computeDeltas(final double[] layerInput, final double[] layerOutput,
-                                    final double[] errors, final double learningRate) {
+    public double[] computeGradients(final double[] layerOutput, final double[] errors) {
         final int length = errors.length;
+        final double[] gradients = new double[length];
+        for (int i = 0; i < length; ++i) {
+            gradients[i] = errors[i] * myFunction.diff(layerOutput[i]);
+        }
+        return gradients;
+    }
+
+    @Override
+    public double[][] computeDeltas(final double[] layerInput, final double[] layerOutput,
+                                    final double[] gradients, final double learningRate) {
+        final int length = gradients.length;
         final int inputLength = layerInput.length + 1;
         final double[][] deltas = new double[length][inputLength];
         for (int i = 0; i < length; ++i) {
             final double[] delta = deltas[i];
-            final double v = learningRate * errors[i] * myFunction.diff(layerOutput[i]);
+            final double v = learningRate * gradients[i];
 
             final int t = inputLength - 1;
             for (int j = 0; j < t; ++j) {
@@ -94,7 +104,7 @@ public class FullyConnectedLayer extends AbstractLayer implements OneDimensional
     }
 
     @Override
-    public double[] backPropagation(final double[] errors) {
+    public double[] backPropagation(final double[] gradients) {
         final int length = myWeights.length;
         final int inputLength = myWeights[0].length;
 
@@ -103,7 +113,7 @@ public class FullyConnectedLayer extends AbstractLayer implements OneDimensional
             final double[] weights = myWeights[i];
 
             for (int j = 0; j < inputLength; ++j) {
-                weightedSum[j] += errors[i] * weights[j];
+                weightedSum[j] += gradients[i] * weights[j];
             }
         }
         return weightedSum;
