@@ -21,6 +21,8 @@ package ru.aifgi.recognizer.api;
  */
 
 public interface ProgressListener {
+    void setIndeterminate(final boolean indeterminate);
+
     void started(final String message);
 
     void progress(final int percent);

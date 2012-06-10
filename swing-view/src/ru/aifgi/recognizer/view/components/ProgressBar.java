@@ -147,6 +147,12 @@ public class ProgressBar extends JPanel implements ProgressListener {
     }
 
     @Override
+    public void setIndeterminate(final boolean indeterminate) {
+        myProgressBar.setIndeterminate(indeterminate);
+        myProgressBar.setStringPainted(!indeterminate);
+    }
+
+    @Override
     public void started(final String message) {
         done = false;
         myProgressBar.setValue(0);
@@ -173,5 +179,6 @@ public class ProgressBar extends JPanel implements ProgressListener {
         if (myDialog != null) {
             myDialog.setVisible(false);
         }
+        setIndeterminate(false);
     }
 }
