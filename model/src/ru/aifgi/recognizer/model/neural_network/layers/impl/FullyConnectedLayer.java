@@ -85,8 +85,7 @@ public class FullyConnectedLayer extends AbstractLayer implements OneDimensional
     }
 
     @Override
-    public double[][] computeDeltas(final double[] layerInput, final double[] layerOutput,
-                                    final double[] gradients, final double learningRate) {
+    public double[][] computeDeltas(final double[] layerInput, final double[] gradients, final double learningRate) {
         final int length = gradients.length;
         final int inputLength = layerInput.length + 1;
         final double[][] deltas = new double[length][inputLength];

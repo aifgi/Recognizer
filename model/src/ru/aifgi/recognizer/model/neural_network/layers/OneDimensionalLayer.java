@@ -27,8 +27,7 @@ public interface OneDimensionalLayer {
 
     double[] computeGradients(final double[] layerOutput, final double[] errors);
 
-    double[][] computeDeltas(final double[] layerInput, final double[] layerOutput,
-                             final double[] gradients, final double learningRate);
+    double[][] computeDeltas(final double[] layerInput, final double[] gradients, final double learningRate);
 
     double[] backPropagation(final double[] gradients);
 
