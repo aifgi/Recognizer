@@ -17,7 +17,6 @@ package ru.aifgi.recognizer.model.neural_network.stages;
  */
 
 import ru.aifgi.recognizer.api.neural_network.NeuralNetworkOutput;
-import ru.aifgi.recognizer.model.neural_network.layers.StageOutput;
 
 import java.io.Serializable;
 
@@ -28,5 +27,5 @@ import java.io.Serializable;
 public interface Stage extends Serializable {
     void forwardComputation(final NeuralNetworkOutput input);
 
-    StageOutput backwardComputation(final StageOutput stageOutput, final StageOutput errors);
+    void backwardComputation(final NeuralNetworkOutput networkOutput, final NeuralNetworkOutput errors);
 }

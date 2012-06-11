@@ -114,7 +114,7 @@ public class ConvolutionalStage implements Stage {
     }
 
     @Override
-    public StageOutput backwardComputation(final StageOutput stageOutput, final StageOutput errors) {
-        return null;
+    public void backwardComputation(final NeuralNetworkOutput networkOutput, final NeuralNetworkOutput errors) {
+        //To change body of implemented methods use File | Settings | File Templates.
     }
 }

@@ -16,11 +16,8 @@ package ru.aifgi.recognizer.model.neural_network.stages;
  * limitations under the License.
  */
 
-import com.google.common.base.Preconditions;
 import ru.aifgi.recognizer.api.neural_network.NeuralNetworkOutput;
-import ru.aifgi.recognizer.model.ArrayUtil;
 import ru.aifgi.recognizer.model.neural_network.layers.OneDimensionalLayer;
-import ru.aifgi.recognizer.model.neural_network.layers.StageOutput;
 import ru.aifgi.recognizer.model.neural_network.layers.impl.FullyConnectedLayer;
 
 /**
@@ -28,34 +25,6 @@ import ru.aifgi.recognizer.model.neural_network.layers.impl.FullyConnectedLayer;
  */
 
 public class FullyConnectedStage implements Stage {
-    public static class StageOutputImpl implements StageOutput {
-        private final double[][] myOutputs;
-
-        public StageOutputImpl(final double[][] outputs) {
-            myOutputs = outputs;
-        }
-
-        @Override
-        public double[][][] getOutput3d() {
-            return ArrayUtil.wrapTo3d(getOutput1d());
-        }
-
-        @Override
-        public double[] getOutput1d() {
-            return myOutputs[myOutputs.length - 1];
-        }
-
-        @Override
-        public boolean is3d() {
-            return false;
-        }
-
-        @Override
-        public boolean is1d() {
-            return true;
-        }
-    }
-
     private final OneDimensionalLayer[] myLayers;
 
     public FullyConnectedStage(final int[] fullyConnectedLayersSizes, final int inputSize) {
@@ -79,15 +48,16 @@ public class FullyConnectedStage implements Stage {
     }
 
     @Override
-    public StageOutput backwardComputation(final StageOutput stageOutput, final StageOutput errors) {
-        Preconditions.checkArgument(stageOutput instanceof StageOutputImpl);
-        double[] errorsArray = errors.getOutput1d();
-        final double[][] outputs = ((StageOutputImpl) stageOutput).myOutputs;
-        for (int i = outputs.length - 1; i >= 0; --i) {
-            final double[] layerOutput = outputs[i];
-            errorsArray = myLayers[i].backPropagation(errorsArray);
+    public void backwardComputation(final NeuralNetworkOutput networkOutput, final NeuralNetworkOutput errors) {
+        final int length = myLayers.length - 1;
+        for (int i = length; i >= 0; --i) {
+            final OneDimensionalLayer layer = myLayers[i];
+            final double[] layerOutput = networkOutput.get1d();
+            final double[] gradients = layer.computeGradients(layerOutput, errors.get1d());
+            networkOutput.previous();
+            errors.pushFront(layer.backPropagation(gradients));
+            final double[][] deltas = layer.computeDeltas(networkOutput.get1d(), gradients, 0.1);
+            layer.updateWeights(deltas);
         }
-
-        return new StageOutputImpl(ArrayUtil.wrapTo2d(errorsArray));
     }
 }

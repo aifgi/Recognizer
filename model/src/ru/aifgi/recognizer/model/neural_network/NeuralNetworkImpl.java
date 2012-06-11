@@ -17,9 +17,7 @@ package ru.aifgi.recognizer.model.neural_network;
  */
 
 import ru.aifgi.recognizer.api.neural_network.*;
-import ru.aifgi.recognizer.model.ArrayUtil;
 import ru.aifgi.recognizer.model.MathUtil;
-import ru.aifgi.recognizer.model.neural_network.layers.StageOutput;
 import ru.aifgi.recognizer.model.neural_network.stages.ConvolutionalStage;
 import ru.aifgi.recognizer.model.neural_network.stages.FullyConnectedStage;
 import ru.aifgi.recognizer.model.neural_network.stages.Stage;
@@ -32,35 +30,6 @@ import java.util.List;
  */
 
 public class NeuralNetworkImpl implements NeuralNetwork, Normalizer {
-    private static class Input implements StageOutput {
-        private final double[][][] myValue;
-
-        private Input(final double[][] value) {
-            myValue = new double[1][][];
-            myValue[0] = value;
-        }
-
-        @Override
-        public double[][][] getOutput3d() {
-            return myValue;
-        }
-
-        @Override
-        public double[] getOutput1d() {
-            return ArrayUtil.toOneDimensionalArray(myValue);
-        }
-
-        @Override
-        public boolean is3d() {
-            return true;
-        }
-
-        @Override
-        public boolean is1d() {
-            return false;
-        }
-    }
-
     private class Trainer {
         private final TrainingSet myTrainingSet;
         private final List<Double> myErrors = new ArrayList<>();
