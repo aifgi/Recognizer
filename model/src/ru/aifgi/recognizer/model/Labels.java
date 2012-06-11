@@ -20,6 +20,7 @@ import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -35,6 +36,13 @@ public class Labels implements Serializable {
         }
     }
 
+    public Labels(final List<Character> chars) {
+        final int length = chars.size();
+        for (int i = 0; i < length; ++i) {
+            myMap.put(chars.get(i), i);
+        }
+    }
+
     public Labels(final Map<Character, Integer> map) {
         myMap.putAll(map);
     }
@@ -45,5 +53,9 @@ public class Labels implements Serializable {
 
     public char getCharForLabel(final int label) {
         return myMap.inverse().get(label);
+    }
+
+    public int getSize() {
+        return myMap.size();
     }
 }

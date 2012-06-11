@@ -103,6 +103,6 @@ public class NeuralNetworkStructureImpl implements NeuralNetworkStructure {
 
     @Override
     public int[] getFullyConnectedLayersSizes() {
-        return new int[]{80, 37};
+        return new int[]{80, 38};
     }
 }

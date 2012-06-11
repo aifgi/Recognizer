@@ -16,6 +16,8 @@ package ru.aifgi.recognizer.api;
  * limitations under the License.
  */
 
+import ru.aifgi.recognizer.api.neural_network.TrainingResult;
+
 import java.io.File;
 
 /**
@@ -29,7 +31,7 @@ public interface ModelFacade {
 
     String recognize(final ImageWrapper inputImage);
 
-    void study(final File file);
+    TrainingResult train(final File file);
 
     void loadRecognizer(final File file);
 

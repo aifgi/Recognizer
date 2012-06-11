@@ -34,7 +34,7 @@ class StudyAction extends MyAction {
     private final ExecutorService myService = Executors.newSingleThreadExecutor(new MyThreadFactory("Study"));
 
     public StudyAction() {
-        super(Bundle.getString("study.action.name"));
+        super(Bundle.getString("train.action.name"));
     }
 
     @Override
@@ -46,7 +46,7 @@ class StudyAction extends MyAction {
                 @Override
                 public void run() {
                     final File file = fileChooser.getSelectedFile();
-                    Model.getFacade().study(file);
+                    Model.getFacade().train(file);
                     saveRecognizer();
                 }
 
