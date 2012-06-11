@@ -17,6 +17,7 @@ package ru.aifgi.recognizer.model.neural_network.stages;
  */
 
 import com.google.common.base.Preconditions;
+import ru.aifgi.recognizer.api.neural_network.NeuralNetworkOutput;
 import ru.aifgi.recognizer.model.ArrayUtil;
 import ru.aifgi.recognizer.model.neural_network.layers.OneDimensionalLayer;
 import ru.aifgi.recognizer.model.neural_network.layers.StageOutput;
@@ -69,15 +70,12 @@ public class FullyConnectedStage implements Stage {
     }
 
     @Override
-    public StageOutput forwardComputation(final StageOutput input) {
-        double[] prevOutput = input.getOutput1d();
-        final int length = myLayers.length;
-        final double[][] outputs = new double[length][];
-        for (int i = 0; i < length; ++i) {
-            prevOutput = myLayers[i].computeOutput(prevOutput);
-            outputs[i] = prevOutput;
+    public void forwardComputation(final NeuralNetworkOutput neuralNetworkOutput) {
+        double[] prevOutput = neuralNetworkOutput.get1d();
+        for (final OneDimensionalLayer myLayer : myLayers) {
+            prevOutput = myLayer.computeOutput(prevOutput);
+            neuralNetworkOutput.pushBack(prevOutput);
         }
-        return new StageOutputImpl(outputs);
     }
 
     @Override

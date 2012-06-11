@@ -1,4 +1,4 @@
-package ru.aifgi.recognizer.model.neural_network.stages;
+package ru.aifgi.recognizer.api.neural_network;
 
 /*
  * Copyright 2012 Alexey Ivanov
@@ -16,17 +16,37 @@ package ru.aifgi.recognizer.model.neural_network.stages;
  * limitations under the License.
  */
 
-import ru.aifgi.recognizer.api.neural_network.NeuralNetworkOutput;
-import ru.aifgi.recognizer.model.neural_network.layers.StageOutput;
-
-import java.io.Serializable;
-
 /**
  * @author aifgi
  */
+public interface NeuralNetworkOutput {
+    double[][] first();
 
-public interface Stage extends Serializable {
-    void forwardComputation(final NeuralNetworkOutput input);
+    double[] last();
 
-    StageOutput backwardComputation(final StageOutput stageOutput, final StageOutput errors);
+    boolean hasNext();
+
+    boolean hasPrevious();
+
+    void next();
+
+    void previous();
+
+    double[] get1d();
+
+    double[][][] get3d();
+
+    double[][][] get3d(final int size);
+
+    void pushBack(final double[] value);
+
+    void pushBack(final double[][][] value);
+
+    void pushFront(final double[] value);
+
+    void pushFront(final double[][][] value);
+
+    NeuralNetworkOutput begin();
+
+    NeuralNetworkOutput end();
 }

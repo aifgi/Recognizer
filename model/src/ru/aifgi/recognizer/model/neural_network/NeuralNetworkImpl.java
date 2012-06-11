@@ -102,29 +102,19 @@ public class NeuralNetworkImpl implements NeuralNetwork, Normalizer {
 
             double averageError = 0;
             for (final TrainingElement element : myTrainingSet) {
-                final StageOutput inputVector = makeInput(element.getData());
-                final StageOutput[] stagesOutputs = forwardComputation(inputVector);
+                final NeuralNetworkOutput neuralNetworkOutput = makeInput(element.getData());
+                forwardComputation(neuralNetworkOutput);
                 final double[] rightAnswer = myRightAnswers[element.getLabel()];
-                backwardComputation(stagesOutputs, rightAnswer);
+                backwardComputation(neuralNetworkOutput, rightAnswer);
 
-                final double[] networkOutput = stagesOutputs[stagesOutputs.length - 1].getOutput1d();
+                final double[] networkOutput = neuralNetworkOutput.last();
                 final double error = computeError(rightAnswer, networkOutput);
                 averageError += error;
             }
             return averageError / myTrainingSet.size();
         }
 
-        private void backwardComputation(final StageOutput[] stagesOutputs, final double[] rightAnswer) {
-            final double[][] gradients = computeGradients(stagesOutputs, rightAnswer);
-            updateWeights(gradients, stagesOutputs);
-        }
-
-        private double[][] computeGradients(final StageOutput[] stagesOutputs, final double[] rightAnswer) {
-            return new double[0][];  //To change body of created methods use File | Settings | File Templates.
-        }
-
-        private void updateWeights(final double[][] gradients, final StageOutput[] stagesOutputs) {
-            //To change body of created methods use File | Settings | File Templates.
+        private void backwardComputation(final NeuralNetworkOutput neuralNetworkOutput, final double[] rightAnswer) {
         }
 
         private double computeError(final double[] rightAnswer, final double[] networkOutput) {
@@ -174,30 +164,18 @@ public class NeuralNetworkImpl implements NeuralNetwork, Normalizer {
     @Override
     public double[] computeOutput(final double[][] input) {
         final double[][] normalizedInput = normalize(input);
-        final StageOutput stageOutput = makeInput(normalizedInput);
-        final StageOutput[] stageOutputs = forwardComputation(stageOutput);
-        return stageOutputs[stageOutputs.length - 1].getOutput1d();
+        final NeuralNetworkOutput neuralNetworkOutput = makeInput(normalizedInput);
+        forwardComputation(neuralNetworkOutput);
+        return neuralNetworkOutput.last();
     }
 
-    private StageOutput makeInput(final double[][] inputVector) {
-        return new Input(inputVector);
+    private NeuralNetworkOutput makeInput(final double[][] inputVector) {
+        return new NeuralNetworkOutputImpl(inputVector);
     }
 
-    private StageOutput[] forwardComputation(final StageOutput input) {
-        final StageOutput[] stageOutputs = new StageOutput[myStages.length + 1];
-
-        stageOutputs[0] = input;
-        forwardThroughStages(stageOutputs);
-
-        return stageOutputs;
-    }
-
-    private void forwardThroughStages(final StageOutput[] stageOutputs) {
-        final int stagesLength = myStages.length;
-        for (int i = 0; i < stagesLength; ++i) {
-            final Stage stage = myStages[i];
-            final StageOutput output = stage.forwardComputation(stageOutputs[i]);
-            stageOutputs[i + 1] = output;
+    private void forwardComputation(final NeuralNetworkOutput neuralNetworkOutput) {
+        for (final Stage stage : myStages) {
+            stage.forwardComputation(neuralNetworkOutput);
         }
     }
 

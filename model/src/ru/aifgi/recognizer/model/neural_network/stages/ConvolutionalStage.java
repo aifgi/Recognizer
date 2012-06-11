@@ -16,6 +16,7 @@ package ru.aifgi.recognizer.model.neural_network.stages;
  * limitations under the License.
  */
 
+import ru.aifgi.recognizer.api.neural_network.NeuralNetworkOutput;
 import ru.aifgi.recognizer.model.ArrayUtil;
 import ru.aifgi.recognizer.model.neural_network.layers.StageOutput;
 import ru.aifgi.recognizer.model.neural_network.layers.impl.ConvolutionalLayer;
@@ -84,17 +85,18 @@ public class ConvolutionalStage implements Stage {
     }
 
     @Override
-    public StageOutput forwardComputation(final StageOutput input) {
+    public void forwardComputation(final NeuralNetworkOutput neuralNetworkOutput) {
         final int length = myLayers.length;
         final double[][][] conv = new double[length][][];
         final double[][][] sub = new double[length][][];
-        final double[][][] input3d = input.getOutput3d();
+        final double[][][] input3d = neuralNetworkOutput.get3d();
         for (int i = 0; i < length; ++i) {
             final LayerPair layerPair = myLayers[i];
             conv[i] = layerPair.convolutional.computeOutput(computeInput(i, input3d));
             sub[i] = layerPair.subsampling.computeOutput(conv[i]);
         }
-        return new StageOutputImpl(conv, sub);
+        neuralNetworkOutput.pushBack(conv);
+        neuralNetworkOutput.pushBack(sub);
     }
 
     private double[][] computeInput(final int layerIndex, double[][][] input3d) {
