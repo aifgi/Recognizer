@@ -66,8 +66,24 @@ public class NeuralNetworkStructureImpl implements NeuralNetworkStructure {
         myStageStructures = new StageStructure[2];
         int[][] mask = new int[6][1];
         myStageStructures[0] = new StageStructureImpl(6, 5, 2, mask);
-        mask = new int[15][6];
-        myStageStructures[1] = new StageStructureImpl(15, 5, 2, mask);
+        mask = new int[16][];
+        mask[0] = new int[]{0, 1, 2};
+        mask[1] = new int[]{1, 2, 3};
+        mask[2] = new int[]{2, 3, 4};
+        mask[3] = new int[]{3, 4, 5};
+        mask[4] = new int[]{4, 5, 0};
+        mask[5] = new int[]{5, 0, 1};
+        mask[6] = new int[]{0, 1, 2, 3};
+        mask[7] = new int[]{1, 2, 3, 4};
+        mask[8] = new int[]{2, 3, 4, 5};
+        mask[9] = new int[]{3, 4, 5, 0};
+        mask[10] = new int[]{4, 5, 0, 1};
+        mask[11] = new int[]{5, 0, 1, 2};
+        mask[12] = new int[]{0, 1, 3, 4};
+        mask[13] = new int[]{1, 2, 4, 5};
+        mask[14] = new int[]{0, 2, 3, 5};
+        mask[15] = new int[]{0, 1, 2, 3, 4, 5};
+        myStageStructures[1] = new StageStructureImpl(16, 5, 2, mask);
     }
 
     @Override
