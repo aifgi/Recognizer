@@ -75,7 +75,14 @@ public class ConvolutionalLayer extends AbstractLayer implements TwoDimensionalL
 
     @Override
     public double[][] computeGradients(final double[][] layerOutput, final double[][] errors) {
-        return new double[0][];  //To change body of implemented methods use File | Settings | File Templates.
+        final int length = layerOutput.length;
+        final double[][] gradients = new double[length][length];
+        for (int i = 0; i < length; ++i) {
+            for (int j = 0; j < length; ++j) {
+                gradients[i][j] = errors[i][j] * myFunction.diff(layerOutput[i][j]);
+            }
+        }
+        return gradients;
     }
 
     @Override
@@ -85,7 +92,21 @@ public class ConvolutionalLayer extends AbstractLayer implements TwoDimensionalL
 
     @Override
     public double[][] backPropagation(final double[][] gradients) {
-        return new double[0][];  //To change body of implemented methods use File | Settings | File Templates.
+        final int gradientsLength = gradients.length;
+        final int maskSize = myConvolutionalMask.length;
+        final int resSize = gradientsLength + maskSize - 1;
+        final double[][] errors = new double[resSize][resSize];
+        for (int i = 0; i < gradientsLength; ++i) {
+            for (int j = 0; j < gradientsLength; ++j) {
+                final double value = gradients[i][j];
+                for (int c = 0; c < maskSize; ++c) {
+                    for (int k = 0; k < maskSize; ++k) {
+                        errors[i + c][i + k] += myConvolutionalMask[c][k] * value;
+                    }
+                }
+            }
+        }
+        return errors;
     }
 
     @Override

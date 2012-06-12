@@ -66,7 +66,14 @@ public class SubsamplingLayer extends AbstractLayer implements TwoDimensionalLay
 
     @Override
     public double[][] computeGradients(final double[][] layerOutput, final double[][] errors) {
-        return new double[0][];  //To change body of implemented methods use File | Settings | File Templates.
+        final int length = layerOutput.length;
+        final double[][] gradients = new double[length][length];
+        for (int i = 0; i < length; ++i) {
+            for (int j = 0; j < length; ++j) {
+                gradients[i][j] = errors[i][j] * myFunction.diff(layerOutput[i][j]);
+            }
+        }
+        return gradients;
     }
 
     @Override
@@ -76,7 +83,21 @@ public class SubsamplingLayer extends AbstractLayer implements TwoDimensionalLay
 
     @Override
     public double[][] backPropagation(final double[][] gradients) {
-        return new double[0][];  //To change body of implemented methods use File | Settings | File Templates.
+        final int length = gradients.length;
+        final int resSize = length * myMaskSize;
+        final double[][] errors = new double[resSize][resSize];
+        for (int i = 0; i < length; ++i) {
+            for (int j = 0; j < length; ++j) {
+                final double value = myWeight * gradients[i / myMaskSize][j / myMaskSize];
+                for (int x = 0; x < myMaskSize; ++x) {
+                    final int xPos = i * myMaskSize + x;
+                    for (int y = 0; y < myMaskSize; ++y) {
+                        errors[xPos][j * myMaskSize + y] = value;
+                    }
+                }
+            }
+        }
+        return errors;
     }
 
     @Override
