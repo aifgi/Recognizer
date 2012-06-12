@@ -96,8 +96,7 @@ public class ConvolutionalStage implements Stage {
             final TwoDimensionalLayer layer = myLayers[i].subsampling;
             final double[][] gradients = layer.computeGradients(layerOutput3d[i], errors3d[i]);
             newErrors[i] = layer.backPropagation(gradients);
-            final double[][] deltas = layer.computeDeltas(layerInput3d[i], gradients, 0.1);
-            layer.updateWeights(deltas);
+            layer.updateWeights(layerInput3d[i], gradients, 0.1);
         }
         errors.pushFront(newErrors);
 
@@ -110,8 +109,7 @@ public class ConvolutionalStage implements Stage {
             final TwoDimensionalLayer layer = myLayers[i].convolutional;
             final double[][] gradients = layer.computeGradients(layerOutput3d[i], errors3d[i]);
             newErrors[i] = layer.backPropagation(gradients);
-            final double[][] deltas = layer.computeDeltas(computeInput(i, layerInput3d), gradients, 0.1);
-            layer.updateWeights(deltas);
+            layer.updateWeights(computeInput(i, layerInput3d), gradients, 0.1);
         }
         errors.pushFront(formErrors(newErrors));
     }

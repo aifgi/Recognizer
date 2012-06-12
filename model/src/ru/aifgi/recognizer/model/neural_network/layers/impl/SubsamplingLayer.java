@@ -77,11 +77,6 @@ public class SubsamplingLayer extends AbstractLayer implements TwoDimensionalLay
     }
 
     @Override
-    public double[][] computeDeltas(final double[][] layerInput, final double[][] gradients, final double learningRate) {
-        return new double[0][];  //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
     public double[][] backPropagation(final double[][] gradients) {
         final int length = gradients.length;
         final int resSize = length * myMaskSize;
@@ -101,12 +96,24 @@ public class SubsamplingLayer extends AbstractLayer implements TwoDimensionalLay
     }
 
     @Override
-    public void updateWeights(final double[][] deltas) {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
+    public void updateWeights(final double[][] layerInput, final double[][] gradients, final double learningRate) {
+        final int length = gradients.length;
+        double biasDelta = 0;
+        double weightDelta = 0;
+        for (int i = 0; i < length; ++i) {
+            for (int j = 0; j < length; ++j) {
+                final double gradient = gradients[i][j];
+                biasDelta += gradient;
+                for (int x = 0; x < myMaskSize; ++x) {
+                    final int xPos = i * myMaskSize + x;
+                    for (int y = 0; y < myMaskSize; ++y) {
+                        weightDelta += gradient * layerInput[xPos][j * myMaskSize + y];
+                    }
+                }
+            }
+        }
 
-    @Override
-    public void updateWeights(final double[][] deltas, final double regularizationParameter) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        myBias += learningRate * biasDelta;
+        myWeight += learningRate * weightDelta;
     }
 }

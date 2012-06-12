@@ -25,12 +25,7 @@ public interface TwoDimensionalLayer extends Layer {
 
     double[][] computeGradients(final double[][] layerOutput, final double[][] errors);
 
-    double[][] computeDeltas(final double[][] layerInput, final double[][] gradients, final double learningRate);
-
     double[][] backPropagation(final double[][] gradients);
 
-    void updateWeights(final double[][] deltas);
-
-    void updateWeights(final double[][] deltas, final double regularizationParameter);
-
+    void updateWeights(final double[][] layerInput, final double[][] gradients, final double learningRate);
 }

@@ -86,11 +86,6 @@ public class ConvolutionalLayer extends AbstractLayer implements TwoDimensionalL
     }
 
     @Override
-    public double[][] computeDeltas(final double[][] layerInput, final double[][] gradients, final double learningRate) {
-        return new double[0][];  //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
     public double[][] backPropagation(final double[][] gradients) {
         final int gradientsLength = gradients.length;
         final int maskSize = myConvolutionalMask.length;
@@ -110,12 +105,28 @@ public class ConvolutionalLayer extends AbstractLayer implements TwoDimensionalL
     }
 
     @Override
-    public void updateWeights(final double[][] deltas) {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
+    public void updateWeights(final double[][] layerInput, final double[][] gradients, final double learningRate) {
+        final int length = gradients.length;
+        double biasDelta = 0;
+        final int maskSize = myConvolutionalMask.length;
+        final double[][] maskDeltas = new double[maskSize][maskSize];
+        for (int i = 0; i < length; ++i) {
+            for (int j = 0; j < length; ++j) {
+                final double gradient = gradients[i][j];
+                biasDelta += gradient;
+                for (int c = 0; c < maskSize; ++c) {
+                    for (int k = 0; k < maskSize; ++k) {
+                        maskDeltas[c][k] += gradient * layerInput[i + c][j + k];
+                    }
+                }
+            }
+        }
 
-    @Override
-    public void updateWeights(final double[][] deltas, final double regularizationParameter) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        myBias += learningRate * biasDelta;
+        for (int c = 0; c < maskSize; ++c) {
+            for (int k = 0; k < maskSize; ++k) {
+                myConvolutionalMask[c][k] += learningRate * maskDeltas[c][k];
+            }
+        }
     }
 }
