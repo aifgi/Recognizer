@@ -44,7 +44,9 @@ public class NeuralNetworkImpl implements NeuralNetwork, Normalizer {
             final int numberOfClusters = myTrainingSet.getNumberOfClusters();
             myRightAnswers = new double[numberOfClusters][numberOfClusters];
             for (int i = 0; i < numberOfClusters; ++i) {
-                myRightAnswers[i][i] = 1;
+                for (int j = 0; j < numberOfClusters; ++j) {
+                    myRightAnswers[i][j] = (i == j) ? 1 : -1;
+                }
             }
         }
 
@@ -67,7 +69,7 @@ public class NeuralNetworkImpl implements NeuralNetwork, Normalizer {
                 deltaError = Math.abs(prevError - error);
                 myLearningRate = initialRateLearning / (1 + count / 10.);
             }
-            while (/*deltaError > 0.01 || deltaError / prevError > 0.001 || */count < 50_000);
+            while (deltaError > 0.01 || deltaError / prevError > 0.001 || count > 5_000);
             return new TrainingResultImpl(myErrors);
         }
 
@@ -101,7 +103,7 @@ public class NeuralNetworkImpl implements NeuralNetwork, Normalizer {
             final int length = rightAnswer.length;
             final double[] errors = new double[length];
             for (int i = 0; i < length; ++i) {
-                errors[i] = networkOutput[i] - rightAnswer[i];
+                errors[i] = rightAnswer[i] - networkOutput[i];
             }
             return errors;
         }
@@ -185,7 +187,7 @@ public class NeuralNetworkImpl implements NeuralNetwork, Normalizer {
 
     @Override
     public TrainingResult train(final TrainingSet trainingSet) {
-        final Trainer trainer = new Trainer(trainingSet, 0.3);
+        final Trainer trainer = new Trainer(trainingSet, 0.001);
         return trainer.train();
     }
 }

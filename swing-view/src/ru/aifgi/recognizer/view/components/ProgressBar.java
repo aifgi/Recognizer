@@ -156,6 +156,7 @@ public class ProgressBar extends JPanel implements ProgressListener {
     public void started(final String message) {
         done = false;
         myProgressBar.setValue(0);
+        myLabel.setText(message);
         setVisible(true);
     }
 

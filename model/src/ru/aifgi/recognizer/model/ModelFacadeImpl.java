@@ -199,12 +199,13 @@ class ModelFacadeImpl implements ModelFacade {
     private TrainingSet readTrainingSet(final ZipFile zipFile) throws IOException {
         final List<TrainingElement> trainingElements = new ArrayList<>();
         final Enumeration<? extends ZipEntry> entries = zipFile.entries();
+        final Binarizer binarizer = new Binarizer();
         while (entries.hasMoreElements()) {
             final ZipEntry entry = entries.nextElement();
             final String name = entry.getName();
             if (!entry.isDirectory() && (name.endsWith("png") || name.endsWith("bmp"))) {
                 System.out.println(name);
-                final double[][] data = readImage(zipFile, entry);
+                final double[][] data = binarizer.apply(readImage(zipFile, entry));
                 final String parentFolderName = getParentFolderName(entry);
                 trainingElements.add(new TrainingElementImpl(data, Integer.valueOf(parentFolderName)));
             }
