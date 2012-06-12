@@ -16,6 +16,7 @@ package ru.aifgi.recognizer.model.neural_network.layers.impl;
  * limitations under the License.
  */
 
+import ru.aifgi.recognizer.api.neural_network.NeuralNetworkTrainInformation;
 import ru.aifgi.recognizer.model.MathUtil;
 import ru.aifgi.recognizer.model.neural_network.layers.TwoDimensionalLayer;
 
@@ -96,7 +97,8 @@ public class SubsamplingLayer extends AbstractLayer implements TwoDimensionalLay
     }
 
     @Override
-    public void updateWeights(final double[][] layerInput, final double[][] gradients, final double learningRate) {
+    public void updateWeights(final double[][] layerInput, final double[][] gradients,
+                              final NeuralNetworkTrainInformation trainInformation) {
         final int length = gradients.length;
         double biasDelta = 0;
         double weightDelta = 0;
@@ -113,6 +115,7 @@ public class SubsamplingLayer extends AbstractLayer implements TwoDimensionalLay
             }
         }
 
+        final double learningRate = trainInformation.getLearningRate();
         myBias += learningRate * biasDelta;
         myWeight += learningRate * weightDelta;
     }

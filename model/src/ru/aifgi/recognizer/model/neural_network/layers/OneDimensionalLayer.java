@@ -16,6 +16,8 @@ package ru.aifgi.recognizer.model.neural_network.layers;
  * limitations under the License.
  */
 
+import ru.aifgi.recognizer.api.neural_network.NeuralNetworkTrainInformation;
+
 /**
  * @author aifgi
  */
@@ -27,11 +29,10 @@ public interface OneDimensionalLayer {
 
     double[] computeGradients(final double[] layerOutput, final double[] errors);
 
-    double[][] computeDeltas(final double[] layerInput, final double[] gradients, final double learningRate);
+    double[][] computeDeltas(final double[] layerInput, final double[] gradients,
+                             final NeuralNetworkTrainInformation trainInformation);
 
     double[] backPropagation(final double[] gradients);
 
     void updateWeights(final double[][] deltas);
-
-    void updateWeights(final double[][] deltas, final double regularizationParameter);
 }

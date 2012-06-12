@@ -16,6 +16,7 @@ package ru.aifgi.recognizer.model.neural_network.layers.impl;
  * limitations under the License.
  */
 
+import ru.aifgi.recognizer.api.neural_network.NeuralNetworkTrainInformation;
 import ru.aifgi.recognizer.model.MathUtil;
 import ru.aifgi.recognizer.model.neural_network.layers.TwoDimensionalLayer;
 
@@ -105,7 +106,8 @@ public class ConvolutionalLayer extends AbstractLayer implements TwoDimensionalL
     }
 
     @Override
-    public void updateWeights(final double[][] layerInput, final double[][] gradients, final double learningRate) {
+    public void updateWeights(final double[][] layerInput, final double[][] gradients,
+                              final NeuralNetworkTrainInformation trainInformation) {
         final int length = gradients.length;
         double biasDelta = 0;
         final int maskSize = myConvolutionalMask.length;
@@ -122,6 +124,7 @@ public class ConvolutionalLayer extends AbstractLayer implements TwoDimensionalL
             }
         }
 
+        final double learningRate = trainInformation.getLearningRate();
         myBias += learningRate * biasDelta;
         for (int c = 0; c < maskSize; ++c) {
             for (int k = 0; k < maskSize; ++k) {

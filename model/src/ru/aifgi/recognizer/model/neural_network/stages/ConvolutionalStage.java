@@ -18,6 +18,7 @@ package ru.aifgi.recognizer.model.neural_network.stages;
 
 import com.google.common.base.Preconditions;
 import ru.aifgi.recognizer.api.neural_network.NeuralNetworkOutput;
+import ru.aifgi.recognizer.api.neural_network.NeuralNetworkTrainInformation;
 import ru.aifgi.recognizer.model.neural_network.layers.TwoDimensionalLayer;
 import ru.aifgi.recognizer.model.neural_network.layers.impl.ConvolutionalLayer;
 import ru.aifgi.recognizer.model.neural_network.layers.impl.SubsamplingLayer;
@@ -84,7 +85,8 @@ public class ConvolutionalStage implements Stage {
 
     // TODO: rewrite
     @Override
-    public void backwardComputation(final NeuralNetworkOutput networkOutput, final NeuralNetworkOutput errors) {
+    public void backwardComputation(final NeuralNetworkTrainInformation trainInformation,
+                                    final NeuralNetworkOutput networkOutput, final NeuralNetworkOutput errors) {
         double[][][] errors3d = errors.get3d(mySubsamplingLayerSize);
         double[][][] layerOutput3d = networkOutput.get3d();
         networkOutput.previous();
@@ -96,7 +98,7 @@ public class ConvolutionalStage implements Stage {
             final TwoDimensionalLayer layer = myLayers[i].subsampling;
             final double[][] gradients = layer.computeGradients(layerOutput3d[i], errors3d[i]);
             newErrors[i] = layer.backPropagation(gradients);
-            layer.updateWeights(layerInput3d[i], gradients, 0.1);
+            layer.updateWeights(layerInput3d[i], gradients, trainInformation);
         }
         errors.pushFront(newErrors);
 
@@ -109,7 +111,7 @@ public class ConvolutionalStage implements Stage {
             final TwoDimensionalLayer layer = myLayers[i].convolutional;
             final double[][] gradients = layer.computeGradients(layerOutput3d[i], errors3d[i]);
             newErrors[i] = layer.backPropagation(gradients);
-            layer.updateWeights(computeInput(i, layerInput3d), gradients, 0.1);
+            layer.updateWeights(computeInput(i, layerInput3d), gradients, trainInformation);
         }
         errors.pushFront(formErrors(newErrors));
     }

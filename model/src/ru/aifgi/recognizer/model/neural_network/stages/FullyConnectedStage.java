@@ -17,6 +17,7 @@ package ru.aifgi.recognizer.model.neural_network.stages;
  */
 
 import ru.aifgi.recognizer.api.neural_network.NeuralNetworkOutput;
+import ru.aifgi.recognizer.api.neural_network.NeuralNetworkTrainInformation;
 import ru.aifgi.recognizer.model.neural_network.layers.OneDimensionalLayer;
 import ru.aifgi.recognizer.model.neural_network.layers.impl.FullyConnectedLayer;
 
@@ -48,7 +49,8 @@ public class FullyConnectedStage implements Stage {
     }
 
     @Override
-    public void backwardComputation(final NeuralNetworkOutput networkOutput, final NeuralNetworkOutput errors) {
+    public void backwardComputation(final NeuralNetworkTrainInformation trainInformation,
+                                    final NeuralNetworkOutput networkOutput, final NeuralNetworkOutput errors) {
         final int length = myLayers.length - 1;
         for (int i = length; i >= 0; --i) {
             final OneDimensionalLayer layer = myLayers[i];
@@ -56,7 +58,7 @@ public class FullyConnectedStage implements Stage {
             final double[] gradients = layer.computeGradients(layerOutput, errors.get1d());
             networkOutput.previous();
             errors.pushFront(layer.backPropagation(gradients));
-            final double[][] deltas = layer.computeDeltas(networkOutput.get1d(), gradients, 0.1);
+            final double[][] deltas = layer.computeDeltas(networkOutput.get1d(), gradients, trainInformation);
             layer.updateWeights(deltas);
         }
     }

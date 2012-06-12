@@ -30,16 +30,16 @@ import java.util.List;
  */
 
 public class NeuralNetworkImpl implements NeuralNetwork, Normalizer {
-    private class Trainer {
+    private class Trainer implements NeuralNetworkTrainInformation {
         private final TrainingSet myTrainingSet;
         private final List<Double> myErrors = new ArrayList<>();
         private final double[][] myRightAnswers;
-        private double myRateOfLearning;
+        private double myLearningRate;
 
-        public Trainer(final TrainingSet trainingSet, final double rateOfLearning) {
+        public Trainer(final TrainingSet trainingSet, final double learningRate) {
             myTrainingSet = trainingSet;
             myTrainingSet.normalize(NeuralNetworkImpl.this);
-            myRateOfLearning = rateOfLearning;
+            myLearningRate = learningRate;
 
             final int numberOfClusters = myTrainingSet.getNumberOfClusters();
             myRightAnswers = new double[numberOfClusters][numberOfClusters];
@@ -48,8 +48,13 @@ public class NeuralNetworkImpl implements NeuralNetwork, Normalizer {
             }
         }
 
+        @Override
+        public double getLearningRate() {
+            return myLearningRate;
+        }
+
         public TrainingResult train() {
-            final double initialRateLearning = myRateOfLearning;
+            final double initialRateLearning = myLearningRate;
             double prevError;
             double error = Double.MAX_VALUE;
             int count = 0;
@@ -60,9 +65,9 @@ public class NeuralNetworkImpl implements NeuralNetwork, Normalizer {
                 ++count;
                 myErrors.add(error);
                 deltaError = Math.abs(prevError - error);
-                myRateOfLearning = initialRateLearning / (1 + count / 10.);
+                myLearningRate = initialRateLearning / (1 + count / 10.);
             }
-            while (deltaError > 0.01 || deltaError / prevError > 0.001 || count > 500);
+            while (/*deltaError > 0.01 || deltaError / prevError > 0.001 || */count < 50_000);
             return new TrainingResultImpl(myErrors);
         }
 
@@ -88,7 +93,7 @@ public class NeuralNetworkImpl implements NeuralNetwork, Normalizer {
             final NeuralNetworkOutput errors = new NeuralNetworkOutputImpl(errorsArray);
             for (int i = myStages.length - 1; i >= 0; --i) {
                 final Stage stage = myStages[i];
-                stage.backwardComputation(neuralNetworkOutput, errors);
+                stage.backwardComputation(this, neuralNetworkOutput, errors);
             }
         }
 
@@ -180,7 +185,7 @@ public class NeuralNetworkImpl implements NeuralNetwork, Normalizer {
 
     @Override
     public TrainingResult train(final TrainingSet trainingSet) {
-        final Trainer trainer = new Trainer(trainingSet, 0.1);
+        final Trainer trainer = new Trainer(trainingSet, 0.3);
         return trainer.train();
     }
 }

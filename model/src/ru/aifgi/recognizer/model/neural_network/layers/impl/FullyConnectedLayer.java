@@ -15,7 +15,7 @@ package ru.aifgi.recognizer.model.neural_network.layers.impl;
  * limitations under the License.
  */
 
-import ru.aifgi.recognizer.model.MathUtil;
+import ru.aifgi.recognizer.api.neural_network.NeuralNetworkTrainInformation;
 import ru.aifgi.recognizer.model.neural_network.layers.OneDimensionalLayer;
 
 /**
@@ -85,7 +85,9 @@ public class FullyConnectedLayer extends AbstractLayer implements OneDimensional
     }
 
     @Override
-    public double[][] computeDeltas(final double[] layerInput, final double[] gradients, final double learningRate) {
+    public double[][] computeDeltas(final double[] layerInput, final double[] gradients,
+                                    final NeuralNetworkTrainInformation trainInformation) {
+        final double learningRate = trainInformation.getLearningRate();
         final int length = gradients.length;
         final int inputLength = layerInput.length + 1;
         final double[][] deltas = new double[length][inputLength];
@@ -119,7 +121,7 @@ public class FullyConnectedLayer extends AbstractLayer implements OneDimensional
     }
 
     @Override
-    public void updateWeights(final double[][] deltas, final double regularizationParameter) {
+    public void updateWeights(final double[][] deltas) {
         final int length = myWeights.length;
         final int inputLength = myWeights[0].length;
         for (int i = 0; i < length; ++i) {
@@ -128,19 +130,9 @@ public class FullyConnectedLayer extends AbstractLayer implements OneDimensional
 
             final int l = inputLength - 1;
             for (int j = 0; j < l; ++j) {
-                weights[j] += delta[j] + computeRegularization(regularizationParameter, weights[j]);
+                weights[j] += delta[j];
             }
             weights[l] += delta[l];
         }
-    }
-
-    private double computeRegularization(final double regularizationParameter, final double weight) {
-        final double w0_2 = MathUtil.sqr(regularizationParameter);
-        return 2 * (w0_2 * weight) / MathUtil.sqr(w0_2 + MathUtil.sqr(weight));
-    }
-
-    @Override
-    public void updateWeights(final double[][] deltas) {
-        updateWeights(deltas, 0);
     }
 }

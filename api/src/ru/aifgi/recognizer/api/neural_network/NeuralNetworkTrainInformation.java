@@ -1,4 +1,4 @@
-package ru.aifgi.recognizer.model.neural_network.layers;
+package ru.aifgi.recognizer.api.neural_network;
 
 /*
  * Copyright 2012 Alexey Ivanov
@@ -16,19 +16,9 @@ package ru.aifgi.recognizer.model.neural_network.layers;
  * limitations under the License.
  */
 
-import ru.aifgi.recognizer.api.neural_network.NeuralNetworkTrainInformation;
-
 /**
  * @author aifgi
  */
-
-public interface TwoDimensionalLayer extends Layer {
-    double[][] computeOutput(double[][] input);
-
-    double[][] computeGradients(final double[][] layerOutput, final double[][] errors);
-
-    double[][] backPropagation(final double[][] gradients);
-
-    void updateWeights(final double[][] layerInput, final double[][] gradients,
-                       final NeuralNetworkTrainInformation trainInformation);
+public interface NeuralNetworkTrainInformation {
+    double getLearningRate();
 }
