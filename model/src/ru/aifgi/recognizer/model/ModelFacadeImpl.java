@@ -166,16 +166,13 @@ class ModelFacadeImpl implements ModelFacade {
 
     @Override
     public TrainingResult train(final File file) {
-        try {
-            setIndeterminate();
-            notifyStarted("Study");
-            final TrainingSet trainingSet = buildTrainingSet(file);
-            init();
-            return myNeuralNetwork.train(trainingSet);
-        }
-        finally {
-            notifyDone("Study finished");
-        }
+        setIndeterminate();
+        notifyStarted("Study");
+        final TrainingSet trainingSet = buildTrainingSet(file);
+        init();
+        final TrainingResult trainingResult = myNeuralNetwork.train(trainingSet);
+        notifyDone("Study finished. Last error: " + String.valueOf(trainingResult.getLastError()));
+        return trainingResult;
     }
 
     // TODO: exceptions
