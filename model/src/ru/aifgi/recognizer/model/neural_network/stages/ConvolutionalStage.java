@@ -116,15 +116,30 @@ public class ConvolutionalStage implements Stage {
         errors.pushFront(formErrors(newErrors));
     }
 
-    // TODO: write it!!!
     private double[][][] formErrors(final double[][][] newErrors) {
-        final int length1 = myMask.length;
-        final int[][] mask = new int[length1][length1];
-        for (int i = 0; i < length1; ++i) {
-            for (int j = 0; j < length1; ++j) {
+        int maxLayer = Integer.MIN_VALUE;
+        for (final int[] line : myMask) {
+            for (final int value : line) {
+                if (value > maxLayer) {
+                    maxLayer = value;
+                }
             }
         }
 
-        return newErrors;
+        final int length = newErrors[0].length;
+        final double[][][] errors = new double[maxLayer + 1][length][length];
+        final int maskLength = myMask.length;
+        for (int i = 0; i < maskLength; ++i) {
+            final int[] ints = myMask[i];
+            for (final int layer : ints) {
+                for (int x = 0; x < length; ++x) {
+                    for (int y = 0; y < length; ++y) {
+                        errors[layer][x][y] += newErrors[i][x][y];
+                    }
+                }
+            }
+        }
+
+        return errors;
     }
 }
