@@ -16,9 +16,9 @@ package ru.aifgi.recognizer.model.neural_network.stages;
  * limitations under the License.
  */
 
+import com.google.common.base.Preconditions;
 import ru.aifgi.recognizer.api.neural_network.NeuralNetworkOutput;
-import ru.aifgi.recognizer.model.ArrayUtil;
-import ru.aifgi.recognizer.model.neural_network.layers.StageOutput;
+import ru.aifgi.recognizer.model.neural_network.layers.TwoDimensionalLayer;
 import ru.aifgi.recognizer.model.neural_network.layers.impl.ConvolutionalLayer;
 import ru.aifgi.recognizer.model.neural_network.layers.impl.SubsamplingLayer;
 
@@ -29,40 +29,6 @@ import java.io.Serializable;
  */
 
 public class ConvolutionalStage implements Stage {
-    private static class StageOutputImpl implements StageOutput {
-        private final double[][][] myConvolutionalLayerOutput;
-        private final double[][][] mySabsamplingLayerOutput;
-
-        public StageOutputImpl(final double[][][] conv, final double[][][] sub) {
-            myConvolutionalLayerOutput = conv;
-            mySabsamplingLayerOutput = sub;
-        }
-
-        @Override
-        public double[][][] getOutput3d() {
-            return mySabsamplingLayerOutput;
-        }
-
-        @Override
-        public double[] getOutput1d() {
-            return ArrayUtil.toOneDimensionalArray(mySabsamplingLayerOutput);
-        }
-
-        public double[][] getStageOutput(final int index) {
-            return mySabsamplingLayerOutput[index];
-        }
-
-        @Override
-        public boolean is3d() {
-            return true;
-        }
-
-        @Override
-        public boolean is1d() {
-            return false;
-        }
-    }
-
     private static class LayerPair implements Serializable {
         ConvolutionalLayer convolutional;
         SubsamplingLayer subsampling;
@@ -70,9 +36,11 @@ public class ConvolutionalStage implements Stage {
 
     private final LayerPair[] myLayers;
     private final int[][] myMask;
+    private final int mySubsamplingLayerSize;
 
     public ConvolutionalStage(final int size, final int[][] mask,
-                              final int convolutionalMask, final int subsamplingMask) {
+                              final int convolutionalMask, final int subsamplingMask,
+                              final int subsamplingLayerSize) {
         myLayers = new LayerPair[size];
         myMask = mask;
         final int length = myLayers.length;
@@ -82,6 +50,7 @@ public class ConvolutionalStage implements Stage {
             layerPair.subsampling = new SubsamplingLayer(subsamplingMask);
             myLayers[i] = layerPair;
         }
+        mySubsamplingLayerSize = subsamplingLayerSize;
     }
 
     @Override
@@ -113,8 +82,49 @@ public class ConvolutionalStage implements Stage {
         return res;
     }
 
+    // TODO: rewrite
     @Override
     public void backwardComputation(final NeuralNetworkOutput networkOutput, final NeuralNetworkOutput errors) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        double[][][] errors3d = errors.get3d(mySubsamplingLayerSize);
+        double[][][] layerOutput3d = networkOutput.get3d();
+        networkOutput.previous();
+        double[][][] layerInput3d = networkOutput.get3d();
+        final int length = myLayers.length;
+        final double[][][] newErrors = new double[length][][];
+        Preconditions.checkState(length == errors3d.length);
+        for (int i = 0; i < length; ++i) {
+            final TwoDimensionalLayer layer = myLayers[i].subsampling;
+            final double[][] gradients = layer.computeGradients(layerOutput3d[i], errors3d[i]);
+            newErrors[i] = layer.backPropagation(gradients);
+            final double[][] deltas = layer.computeDeltas(layerInput3d[i], gradients, 0.1);
+            layer.updateWeights(deltas);
+        }
+        errors.pushFront(newErrors);
+
+
+        errors3d = newErrors;
+        layerOutput3d = layerInput3d;
+        networkOutput.previous();
+        layerInput3d = networkOutput.get3d();
+        for (int i = 0; i < length; ++i) {
+            final TwoDimensionalLayer layer = myLayers[i].convolutional;
+            final double[][] gradients = layer.computeGradients(layerOutput3d[i], errors3d[i]);
+            newErrors[i] = layer.backPropagation(gradients);
+            final double[][] deltas = layer.computeDeltas(computeInput(i, layerInput3d), gradients, 0.1);
+            layer.updateWeights(deltas);
+        }
+        errors.pushFront(formErrors(newErrors));
+    }
+
+    // TODO: write it!!!
+    private double[][][] formErrors(final double[][][] newErrors) {
+        final int length1 = myMask.length;
+        final int[][] mask = new int[length1][length1];
+        for (int i = 0; i < length1; ++i) {
+            for (int j = 0; j < length1; ++j) {
+            }
+        }
+
+        return newErrors;
     }
 }

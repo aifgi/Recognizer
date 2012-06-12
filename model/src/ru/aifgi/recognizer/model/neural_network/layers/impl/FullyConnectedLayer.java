@@ -76,7 +76,7 @@ public class FullyConnectedLayer extends AbstractLayer implements OneDimensional
 
     @Override
     public double[] computeGradients(final double[] layerOutput, final double[] errors) {
-        final int length = errors.length;
+        final int length = layerOutput.length;
         final double[] gradients = new double[length];
         for (int i = 0; i < length; ++i) {
             gradients[i] = errors[i] * myFunction.diff(layerOutput[i]);

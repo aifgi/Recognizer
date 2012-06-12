@@ -37,7 +37,11 @@ public class NeuralNetworkOutputImpl implements NeuralNetworkOutput {
     public NeuralNetworkOutputImpl(final double[][] inputVector) {
         final double[][][] t = new double[1][][];
         t[0] = inputVector;
-        myThreeDimensionalArrays.add(t);
+        pushBack(t);
+    }
+
+    public NeuralNetworkOutputImpl(final double[] errorsArray) {
+        pushFront(errorsArray);
     }
 
     @Override
@@ -94,16 +98,14 @@ public class NeuralNetworkOutputImpl implements NeuralNetworkOutput {
         final int s = myThreeDimensionalArrays.size();
         if (myPosition < s) {
             final double[][][] doubles = myThreeDimensionalArrays.get(myPosition);
-            if (doubles[0].length != size) {
-                throw new IllegalStateException();
-            }
+//            Preconditions.checkState(doubles[0].length != size);
             return doubles;
         }
 
         final int sqr = MathUtil.sqr(size);
         final double[] doubles = myOneDimensionalArrays.get(myPosition - s);
         final int t = doubles.length / sqr;
-        Preconditions.checkState(doubles.length % sqr == 0);
+        Preconditions.checkState((doubles.length - 1) % sqr == 0);
         final double[][][] res = new double[t][size][size];
         for (int i = 0; i < t; ++i) {
             for (int j = 0; j < size; ++j) {
@@ -133,7 +135,7 @@ public class NeuralNetworkOutputImpl implements NeuralNetworkOutput {
     public void pushFront(final double[] value) {
         myOneDimensionalArrays.add(0, value);
         ++mySize;
-        myPosition = myThreeDimensionalArrays.size() - 1;
+        myPosition = myThreeDimensionalArrays.size();
     }
 
     @Override

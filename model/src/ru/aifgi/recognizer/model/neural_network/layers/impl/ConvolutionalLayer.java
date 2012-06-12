@@ -74,17 +74,27 @@ public class ConvolutionalLayer extends AbstractLayer implements TwoDimensionalL
     }
 
     @Override
+    public double[][] computeGradients(final double[][] layerOutput, final double[][] errors) {
+        return new double[0][];  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public double[][] computeDeltas(final double[][] layerInput, final double[][] gradients, final double learningRate) {
+        return new double[0][];  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
     public double[][] backPropagation(final double[][] gradients) {
-        return null;
-    }
-
-    @Override
-    public double[][] updateWeights(final double[][] deltas) {
         return new double[0][];  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
-    public double[][] updateWeights(final double[][] deltas, final double regularizationParameter) {
-        return new double[0][];  //To change body of implemented methods use File | Settings | File Templates.
+    public void updateWeights(final double[][] deltas) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void updateWeights(final double[][] deltas, final double regularizationParameter) {
+        //To change body of implemented methods use File | Settings | File Templates.
     }
 }

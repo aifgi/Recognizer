@@ -84,13 +84,27 @@ public class NeuralNetworkImpl implements NeuralNetwork, Normalizer {
         }
 
         private void backwardComputation(final NeuralNetworkOutput neuralNetworkOutput, final double[] rightAnswer) {
+            final double[] errorsArray = computeErrors(rightAnswer, neuralNetworkOutput.last());
+            final NeuralNetworkOutput errors = new NeuralNetworkOutputImpl(errorsArray);
+            for (int i = myStages.length - 1; i >= 0; --i) {
+                final Stage stage = myStages[i];
+                stage.backwardComputation(neuralNetworkOutput, errors);
+            }
+        }
+
+        private double[] computeErrors(final double[] rightAnswer, final double[] networkOutput) {
+            final int length = rightAnswer.length;
+            final double[] errors = new double[length];
+            for (int i = 0; i < length; ++i) {
+                errors[i] = networkOutput[i] - rightAnswer[i];
+            }
+            return errors;
         }
 
         private double computeError(final double[] rightAnswer, final double[] networkOutput) {
             double error = 0;
-            final int length = rightAnswer.length;
-            for (int i = 0; i < length; ++i) {
-                final double e = networkOutput[i] - rightAnswer[i];
+            final double[] errors = computeErrors(rightAnswer, networkOutput);
+            for (final double e : errors) {
                 error += MathUtil.sqr(e);
             }
             return error / 2;
@@ -116,12 +130,12 @@ public class NeuralNetworkImpl implements NeuralNetwork, Normalizer {
             final NeuralNetworkStructure.StageStructure stageStructure = stageStructures[i];
             final int convolutionalReceptiveFieldSize = stageStructure.getConvolutionalReceptiveFieldSize();
             final int subsamplingReceptiveFieldSize = stageStructure.getSubsamplingReceptiveFieldSize();
+            inputSize -= convolutionalReceptiveFieldSize - 1;
+            inputSize /= subsamplingReceptiveFieldSize;
             myStages[i] = new ConvolutionalStage(stageStructure.getNumberOfFeatureMaps(),
                     stageStructure.getMask(),
                     convolutionalReceptiveFieldSize,
-                    subsamplingReceptiveFieldSize);
-            inputSize -= convolutionalReceptiveFieldSize - 1;
-            inputSize /= subsamplingReceptiveFieldSize;
+                    subsamplingReceptiveFieldSize, inputSize);
         }
 
         final int[] fullyConnectedLayersSizes = networkStructure.getFullyConnectedLayersSizes();
