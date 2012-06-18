@@ -8,19 +8,19 @@
     <parent>
         <groupId>org.aifgi</groupId>
         <artifactId>Recognizer</artifactId>
-        <version>0.0.1</version>
+        <version>${project.version}</version>
     </parent>
 
     <dependencies>
         <dependency>
             <groupId>${pom.groupId}</groupId>
             <artifactId>api</artifactId>
-            <version>0.0.1</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>${pom.groupId}</groupId>
             <artifactId>model</artifactId>
-            <version>0.0.1</version>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 
