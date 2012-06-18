@@ -18,6 +18,7 @@ package ru.aifgi.recognizer.model;
 
 import ru.aifgi.recognizer.api.Rectangle;
 import ru.aifgi.recognizer.api.graph.Graph;
+import ru.aifgi.recognizer.api.neural_network.Labels;
 import ru.aifgi.recognizer.api.neural_network.NeuralNetwork;
 import ru.aifgi.recognizer.model.viterbi.GraphImpl;
 import ru.aifgi.recognizer.model.viterbi.ViterbiAlgorithm;
