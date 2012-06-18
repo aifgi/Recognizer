@@ -3,12 +3,12 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.aifgi</groupId>
     <artifactId>model</artifactId>
-    <version>0.0.1</version>
+    <version>0.0.1-SNAPSHOT</version>
 
     <parent>
         <groupId>org.aifgi</groupId>
         <artifactId>Recognizer</artifactId>
-        <version>${project.version}</version>
+        <version>0.0.1-SNAPSHOT</version>
     </parent>
 
     <dependencies>
@@ -32,7 +32,7 @@
         <dependency>
             <groupId>${pom.groupId}</groupId>
             <artifactId>api</artifactId>
-            <version>0.0.1</version>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 
