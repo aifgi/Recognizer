@@ -16,12 +16,15 @@ package ru.aifgi.recognizer;
  * limitations under the License.
  */
 
+import com.google.common.collect.Sets;
 import ru.aifgi.recognizer.view.ViewUtil;
 
 import javax.swing.*;
+import java.io.Closeable;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author aifgi
@@ -36,11 +39,34 @@ public class Application {
             ViewUtil.showErrorMessage(e);
         }
     };
+    private static final Set<AutoCloseable> CLOSEABLES = Sets.newIdentityHashSet();
 
     public static void init(final String[] args) {
         final Map<String, Object> commands = parseCommandLine(args);
         setLocale(commands);
         Thread.setDefaultUncaughtExceptionHandler(getApplicationUncaughtExceptionHandler());
+        Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+            @Override
+            public void run() {
+                cleanUp();
+            }
+        }));
+    }
+
+    private static void cleanUp() {
+        for (final AutoCloseable autoCloseable : CLOSEABLES) {
+            try {
+                autoCloseable.close();
+            }
+            catch (Exception e) {
+                // TODO:
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static void addAutoCloseable(final AutoCloseable autoCloseable) {
+        CLOSEABLES.add(autoCloseable);
     }
 
     private static Map<String, Object> parseCommandLine(final String[] args) {
