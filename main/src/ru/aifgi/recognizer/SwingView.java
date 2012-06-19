@@ -1,4 +1,4 @@
-package ru.aifgi.recognizer.view;
+package ru.aifgi.recognizer;
 
 /*
  * Copyright 2012 Alexey Ivanov
@@ -16,6 +16,8 @@ package ru.aifgi.recognizer.view;
  * limitations under the License.
  */
 
+import ru.aifgi.recognizer.view.MainWindow;
+
 import javax.swing.*;
 
 /**
@@ -23,19 +25,6 @@ import javax.swing.*;
  */
 
 public class SwingView {
-    private static SwingView ourView;
-
-    public static SwingView getInstance() {
-        if (ourView == null) {
-            synchronized (SwingView.class) {
-                if (ourView == null) {
-                    ourView = new SwingView();
-                }
-            }
-        }
-        return ourView;
-    }
-
     private MainWindow myMainWindow;
 
     // TODO: change return type to Window or make MainWindow interface?
@@ -70,6 +59,6 @@ public class SwingView {
         return new JFileChooser(System.getProperty("user.dir"));
     }
 
-    private SwingView() {
+    SwingView() {
     }
 }

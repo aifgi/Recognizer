@@ -17,6 +17,7 @@
     <orderEntry type="library" name="Maven: com.google.code.gson:gson:1.7.2" level="project" />
     <orderEntry type="library" name="Maven: com.google.guava:guava:11.0.2" level="project" />
     <orderEntry type="library" name="Maven: com.google.code.findbugs:jsr305:1.3.9" level="project" />
+    <orderEntry type="module" module-name="debug" />
   </component>
 </module>
 

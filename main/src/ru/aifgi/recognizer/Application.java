@@ -16,11 +16,10 @@ package ru.aifgi.recognizer;
  * limitations under the License.
  */
 
+import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import ru.aifgi.recognizer.view.SwingView;
 
 import javax.swing.*;
-import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -31,6 +30,8 @@ import java.util.Set;
 public class Application {
     public static final String MAIN = "main";
     public static final String LOCALE = "locale";
+    public static final String DEBUG = "debug";
+
     private static final Thread.UncaughtExceptionHandler HANDLER = new Thread.UncaughtExceptionHandler() {
         @Override
         public void uncaughtException(final Thread t, final Throwable e) {
@@ -41,17 +42,25 @@ public class Application {
     private static final Set<AutoCloseable> CLOSEABLES = Sets.newIdentityHashSet();
     private static SwingView ourView;
 
+    // TODO: move to settings manager
+    private static final Map<String, Object> OPTIONS = Maps.newHashMap();
+
     public static void init(final String[] args) {
-        final Map<String, Object> commands = parseCommandLine(args);
-        setLocale(commands);
+        parseCommandLine(args);
+        setLocale();
         Thread.setDefaultUncaughtExceptionHandler(getApplicationUncaughtExceptionHandler());
-        ourView = SwingView.getInstance();
+        ourView = createView();
         Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
             @Override
             public void run() {
                 cleanUp();
             }
         }));
+    }
+
+    private static SwingView createView() {
+        final Boolean debug = (Boolean) OPTIONS.get(DEBUG);
+        return (debug != null && debug) ? new DebugView() : new SwingView();
     }
 
     private static void cleanUp() {
@@ -70,41 +79,39 @@ public class Application {
         CLOSEABLES.add(autoCloseable);
     }
 
-    private static Map<String, Object> parseCommandLine(final String[] args) {
-        final Map<String, Object> res = new HashMap<>();
+    private static void parseCommandLine(final String[] args) {
         for (final String arg : args) {
             if (arg.startsWith("--")) {
                 final String command = arg.substring(2);
                 final int index = command.indexOf('=');
                 if (index < 0) {
-                    res.put(command, Boolean.TRUE);
+                    OPTIONS.put(command, Boolean.TRUE);
                 }
                 else {
                     final String key = command.substring(0, index);
                     final String value = command.substring(index + 1);
-                    res.put(key, value);
+                    OPTIONS.put(key, value);
                 }
             }
             else if (arg.startsWith("-")) {
                 final String command = arg.substring(1);
                 final int length = command.length();
                 for (int i = 0; i < length; ++i) {
-                    res.put(command.substring(i, i + 1), Boolean.TRUE);
+                    OPTIONS.put(command.substring(i, i + 1), Boolean.TRUE);
                 }
             }
             else {
                 if (!arg.contains("=")) {
-                    res.put(MAIN, arg);
+                    OPTIONS.put(MAIN, arg);
                 }
             }
         }
-        return res;
     }
 
-    private static void setLocale(final Map<String, Object> args) {
+    private static void setLocale() {
         String language = "en";
         String country = "US";
-        final String localeString = (String) args.get(LOCALE);
+        final String localeString = (String) OPTIONS.get(LOCALE);
         if (localeString != null) {
             final int i = localeString.indexOf('_');
             if (i >= 0) {
@@ -127,5 +134,9 @@ public class Application {
                 ourView.getMainWindow().setVisible(true);
             }
         });
+    }
+
+    public static SwingView getView() {
+        return ourView;
     }
 }

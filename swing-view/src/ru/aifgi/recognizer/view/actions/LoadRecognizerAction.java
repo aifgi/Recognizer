@@ -16,9 +16,9 @@ package ru.aifgi.recognizer.view.actions;
  * limitations under the License.
  */
 
+import ru.aifgi.recognizer.Application;
 import ru.aifgi.recognizer.model.Model;
 import ru.aifgi.recognizer.view.Bundle;
-import ru.aifgi.recognizer.view.SwingView;
 
 import javax.swing.*;
 import java.awt.*;
@@ -34,8 +34,8 @@ public class LoadRecognizerAction extends MyAction {
 
     @Override
     protected void performImpl(final AWTEvent event) {
-        final JFileChooser fileChooser = SwingView.getInstance().createFileChooser();
-        final int res = fileChooser.showOpenDialog(SwingView.getInstance().getMainWindow());
+        final JFileChooser fileChooser = Application.getView().createFileChooser();
+        final int res = fileChooser.showOpenDialog(Application.getView().getMainWindow());
         if (res == JFileChooser.APPROVE_OPTION) {
             final File file = fileChooser.getSelectedFile();
             Model.getFacade().loadRecognizer(file);

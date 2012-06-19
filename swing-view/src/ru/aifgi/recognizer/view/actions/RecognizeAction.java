@@ -16,11 +16,11 @@ package ru.aifgi.recognizer.view.actions;
  * limitations under the License.
  */
 
+import ru.aifgi.recognizer.Application;
 import ru.aifgi.recognizer.model.Model;
 import ru.aifgi.recognizer.model.thread_factories.MyThreadFactory;
 import ru.aifgi.recognizer.view.BufferedImageWrapper;
 import ru.aifgi.recognizer.view.Bundle;
-import ru.aifgi.recognizer.view.SwingView;
 
 import java.awt.*;
 import java.util.concurrent.ExecutorService;
@@ -43,9 +43,9 @@ public class RecognizeAction extends MyAction {
             @Override
             public void run() {
                 final BufferedImageWrapper inputImage
-                        = new BufferedImageWrapper(SwingView.getInstance().getMainWindow().getImage());
+                        = new BufferedImageWrapper(Application.getView().getMainWindow().getImage());
                 final String text = Model.getFacade().recognize(inputImage);
-                SwingView.getInstance().getMainWindow().setText(text);
+                Application.getView().getMainWindow().setText(text);
                 System.gc();
             }
         });
@@ -54,7 +54,7 @@ public class RecognizeAction extends MyAction {
     @Override
     public boolean update() {
         final boolean oldEnabled = isEnabled();
-        setEnabled(SwingView.getInstance().getMainWindow().getImage() != null);
+        setEnabled(Application.getView().getMainWindow().getImage() != null);
         return super.update() || oldEnabled != isEnabled();
     }
 }

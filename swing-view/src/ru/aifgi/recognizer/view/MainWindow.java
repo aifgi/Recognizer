@@ -15,6 +15,7 @@ package ru.aifgi.recognizer.view;
  * limitations under the License.
  */
 
+import ru.aifgi.recognizer.Application;
 import ru.aifgi.recognizer.model.Model;
 import ru.aifgi.recognizer.view.actions.ActionGroup;
 import ru.aifgi.recognizer.view.actions.ActionGroups;
@@ -47,7 +48,7 @@ public class MainWindow extends JFrame {
 
     private double myDividerLocation = 0.5;
 
-    MainWindow() {
+    public MainWindow() {
         super();
         setTitle(Bundle.getString("application.title"));
         setContentPane(myContentPane);
@@ -89,7 +90,7 @@ public class MainWindow extends JFrame {
         final String settingsDirPath = System.getProperty("user.home") + "/.recognizer/";
         final File file = new File(settingsDirPath + "previous.rec");
         if (!file.exists()) {
-            SwingView.getInstance().showErrorMessage(Bundle.getString("recognizer.not.studied"));
+            Application.getView().showErrorMessage(Bundle.getString("recognizer.not.studied"));
             return;
         }
         Model.getFacade().loadRecognizer(file);

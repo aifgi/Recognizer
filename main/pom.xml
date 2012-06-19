@@ -19,6 +19,11 @@
             <artifactId>swing-view</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>${pom.groupId}</groupId>
+            <artifactId>debug</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
     <build>

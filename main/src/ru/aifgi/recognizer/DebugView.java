@@ -1,4 +1,4 @@
-package ru.aifgi.recognizer.view.actions;
+package ru.aifgi.recognizer;
 
 /*
  * Copyright 2012 Alexey Ivanov
@@ -16,28 +16,15 @@ package ru.aifgi.recognizer.view.actions;
  * limitations under the License.
  */
 
-import ru.aifgi.recognizer.Application;
-import ru.aifgi.recognizer.view.Bundle;
-
-import java.awt.*;
+import ru.aifgi.recognizer.view.DebugMainWindow;
+import ru.aifgi.recognizer.view.MainWindow;
 
 /**
  * @author aifgi
  */
-public class CloseImageAction extends MyAction {
-    public CloseImageAction() {
-        super(Bundle.getString("close.image.action.name"));
-    }
-
+public class DebugView extends SwingView {
     @Override
-    protected void performImpl(final AWTEvent event) {
-        Application.getView().getMainWindow().setImage(null);
-    }
-
-    @Override
-    public boolean update() {
-        final boolean oldEnabled = isEnabled();
-        setEnabled(Application.getView().getMainWindow().getImage() != null);
-        return super.update() || oldEnabled != isEnabled();
+    protected MainWindow createMainWindow() {
+        return new DebugMainWindow();
     }
 }
