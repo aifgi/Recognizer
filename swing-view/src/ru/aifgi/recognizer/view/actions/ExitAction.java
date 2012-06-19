@@ -17,7 +17,7 @@ package ru.aifgi.recognizer.view.actions;
  */
 
 import ru.aifgi.recognizer.view.Bundle;
-import ru.aifgi.recognizer.view.ViewUtil;
+import ru.aifgi.recognizer.view.SwingView;
 
 import javax.swing.*;
 import java.awt.*;
@@ -33,7 +33,7 @@ class ExitAction extends MyAction {
 
     @Override
     public void performImpl(final AWTEvent e) {
-        final Window mainWindow = ViewUtil.getMainWindow();
+        final Window mainWindow = SwingView.getInstance().getMainWindow();
         final int confirmed = JOptionPane.showConfirmDialog(mainWindow,
                                                             Bundle.getString("are.you.sure.to.want.to.quit"),
                                                             Bundle.getString("confirm.exit"),

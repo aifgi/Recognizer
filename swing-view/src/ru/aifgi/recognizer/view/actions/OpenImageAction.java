@@ -18,7 +18,7 @@ package ru.aifgi.recognizer.view.actions;
 import ru.aifgi.recognizer.model.thread_factories.MyThreadFactory;
 import ru.aifgi.recognizer.view.Bundle;
 import ru.aifgi.recognizer.view.MainWindow;
-import ru.aifgi.recognizer.view.ViewUtil;
+import ru.aifgi.recognizer.view.SwingView;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -52,9 +52,9 @@ public class OpenImageAction extends MyAction {
 
     @Override
     protected void performImpl(final AWTEvent event) {
-        final JFileChooser fileChooser = ViewUtil.createFileChooser();
+        final JFileChooser fileChooser = SwingView.getInstance().createFileChooser();
         fileChooser.setDialogTitle(Bundle.getString("open.image"));
-        final MainWindow mainWindow = ViewUtil.getMainWindow();
+        final MainWindow mainWindow = SwingView.getInstance().getMainWindow();
         final int returnVal = fileChooser.showOpenDialog(mainWindow);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             myService.execute(new Runnable() {

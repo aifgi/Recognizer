@@ -18,7 +18,7 @@ package ru.aifgi.recognizer.view.actions;
 
 import ru.aifgi.recognizer.model.Model;
 import ru.aifgi.recognizer.view.Bundle;
-import ru.aifgi.recognizer.view.ViewUtil;
+import ru.aifgi.recognizer.view.SwingView;
 
 import javax.swing.*;
 import java.awt.*;
@@ -34,8 +34,8 @@ public class SaveRecognizerAction extends MyAction {
 
     @Override
     protected void performImpl(final AWTEvent event) {
-        final JFileChooser fileChooser = ViewUtil.createFileChooser();
-        final int res = fileChooser.showSaveDialog(ViewUtil.getMainWindow());
+        final JFileChooser fileChooser = SwingView.getInstance().createFileChooser();
+        final int res = fileChooser.showSaveDialog(SwingView.getInstance().getMainWindow());
         if (res == JFileChooser.APPROVE_OPTION) {
             final File file = fileChooser.getSelectedFile();
             Model.getFacade().saveRecognizer(file);

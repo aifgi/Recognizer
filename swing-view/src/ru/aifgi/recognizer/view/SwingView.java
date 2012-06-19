@@ -1,0 +1,75 @@
+package ru.aifgi.recognizer.view;
+
+/*
+ * Copyright 2012 Alexey Ivanov
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+import javax.swing.*;
+
+/**
+ * @author aifgi
+ */
+
+public class SwingView {
+    private static SwingView ourView;
+
+    public static SwingView getInstance() {
+        if (ourView == null) {
+            synchronized (SwingView.class) {
+                if (ourView == null) {
+                    ourView = new SwingView();
+                }
+            }
+        }
+        return ourView;
+    }
+
+    private MainWindow myMainWindow;
+
+    // TODO: change return type to Window or make MainWindow interface?
+    public MainWindow getMainWindow() {
+        if (myMainWindow == null) {
+            synchronized (this) {
+                if (myMainWindow == null) {
+                    myMainWindow = createMainWindow();
+                }
+            }
+        }
+        return myMainWindow;
+    }
+
+    protected MainWindow createMainWindow() {
+        return new MainWindow();
+    }
+
+    public void showErrorMessage(final Throwable throwable) {
+        showErrorMessage(throwable.getClass().getName(), throwable.getLocalizedMessage());
+    }
+
+    public void showErrorMessage(final String message) {
+        showErrorMessage("Error", message);
+    }
+
+    public void showErrorMessage(final String title, final String message) {
+        JOptionPane.showMessageDialog(myMainWindow, message, title, JOptionPane.ERROR_MESSAGE);
+    }
+
+    public JFileChooser createFileChooser() {
+        return new JFileChooser(System.getProperty("user.dir"));
+    }
+
+    private SwingView() {
+    }
+}

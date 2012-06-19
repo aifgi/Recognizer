@@ -17,7 +17,7 @@ package ru.aifgi.recognizer;
  */
 
 import com.google.common.collect.Sets;
-import ru.aifgi.recognizer.view.ViewUtil;
+import ru.aifgi.recognizer.view.SwingView;
 
 import javax.swing.*;
 import java.util.HashMap;
@@ -35,15 +35,17 @@ public class Application {
         @Override
         public void uncaughtException(final Thread t, final Throwable e) {
             e.printStackTrace();
-            ViewUtil.showErrorMessage(e);
+            ourView.showErrorMessage(e);
         }
     };
     private static final Set<AutoCloseable> CLOSEABLES = Sets.newIdentityHashSet();
+    private static SwingView ourView;
 
     public static void init(final String[] args) {
         final Map<String, Object> commands = parseCommandLine(args);
         setLocale(commands);
         Thread.setDefaultUncaughtExceptionHandler(getApplicationUncaughtExceptionHandler());
+        ourView = SwingView.getInstance();
         Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
             @Override
             public void run() {
@@ -122,7 +124,7 @@ public class Application {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                ViewUtil.getMainWindow().setVisible(true);
+                ourView.getMainWindow().setVisible(true);
             }
         });
     }

@@ -18,7 +18,7 @@ package ru.aifgi.recognizer.view.actions;
 
 import com.google.common.base.Strings;
 import ru.aifgi.recognizer.view.Bundle;
-import ru.aifgi.recognizer.view.ViewUtil;
+import ru.aifgi.recognizer.view.SwingView;
 
 import javax.swing.*;
 import java.awt.*;
@@ -34,13 +34,13 @@ public class SaveTextAction extends MyAction {
 
     @Override
     protected void performImpl(AWTEvent event) {
-        final JFileChooser fileChooser = ViewUtil.createFileChooser();
-        final int approve = fileChooser.showSaveDialog(ViewUtil.getMainWindow());
+        final JFileChooser fileChooser = SwingView.getInstance().createFileChooser();
+        final int approve = fileChooser.showSaveDialog(SwingView.getInstance().getMainWindow());
         if (approve == JFileChooser.APPROVE_OPTION) {
             final File selectedFile = fileChooser.getSelectedFile();
             try {
                 final Writer writer = new PrintWriter(new BufferedOutputStream(new FileOutputStream(selectedFile)));
-                writer.write(ViewUtil.getMainWindow().getText());
+                writer.write(SwingView.getInstance().getMainWindow().getText());
             } catch (IOException e) {
                 e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
             }
@@ -50,7 +50,7 @@ public class SaveTextAction extends MyAction {
     @Override
     public boolean update() {
         final boolean oldEnabled = isEnabled();
-        setEnabled(!Strings.isNullOrEmpty(ViewUtil.getMainWindow().getText()));
+        setEnabled(!Strings.isNullOrEmpty(SwingView.getInstance().getMainWindow().getText()));
         return super.update() || oldEnabled != isEnabled();
     }
 }

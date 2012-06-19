@@ -89,7 +89,7 @@ public class MainWindow extends JFrame {
         final String settingsDirPath = System.getProperty("user.home") + "/.recognizer/";
         final File file = new File(settingsDirPath + "previous.rec");
         if (!file.exists()) {
-            ViewUtil.showErrorMessage(Bundle.getString("recognizer.not.studied"));
+            SwingView.getInstance().showErrorMessage(Bundle.getString("recognizer.not.studied"));
             return;
         }
         Model.getFacade().loadRecognizer(file);

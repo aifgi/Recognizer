@@ -19,7 +19,7 @@ package ru.aifgi.recognizer.view.actions;
 import ru.aifgi.recognizer.model.Model;
 import ru.aifgi.recognizer.model.thread_factories.MyThreadFactory;
 import ru.aifgi.recognizer.view.Bundle;
-import ru.aifgi.recognizer.view.ViewUtil;
+import ru.aifgi.recognizer.view.SwingView;
 
 import javax.swing.*;
 import java.awt.*;
@@ -39,8 +39,8 @@ class StudyAction extends MyAction {
 
     @Override
     protected void performImpl(final AWTEvent event) {
-        final JFileChooser fileChooser = ViewUtil.createFileChooser();
-        final int approve = fileChooser.showOpenDialog(ViewUtil.getMainWindow());
+        final JFileChooser fileChooser = SwingView.getInstance().createFileChooser();
+        final int approve = fileChooser.showOpenDialog(SwingView.getInstance().getMainWindow());
         if (approve == JFileChooser.APPROVE_OPTION) {
             myService.execute(new Runnable() {
                 @Override

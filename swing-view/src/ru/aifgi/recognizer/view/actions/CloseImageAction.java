@@ -17,7 +17,7 @@ package ru.aifgi.recognizer.view.actions;
  */
 
 import ru.aifgi.recognizer.view.Bundle;
-import ru.aifgi.recognizer.view.ViewUtil;
+import ru.aifgi.recognizer.view.SwingView;
 
 import java.awt.*;
 
@@ -31,13 +31,13 @@ public class CloseImageAction extends MyAction {
 
     @Override
     protected void performImpl(final AWTEvent event) {
-        ViewUtil.getMainWindow().setImage(null);
+        SwingView.getInstance().getMainWindow().setImage(null);
     }
 
     @Override
     public boolean update() {
         final boolean oldEnabled = isEnabled();
-        setEnabled(ViewUtil.getMainWindow().getImage() != null);
+        setEnabled(SwingView.getInstance().getMainWindow().getImage() != null);
         return super.update() || oldEnabled != isEnabled();
     }
 }

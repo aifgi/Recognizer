@@ -17,7 +17,7 @@ package ru.aifgi.recognizer.view.components;
 
 import ru.aifgi.recognizer.api.ProgressListener;
 import ru.aifgi.recognizer.view.Bundle;
-import ru.aifgi.recognizer.view.ViewUtil;
+import ru.aifgi.recognizer.view.SwingView;
 
 import javax.swing.*;
 import java.awt.*;
@@ -59,7 +59,7 @@ public class ProgressBar extends JPanel implements ProgressListener {
         private final JPanel myContentPane;
 
         public MyDialog() {
-            super(ViewUtil.getMainWindow(), Bundle.getString("background.task"), true);
+            super(SwingView.getInstance().getMainWindow(), Bundle.getString("background.task"), true);
 
             myContentPane = new JPanel(new BorderLayout(3, 7));
             myContentPane.setBorder(BorderFactory.createEmptyBorder(5, 3, 5, 3));
@@ -175,7 +175,7 @@ public class ProgressBar extends JPanel implements ProgressListener {
     @Override
     public void done(final String message) {
         done = true;
-        JOptionPane.showMessageDialog(ViewUtil.getMainWindow(), message);
+        JOptionPane.showMessageDialog(SwingView.getInstance().getMainWindow(), message);
         setVisible(false);
         if (myDialog != null) {
             myDialog.setVisible(false);
