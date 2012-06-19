@@ -75,7 +75,7 @@ public class Application {
             if (arg.startsWith("--")) {
                 final String command = arg.substring(2);
                 final int index = command.indexOf('=');
-                if (index >= 0) {
+                if (index < 0) {
                     res.put(command, Boolean.TRUE);
                 }
                 else {
