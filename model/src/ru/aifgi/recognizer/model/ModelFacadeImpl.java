@@ -16,7 +16,6 @@ package ru.aifgi.recognizer.model;
  * limitations under the License.
  */
 
-import com.google.gson.Gson;
 import ru.aifgi.recognizer.api.ImageWrapper;
 import ru.aifgi.recognizer.api.ModelFacade;
 import ru.aifgi.recognizer.api.ProgressListener;
