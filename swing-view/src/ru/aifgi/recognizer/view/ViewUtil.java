@@ -24,13 +24,6 @@ import javax.swing.*;
 
 public class ViewUtil {
     private static /*volatile*/ MainWindow ourMainWindow;
-    private static final Thread.UncaughtExceptionHandler HANDLER = new Thread.UncaughtExceptionHandler() {
-        @Override
-        public void uncaughtException(final Thread t, final Throwable e) {
-            e.printStackTrace();
-            showErrorMessage(e);
-        }
-    };
 
     // TODO: change return type to Window or make MainWindow interface?
     public static MainWindow getMainWindow() {
@@ -42,11 +35,6 @@ public class ViewUtil {
             }
         }
         return ourMainWindow;
-    }
-
-    // TODO: move to another place?
-    public static Thread.UncaughtExceptionHandler getApplicationUncaughtExceptionHandler() {
-        return HANDLER;
     }
 
     public static void showErrorMessage(final Throwable throwable) {
