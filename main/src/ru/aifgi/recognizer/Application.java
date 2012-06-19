@@ -18,6 +18,7 @@ package ru.aifgi.recognizer;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import ru.aifgi.recognizer.view.SwingView;
 
 import javax.swing.*;
 import java.util.Locale;
@@ -60,7 +61,7 @@ public class Application {
 
     private static SwingView createView() {
         final Boolean debug = (Boolean) OPTIONS.get(DEBUG);
-        return (debug != null && debug) ? new DebugView() : new SwingView();
+        return (debug != null && debug) ? new DebugView() : new SwingViewImpl();
     }
 
     private static void cleanUp() {

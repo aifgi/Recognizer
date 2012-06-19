@@ -22,7 +22,7 @@ import ru.aifgi.recognizer.view.MainWindow;
 /**
  * @author aifgi
  */
-public class DebugView extends SwingView {
+public class DebugView extends SwingViewImpl {
     @Override
     protected MainWindow createMainWindow() {
         return new DebugMainWindow();

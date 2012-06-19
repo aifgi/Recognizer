@@ -17,6 +17,7 @@ package ru.aifgi.recognizer;
  */
 
 import ru.aifgi.recognizer.view.MainWindow;
+import ru.aifgi.recognizer.view.SwingView;
 
 import javax.swing.*;
 
@@ -24,11 +25,11 @@ import javax.swing.*;
  * @author aifgi
  */
 
-public class SwingView {
+public class SwingViewImpl implements SwingView {
     private MainWindow myMainWindow;
 
     // TODO: change return type to Window or make MainWindow interface?
-    public MainWindow getMainWindow() {
+    @Override public MainWindow getMainWindow() {
         if (myMainWindow == null) {
             synchronized (this) {
                 if (myMainWindow == null) {
@@ -43,22 +44,22 @@ public class SwingView {
         return new MainWindow();
     }
 
-    public void showErrorMessage(final Throwable throwable) {
+    @Override public void showErrorMessage(final Throwable throwable) {
         showErrorMessage(throwable.getClass().getName(), throwable.getLocalizedMessage());
     }
 
-    public void showErrorMessage(final String message) {
+    @Override public void showErrorMessage(final String message) {
         showErrorMessage("Error", message);
     }
 
-    public void showErrorMessage(final String title, final String message) {
+    @Override public void showErrorMessage(final String title, final String message) {
         JOptionPane.showMessageDialog(myMainWindow, message, title, JOptionPane.ERROR_MESSAGE);
     }
 
-    public JFileChooser createFileChooser() {
+    @Override public JFileChooser createFileChooser() {
         return new JFileChooser(System.getProperty("user.dir"));
     }
 
-    SwingView() {
+    SwingViewImpl() {
     }
 }
