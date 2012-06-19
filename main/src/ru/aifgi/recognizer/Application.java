@@ -20,7 +20,6 @@ import com.google.common.collect.Sets;
 import ru.aifgi.recognizer.view.ViewUtil;
 
 import javax.swing.*;
-import java.io.Closeable;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
