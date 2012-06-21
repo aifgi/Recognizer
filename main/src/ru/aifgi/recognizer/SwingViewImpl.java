@@ -29,7 +29,8 @@ public class SwingViewImpl implements SwingView {
     private MainWindow myMainWindow;
 
     // TODO: change return type to Window or make MainWindow interface?
-    @Override public MainWindow getMainWindow() {
+    @Override
+    public MainWindow getMainWindow() {
         if (myMainWindow == null) {
             synchronized (this) {
                 if (myMainWindow == null) {
@@ -44,19 +45,23 @@ public class SwingViewImpl implements SwingView {
         return new MainWindow();
     }
 
-    @Override public void showErrorMessage(final Throwable throwable) {
+    @Override
+    public void showErrorMessage(final Throwable throwable) {
         showErrorMessage(throwable.getClass().getName(), throwable.getLocalizedMessage());
     }
 
-    @Override public void showErrorMessage(final String message) {
+    @Override
+    public void showErrorMessage(final String message) {
         showErrorMessage("Error", message);
     }
 
-    @Override public void showErrorMessage(final String title, final String message) {
+    @Override
+    public void showErrorMessage(final String title, final String message) {
         JOptionPane.showMessageDialog(myMainWindow, message, title, JOptionPane.ERROR_MESSAGE);
     }
 
-    @Override public JFileChooser createFileChooser() {
+    @Override
+    public JFileChooser createFileChooser() {
         return new JFileChooser(System.getProperty("user.dir"));
     }
 
