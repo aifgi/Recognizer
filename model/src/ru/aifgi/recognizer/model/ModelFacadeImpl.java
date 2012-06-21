@@ -20,10 +20,7 @@ import ru.aifgi.recognizer.api.ImageWrapper;
 import ru.aifgi.recognizer.api.ModelFacade;
 import ru.aifgi.recognizer.api.ProgressListener;
 import ru.aifgi.recognizer.api.Rectangle;
-import ru.aifgi.recognizer.api.neural_network.Labels;
-import ru.aifgi.recognizer.api.neural_network.NeuralNetwork;
-import ru.aifgi.recognizer.api.neural_network.TrainingResult;
-import ru.aifgi.recognizer.api.neural_network.TrainingSet;
+import ru.aifgi.recognizer.api.neural_network.*;
 import ru.aifgi.recognizer.model.neural_network.NeuralNetworkImpl;
 import ru.aifgi.recognizer.model.neural_network.NeuralNetworkStructureImpl;
 import ru.aifgi.recognizer.model.neural_network.ZipFileTrainingSetReader;
@@ -174,7 +171,7 @@ public class ModelFacadeImpl implements ModelFacade {
     }
 
     private TrainingSet readTrainingData(final File file) {
-        final ZipFileTrainingSetReader trainingSetReader = new ZipFileTrainingSetReader(file);
+        final TrainingSetReader trainingSetReader = new ZipFileTrainingSetReader(file);
         myLabels = trainingSetReader.getLabels();
         myNeuralNetwork = new NeuralNetworkImpl(trainingSetReader.getNeuralNetworkStructure());
         return trainingSetReader.getTrainingSet();
