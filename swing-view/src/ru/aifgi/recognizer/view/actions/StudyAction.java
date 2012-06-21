@@ -17,7 +17,6 @@ package ru.aifgi.recognizer.view.actions;
  */
 
 import ru.aifgi.recognizer.Application;
-import ru.aifgi.recognizer.model.Model;
 import ru.aifgi.recognizer.model.thread_factories.MyThreadFactory;
 import ru.aifgi.recognizer.view.Bundle;
 
@@ -46,7 +45,7 @@ class StudyAction extends MyAction {
                 @Override
                 public void run() {
                     final File file = fileChooser.getSelectedFile();
-                    Model.getFacade().train(file);
+                    Application.getModelFacade().train(file);
                     saveRecognizer();
                 }
 
@@ -56,7 +55,7 @@ class StudyAction extends MyAction {
                     if (!settingsDir.exists()) {
                         settingsDir.mkdir();
                     }
-                    Model.getFacade().saveRecognizer(new File(settingsDir + ".previous.rec"));
+                    Application.getModelFacade().saveRecognizer(new File(settingsDir + ".previous.rec"));
                 }
             });
         }

@@ -16,7 +16,6 @@ package ru.aifgi.recognizer.view;
  */
 
 import ru.aifgi.recognizer.Application;
-import ru.aifgi.recognizer.model.Model;
 import ru.aifgi.recognizer.view.actions.ActionGroup;
 import ru.aifgi.recognizer.view.actions.ActionGroups;
 import ru.aifgi.recognizer.view.actions.Actions;
@@ -79,7 +78,7 @@ public class MainWindow extends JFrame {
         });
 
         loadRecognizer();
-        Model.getFacade().addProgressListener(myProgressBar);
+        Application.getModelFacade().addProgressListener(myProgressBar);
 
         createMainMenu();
 
@@ -93,7 +92,7 @@ public class MainWindow extends JFrame {
             Application.getView().showErrorMessage(Bundle.getString("recognizer.not.studied"));
             return;
         }
-        Model.getFacade().loadRecognizer(file);
+        Application.getModelFacade().loadRecognizer(file);
     }
 
     // TODO: find better way

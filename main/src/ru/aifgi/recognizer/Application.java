@@ -18,6 +18,8 @@ package ru.aifgi.recognizer;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import ru.aifgi.recognizer.api.ModelFacade;
+import ru.aifgi.recognizer.model.ModelFacadeImpl;
 import ru.aifgi.recognizer.view.SwingView;
 
 import javax.swing.*;
@@ -42,6 +44,7 @@ public class Application {
     };
     private static final Set<AutoCloseable> CLOSEABLES = Sets.newIdentityHashSet();
     private static SwingView ourView;
+    private static ModelFacade ourModelFacade;
 
     // TODO: move to settings manager
     private static final Map<String, Object> OPTIONS = Maps.newHashMap();
@@ -51,6 +54,7 @@ public class Application {
         setLocale();
         Thread.setDefaultUncaughtExceptionHandler(getApplicationUncaughtExceptionHandler());
         ourView = createView();
+        ourModelFacade = new ModelFacadeImpl();
         Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
             @Override
             public void run() {
@@ -139,5 +143,9 @@ public class Application {
 
     public static SwingView getView() {
         return ourView;
+    }
+
+    public static ModelFacade getModelFacade() {
+        return ourModelFacade;
     }
 }

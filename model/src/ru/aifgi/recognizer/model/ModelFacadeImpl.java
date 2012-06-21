@@ -20,14 +20,21 @@ import ru.aifgi.recognizer.api.ImageWrapper;
 import ru.aifgi.recognizer.api.ModelFacade;
 import ru.aifgi.recognizer.api.ProgressListener;
 import ru.aifgi.recognizer.api.Rectangle;
-import ru.aifgi.recognizer.api.neural_network.*;
-import ru.aifgi.recognizer.model.neural_network.*;
+import ru.aifgi.recognizer.api.neural_network.Labels;
+import ru.aifgi.recognizer.api.neural_network.NeuralNetwork;
+import ru.aifgi.recognizer.api.neural_network.TrainingResult;
+import ru.aifgi.recognizer.api.neural_network.TrainingSet;
+import ru.aifgi.recognizer.model.neural_network.NeuralNetworkImpl;
+import ru.aifgi.recognizer.model.neural_network.NeuralNetworkStructureImpl;
+import ru.aifgi.recognizer.model.neural_network.ZipFileTrainingSetReader;
 import ru.aifgi.recognizer.model.preprosessing.Binarizer;
 import ru.aifgi.recognizer.model.preprosessing.ImageComponentsFinder;
 import ru.aifgi.recognizer.model.thread_factories.MyThreadFactory;
 
 import java.io.*;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -36,7 +43,7 @@ import java.util.concurrent.Executors;
  * @author aifgi
  */
 
-class ModelFacadeImpl implements ModelFacade {
+public class ModelFacadeImpl implements ModelFacade {
     private final ExecutorService myExecutorService = Executors.newCachedThreadPool(new MyThreadFactory("Recognition"));
 
     private final Set<ProgressListener> myProgressListeners = new HashSet<>();

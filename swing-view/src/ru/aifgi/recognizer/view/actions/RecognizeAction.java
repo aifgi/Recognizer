@@ -17,7 +17,6 @@ package ru.aifgi.recognizer.view.actions;
  */
 
 import ru.aifgi.recognizer.Application;
-import ru.aifgi.recognizer.model.Model;
 import ru.aifgi.recognizer.model.thread_factories.MyThreadFactory;
 import ru.aifgi.recognizer.view.BufferedImageWrapper;
 import ru.aifgi.recognizer.view.Bundle;
@@ -44,7 +43,7 @@ public class RecognizeAction extends MyAction {
             public void run() {
                 final BufferedImageWrapper inputImage
                         = new BufferedImageWrapper(Application.getView().getMainWindow().getImage());
-                final String text = Model.getFacade().recognize(inputImage);
+                final String text = Application.getModelFacade().recognize(inputImage);
                 Application.getView().getMainWindow().setText(text);
                 System.gc();
             }

@@ -17,7 +17,6 @@ package ru.aifgi.recognizer.view.actions;
  */
 
 import ru.aifgi.recognizer.Application;
-import ru.aifgi.recognizer.model.Model;
 import ru.aifgi.recognizer.view.Bundle;
 
 import javax.swing.*;
@@ -38,7 +37,7 @@ public class SaveRecognizerAction extends MyAction {
         final int res = fileChooser.showSaveDialog(Application.getView().getMainWindow());
         if (res == JFileChooser.APPROVE_OPTION) {
             final File file = fileChooser.getSelectedFile();
-            Model.getFacade().saveRecognizer(file);
+            Application.getModelFacade().saveRecognizer(file);
         }
     }
 }
