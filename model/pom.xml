@@ -38,7 +38,7 @@
 
     <build>
         <sourceDirectory>src</sourceDirectory>
-        <!--<testSourceDirectory>test</testSourceDirectory>-->
+        <testSourceDirectory>test</testSourceDirectory>
         <outputDirectory>../out</outputDirectory>
         <testOutputDirectory>../testOut</testOutputDirectory>
         <plugins>
