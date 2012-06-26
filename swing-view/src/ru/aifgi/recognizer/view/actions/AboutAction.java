@@ -16,7 +16,7 @@ package ru.aifgi.recognizer.view.actions;
  * limitations under the License.
  */
 
-import ru.aifgi.recognizer.view.Bundle;
+import ru.aifgi.recognizer.Application;
 import ru.aifgi.recognizer.view.dialogs.AboutDialog;
 
 import javax.swing.*;
@@ -30,7 +30,7 @@ public class AboutAction extends MyAction {
     private JDialog myAboutDialog = new AboutDialog();
 
     public AboutAction() {
-        super(Bundle.getString("about.action.name"));
+        super(Application.getBundle().getString("about.action.name"));
     }
 
     @Override

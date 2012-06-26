@@ -18,7 +18,6 @@ package ru.aifgi.recognizer.view.actions;
 
 import ru.aifgi.recognizer.Application;
 import ru.aifgi.recognizer.model.thread_factories.MyThreadFactory;
-import ru.aifgi.recognizer.view.Bundle;
 
 import javax.swing.*;
 import java.awt.*;
@@ -33,7 +32,7 @@ class StudyAction extends MyAction {
     private final ExecutorService myService = Executors.newSingleThreadExecutor(new MyThreadFactory("Study"));
 
     public StudyAction() {
-        super(Bundle.getString("train.action.name"));
+        super(Application.getBundle().getString("train.action.name"));
     }
 
     @Override

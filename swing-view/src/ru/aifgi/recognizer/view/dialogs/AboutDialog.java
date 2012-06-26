@@ -16,7 +16,7 @@ package ru.aifgi.recognizer.view.dialogs;
  * limitations under the License.
  */
 
-import ru.aifgi.recognizer.view.Bundle;
+import ru.aifgi.recognizer.Application;
 
 import javax.swing.*;
 import java.awt.event.FocusAdapter;
@@ -32,7 +32,7 @@ public class AboutDialog extends JDialog {
 
     public AboutDialog() {
         super();
-        setTitle(Bundle.getString("about"));
+        setTitle(Application.getBundle().getString("about"));
         setContentPane(myContentPane);
         setModal(false);
         setDefaultCloseOperation(HIDE_ON_CLOSE);

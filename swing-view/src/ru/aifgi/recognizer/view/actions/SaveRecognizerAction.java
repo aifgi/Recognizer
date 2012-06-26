@@ -17,7 +17,6 @@ package ru.aifgi.recognizer.view.actions;
  */
 
 import ru.aifgi.recognizer.Application;
-import ru.aifgi.recognizer.view.Bundle;
 
 import javax.swing.*;
 import java.awt.*;
@@ -28,7 +27,7 @@ import java.io.File;
  */
 public class SaveRecognizerAction extends MyAction {
     public SaveRecognizerAction() {
-        super(Bundle.getString("save.recognizer.action.name"));
+        super(Application.getBundle().getString("save.recognizer.action.name"));
     }
 
     @Override

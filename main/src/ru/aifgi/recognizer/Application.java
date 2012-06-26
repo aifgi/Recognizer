@@ -23,14 +23,55 @@ import ru.aifgi.recognizer.model.ModelFacadeImpl;
 import ru.aifgi.recognizer.view.SwingView;
 
 import javax.swing.*;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.*;
 
 /**
  * @author aifgi
  */
 public class Application {
+    // Bundle work with UTF-8
+    // see: http://stackoverflow.com/questions/4659929/how-to-use-utf-8-in-resource-properties-with-resourcebundle
+    public static class UTF8Control extends ResourceBundle.Control {
+        public ResourceBundle newBundle(final String baseName, final Locale locale, final String format,
+                                        final ClassLoader loader,
+                                        final boolean reload) throws IllegalAccessException, InstantiationException,
+                IOException {
+            // The below is a copy of the default implementation.
+            final String bundleName = toBundleName(baseName, locale);
+            final String resourceName = toResourceName(bundleName, "properties");
+            ResourceBundle bundle = null;
+            InputStream stream = null;
+            if (reload) {
+                final URL url = loader.getResource(resourceName);
+                if (url != null) {
+                    final URLConnection connection = url.openConnection();
+                    if (connection != null) {
+                        connection.setUseCaches(false);
+                        stream = connection.getInputStream();
+                    }
+                }
+            }
+            else {
+                stream = loader.getResourceAsStream(resourceName);
+            }
+            if (stream != null) {
+                try {
+                    // Only this line is changed to make it to read properties files as UTF-8.
+                    bundle = new PropertyResourceBundle(new InputStreamReader(stream, "UTF-8"));
+                }
+                finally {
+                    stream.close();
+                }
+            }
+            return bundle;
+        }
+    }
+
     public static final String MAIN = "main";
     public static final String LOCALE = "locale";
     public static final String DEBUG = "debug";
@@ -43,6 +84,8 @@ public class Application {
         }
     };
     private static final Set<AutoCloseable> CLOSEABLES = Sets.newIdentityHashSet();
+    private static final ResourceBundle ourBundle = ResourceBundle.getBundle("i18n",
+            Locale.getDefault(), new UTF8Control());
     private static SwingView ourView;
     private static ModelFacade ourModelFacade;
 
@@ -54,7 +97,7 @@ public class Application {
         setLocale();
         Thread.setDefaultUncaughtExceptionHandler(getApplicationUncaughtExceptionHandler());
         ourView = createView();
-        ourModelFacade = new ModelFacadeImpl();
+        ourModelFacade = new ModelFacadeImpl(ourBundle);
         Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
             @Override
             public void run() {
@@ -147,5 +190,9 @@ public class Application {
 
     public static ModelFacade getModelFacade() {
         return ourModelFacade;
+    }
+
+    public static ResourceBundle getBundle() {
+        return ourBundle;
     }
 }

@@ -17,7 +17,6 @@ package ru.aifgi.recognizer.view.components;
 
 import ru.aifgi.recognizer.Application;
 import ru.aifgi.recognizer.api.ProgressListener;
-import ru.aifgi.recognizer.view.Bundle;
 
 import javax.swing.*;
 import java.awt.*;
@@ -59,7 +58,7 @@ public class ProgressBar extends JPanel implements ProgressListener {
         private final JPanel myContentPane;
 
         public MyDialog() {
-            super(Application.getView().getMainWindow(), Bundle.getString("background.task"), true);
+            super(Application.getView().getMainWindow(), Application.getBundle().getString("background.task"), true);
 
             myContentPane = new JPanel(new BorderLayout(3, 7));
             myContentPane.setBorder(BorderFactory.createEmptyBorder(5, 3, 5, 3));

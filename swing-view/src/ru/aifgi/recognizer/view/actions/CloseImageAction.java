@@ -17,7 +17,6 @@ package ru.aifgi.recognizer.view.actions;
  */
 
 import ru.aifgi.recognizer.Application;
-import ru.aifgi.recognizer.view.Bundle;
 
 import java.awt.*;
 
@@ -26,7 +25,7 @@ import java.awt.*;
  */
 public class CloseImageAction extends MyAction {
     public CloseImageAction() {
-        super(Bundle.getString("close.image.action.name"));
+        super(Application.getBundle().getString("close.image.action.name"));
     }
 
     @Override

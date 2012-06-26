@@ -18,7 +18,6 @@ package ru.aifgi.recognizer.view.actions;
 
 import com.google.common.base.Strings;
 import ru.aifgi.recognizer.Application;
-import ru.aifgi.recognizer.view.Bundle;
 
 import javax.swing.*;
 import java.awt.*;
@@ -29,7 +28,7 @@ import java.io.*;
  */
 public class SaveTextAction extends MyAction {
     public SaveTextAction() {
-        super(Bundle.getString("save.text.action.name"));
+        super(Application.getBundle().getString("save.text.action.name"));
     }
 
     @Override

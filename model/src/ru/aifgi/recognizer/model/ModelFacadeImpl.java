@@ -31,6 +31,7 @@ import ru.aifgi.recognizer.model.thread_factories.MyThreadFactory;
 import java.io.*;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
@@ -43,9 +44,14 @@ import java.util.concurrent.Executors;
 public class ModelFacadeImpl implements ModelFacade {
     private final ExecutorService myExecutorService = Executors.newCachedThreadPool(new MyThreadFactory("Recognition"));
 
+    private final ResourceBundle myBundle;
     private final Set<ProgressListener> myProgressListeners = new HashSet<>();
     private NeuralNetwork myNeuralNetwork;
     private Labels myLabels;
+
+    public ModelFacadeImpl(final ResourceBundle bundle) {
+        myBundle = bundle;
+    }
 
     @Override
     public void addProgressListener(final ProgressListener progressListener) {

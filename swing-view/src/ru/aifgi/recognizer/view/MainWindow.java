@@ -49,7 +49,7 @@ public class MainWindow extends JFrame {
 
     public MainWindow() {
         super();
-        setTitle(Bundle.getString("application.title"));
+        setTitle(Application.getBundle().getString("application.title"));
         setContentPane(myContentPane);
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         setMinimumSize(new Dimension(640, 480));
@@ -89,7 +89,7 @@ public class MainWindow extends JFrame {
         final String settingsDirPath = System.getProperty("user.home") + "/.recognizer/";
         final File file = new File(settingsDirPath + "previous.rec");
         if (!file.exists()) {
-            Application.getView().showErrorMessage(Bundle.getString("recognizer.not.studied"));
+            Application.getView().showErrorMessage(Application.getBundle().getString("recognizer.not.studied"));
             return;
         }
         Application.getModelFacade().loadRecognizer(file);
