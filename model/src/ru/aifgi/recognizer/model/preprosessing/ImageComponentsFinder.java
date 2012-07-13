@@ -86,7 +86,7 @@ public class ImageComponentsFinder {
         @Override
         public int compareTo(final Rectangle o) {
             final int dy = y1 - o.getY();
-            return (Math.abs(dy) < 7) ? (x1 - o.getX()) : dy;
+            return (Math.abs(dy) < 16) ? (x1 - o.getX()) : dy;
         }
     }
 
@@ -139,7 +139,8 @@ public class ImageComponentsFinder {
                     if (newValue < res) {
                         mergedComponents.put(res, newValue);
                         res = newValue;
-                    } else if (newValue != res) {
+                    }
+                    else if (newValue != res) {
                         mergedComponents.put(newValue, res);
                     }
                 }
@@ -166,7 +167,7 @@ public class ImageComponentsFinder {
 
     private Collection<? extends Rectangle> mergeComponentsToWords() {
         final Map<Integer, RectangleImpl> boundingBoxes = buildBoundingBoxes();
-        final Collection<? extends Rectangle> rectangles = expandAndMergeRectangles(boundingBoxes, 3, 1);
+        final Collection<? extends Rectangle> rectangles = expandAndMergeRectangles(boundingBoxes, 5, 1);
         filter(rectangles);
         final List<Rectangle> list = new ArrayList<>(rectangles);
         Collections.sort(list);
@@ -195,7 +196,8 @@ public class ImageComponentsFinder {
                     final RectangleImpl rectangle = boundingBoxes.get(componentLabel);
                     if (rectangle == null) {
                         boundingBoxes.put(componentLabel, new RectangleImpl(x, y));
-                    } else {
+                    }
+                    else {
                         rectangle.update(x, y);
                     }
                 }

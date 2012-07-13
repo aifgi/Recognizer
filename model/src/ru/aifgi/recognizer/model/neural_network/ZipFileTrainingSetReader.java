@@ -18,7 +18,7 @@ package ru.aifgi.recognizer.model.neural_network;
 
 import com.google.gson.Gson;
 import ru.aifgi.recognizer.api.neural_network.*;
-import ru.aifgi.recognizer.model.ImageReader;
+import ru.aifgi.recognizer.model.ImageUtil;
 import ru.aifgi.recognizer.model.LabelsImpl;
 import ru.aifgi.recognizer.model.preprosessing.Binarizer;
 
@@ -90,7 +90,7 @@ public class ZipFileTrainingSetReader implements TrainingSetReader {
     }
 
     private double[][] readImage(final ZipFile zipFile, final ZipEntry entry) throws IOException {
-        return ImageReader.readImage(zipFile.getInputStream(entry));
+        return ImageUtil.readImage(zipFile.getInputStream(entry));
     }
 
     // TODO: better way

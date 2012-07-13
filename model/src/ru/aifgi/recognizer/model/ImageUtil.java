@@ -16,16 +16,22 @@ package ru.aifgi.recognizer.model;
  * limitations under the License.
  */
 
+import com.google.common.math.DoubleMath;
+import ru.aifgi.recognizer.api.Rectangle;
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.awt.image.RenderedImage;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.RoundingMode;
 
 /**
  * @author aifgi
  */
 // TODO: delete it
-public class ImageReader {
+public class ImageUtil {
     public static double[][] readImage(final InputStream inputStream) {
         try {
             final BufferedImage image = ImageIO.read(inputStream);
@@ -34,6 +40,40 @@ public class ImageReader {
         catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static void writeImage(final double[][] brightnesses, final File file) {
+        final int width = brightnesses.length;
+        final int height = brightnesses[0].length;
+        final BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        for (int i = 0; i < width; ++i) {
+            for (int j = 0; j < height; ++j) {
+                final int rgb = 0xFFFF * DoubleMath.roundToInt(1 - brightnesses[i][j], RoundingMode.HALF_UP);
+                bufferedImage.setRGB(i, j, rgb);
+            }
+        }
+        writeImage(bufferedImage, file);
+    }
+
+    public static void writeImage(final RenderedImage image, final File file) {
+        try {
+            ImageIO.write(image, "PNG", file);
+        }
+        catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void writeImage(final double[][] input, final Rectangle word, final File file) {
+        final int width = word.getWidth();
+        final int height = word.getHeight();
+        final double[][] res = new double[width][height];
+        for (int x = 0; x < width; ++x) {
+            for (int y = 0; y < height; ++y) {
+                res[x][y] = input[x + word.getX()][y + word.getY()];
+            }
+        }
+        writeImage(res, file);
     }
 
     private static double[][] computeBrightnesses(final BufferedImage image) {
@@ -72,6 +112,6 @@ public class ImageReader {
         return (rgb >> s) & 0xFF;
     }
 
-    private ImageReader() {
+    private ImageUtil() {
     }
 }

@@ -46,14 +46,14 @@ public class BufferedImageWrapper implements ImageWrapper {
         return computeBrightnesses();
     }
 
-    // TODO: remove + 3 and +1 !!!
+    // TODO: remove + 5 and +1 !!!
     private double[][] computeBrightnesses() {
         final int width = myBufferedImage.getWidth();
         final int height = myBufferedImage.getHeight();
-        final double[][] brightnesses = new double[width  + 6][height + 2];
+        final double[][] brightnesses = new double[width + 10][height + 2];
         for (int i = 0; i < width; ++i) {
             for (int j = 0; j < height; ++j) {
-                brightnesses[i + 3][j + 1] = getBrightness(i, j);
+                brightnesses[i + 5][j + 1] = getBrightness(i, j);
             }
         }
         return brightnesses;
